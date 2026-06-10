@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Muhammed Saaim Saad — Résumé</title>
+<meta name="description" content="Résumé — Muhammed Saaim Saad, Model-Based Development Engineer (Powertrain Embedded Software).">
+<meta name="theme-color" content="#080808">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23080808'/%3E%3Ctext x='16' y='23' font-family='Orbitron,Arial,sans-serif' font-size='17' font-weight='700' fill='%2300D2BE' text-anchor='middle'%3EM%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ── Tokens — index.html design language, light-mode adaptation ─────────── */
+:root{
+  --bg:#ffffff;            /* sheet            */
+  --page:#e7eaec;          /* page behind sheet (newcv near-black → light)  */
+  --surface:#f6f8f9;       /* raised surfaces  (newcv bg-raised)            */
+  --ink:#0c1318;           /* headings         (newcv white)               */
+  --body:#33404b;          /* body text        (newcv silver)              */
+  --muted:#67737e;         /* secondary text   (newcv silver-dim)          */
+  --petronas:#00D2BE;      /* brand accent — decorative                    */
+  --petronas-dim:#009E8E;
+  --teal-ink:#00786b;      /* accent text on white (legible)               */
+  --teal-soft:#e6f6f4;     /* soft teal fill                               */
+  --line:#e3e7ea;          /* hairline                                     */
+  --font-d:'Orbitron',monospace;
+  --font-b:'Inter',sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px}
+body{
+  font-family:var(--font-b);color:var(--body);background:var(--page);
+  line-height:1.5;-webkit-print-color-adjust:exact;print-color-adjust:exact;
+}
+a{color:inherit;text-decoration:none}
+
+/* ── Screen toolbar — stays dark to tie back to the (dark) site ─────────── */
+.toolbar{
+  position:sticky;top:0;z-index:10;display:flex;align-items:center;justify-content:space-between;
+  gap:16px;padding:12px 22px;background:rgba(8,8,8,.96);backdrop-filter:blur(10px);
+  border-bottom:1px solid rgba(0,210,190,.25);
+}
+.tb-name{font-family:var(--font-d);font-size:.7rem;font-weight:700;letter-spacing:.22em;color:#00D2BE;text-transform:uppercase}
+.tb-actions{display:flex;gap:10px}
+.tb-btn{
+  font-family:var(--font-d);font-size:.58rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
+  padding:9px 18px;border-radius:3px;cursor:pointer;border:1px solid rgba(0,210,190,.5);
+  background:#00D2BE;color:#080808;transition:.2s;
+}
+.tb-btn.ghost{background:transparent;color:#9aa6ad;border-color:rgba(255,255,255,.2)}
+.tb-btn:hover{transform:translateY(-1px);filter:brightness(1.08)}
+.tb-btn.ghost:hover{color:#fff;border-color:#fff}
+
+/* ── A4 sheet ───────────────────────────────────────────────────────────── */
+.sheet{
+  width:210mm;min-height:297mm;margin:26px auto 40px;background:var(--bg);
+  padding:15mm 16mm 13mm;box-shadow:0 12px 50px rgba(0,0,0,.22);
+}
+
+/* Metal rule (newcv .rule, tuned for light) */
+.rule{height:1px;background:linear-gradient(90deg,transparent,rgba(12,19,24,.14) 25%,rgba(0,120,107,.4) 50%,rgba(12,19,24,.14) 75%,transparent)}
+
+/* ── Header ─────────────────────────────────────────────────────────────── */
+header{padding-bottom:15px;margin-bottom:6px}
+.name{font-family:var(--font-d);font-size:27pt;font-weight:800;letter-spacing:.05em;color:var(--ink);line-height:1;text-transform:uppercase}
+.name .ac{color:var(--teal-ink)}
+.title{font-family:var(--font-d);font-size:8.6pt;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--teal-ink);margin-top:11px}
+.contact{font-size:8.9pt;color:var(--muted);margin-top:12px;line-height:1.7}
+.contact .sep{color:var(--line);margin:0 8px}
+.contact a:hover{color:var(--teal-ink)}
+
+/* ── Section heading — newcv eyebrow + teal bar, compacted ──────────────── */
+.sec{margin-bottom:19px}
+/* teal bar + hairline drawn as backgrounds (not positioned pseudo-elements)
+   so the heading text stays in normal paint order — keeps PDF/ATS text order correct */
+.sec-h{
+  font-family:var(--font-d);font-size:9.5pt;font-weight:700;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--ink);margin-bottom:16px;break-after:avoid;
+  padding-bottom:8px;
+  background:
+    linear-gradient(var(--petronas),var(--petronas)) left bottom / 34px 2.5px no-repeat,
+    linear-gradient(var(--line),var(--line)) left bottom / 100% 1px no-repeat;
+}
+
+/* ── Summary ────────────────────────────────────────────────────────────── */
+.summary{font-size:9.6pt;line-height:1.64;color:var(--body)}
+.summary b{color:var(--ink);font-weight:600}
+
+/* ── Skills — newcv tag pills ───────────────────────────────────────────── */
+.skills{display:grid;grid-template-columns:repeat(3,1fr);gap:14px 22px}
+.sk h4{
+  font-family:var(--font-d);font-size:7.4pt;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--ink);margin-bottom:9px;padding-left:11px;
+  background:linear-gradient(var(--petronas),var(--petronas)) left center / 4px 10px no-repeat;
+}
+.sk .tags{display:flex;flex-wrap:wrap;gap:5px}
+.tag{
+  display:inline-block;font-size:7.9pt;color:var(--body);
+  background:var(--surface);border:1px solid var(--line);
+  padding:3px 8px;border-radius:3px;letter-spacing:.01em;line-height:1.3;
+}
+
+/* ── Experience — newcv timeline ────────────────────────────────────────── */
+.tl{position:relative;padding-left:24px}
+.tl::before{content:'';position:absolute;left:5px;top:6px;bottom:4px;width:2px;
+  background:linear-gradient(to bottom,var(--petronas),rgba(0,210,190,.15))}
+.tl-entry{position:relative;margin-bottom:20px;break-inside:avoid}
+.tl-entry:last-child{margin-bottom:0}
+.tl-dot{position:absolute;left:-24px;top:3.5px;width:12px;height:12px;border-radius:50%;
+  background:var(--bg);border:2px solid var(--petronas);z-index:1}
+.tl-dot.on{background:var(--petronas);box-shadow:0 0 0 3px var(--teal-soft)}
+.tl-meta{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-bottom:6px}
+.tl-date{font-family:var(--font-d);font-size:7.6pt;font-weight:600;letter-spacing:.06em;
+  color:var(--teal-ink);text-transform:uppercase}
+.badge{font-family:var(--font-d);font-size:6.6pt;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+  padding:2px 8px;border-radius:2px}
+.b-cur{background:var(--teal-soft);color:var(--teal-ink);border:1px solid rgba(0,210,190,.4)}
+.b-int{background:#f1f3f4;color:var(--muted);border:1px solid var(--line)}
+.tl-role{font-size:10.5pt;font-weight:600;color:var(--ink);line-height:1.25}
+.tl-co{font-size:8.7pt;color:var(--muted);margin-top:3px;margin-bottom:10px}
+ul.b{list-style:none}
+ul.b li{position:relative;padding-left:16px;font-size:9.1pt;line-height:1.56;color:var(--body);margin-bottom:5px;break-inside:avoid}
+ul.b li::before{content:'•';position:absolute;left:2px;top:0;color:var(--teal-ink);font-weight:400;font-size:1.05em}
+ul.b li b{color:var(--ink);font-weight:600}
+.hl{color:var(--teal-ink);font-weight:600}
+
+/* ── Project cards — newcv proj-card ────────────────────────────────────── */
+.proj-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.proj-card{
+  background:var(--surface);border:1px solid var(--line);border-top:2px solid var(--petronas);
+  border-radius:5px;padding:15px 16px;display:flex;flex-direction:column;gap:9px;break-inside:avoid;
+}
+.pc-header{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.p-title{font-family:var(--font-d);font-size:9pt;font-weight:600;color:var(--ink);letter-spacing:.02em;line-height:1.3}
+.ps{font-family:var(--font-d);font-size:6.4pt;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
+  padding:3px 8px;border-radius:2px;white-space:nowrap;flex-shrink:0}
+.ps-wip{background:rgba(200,160,0,.12);color:#8a6d00;border:1px solid rgba(200,160,0,.3)}
+.st-tags{display:flex;flex-wrap:wrap;gap:5px}
+.st{font-family:var(--font-d);font-size:6.2pt;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--teal-ink);background:var(--teal-soft);border:1px solid rgba(0,210,190,.3);
+  padding:3px 7px;border-radius:2px}
+.p-desc{font-size:8.7pt;color:var(--muted);line-height:1.55}
+
+/* ── Rows — education / certifications ──────────────────────────────────── */
+.row{margin-bottom:10px;break-inside:avoid}
+.row:last-child{margin-bottom:0}
+.row-h{display:flex;justify-content:space-between;align-items:baseline;gap:14px}
+.row-t{font-size:9.8pt;font-weight:600;color:var(--ink)}
+.row-tag{font-family:var(--font-d);font-size:7.2pt;font-weight:600;letter-spacing:.06em;
+  color:var(--teal-ink);white-space:nowrap;text-transform:uppercase}
+.row-meta{font-size:8.6pt;color:var(--muted);margin-top:2px}
+.row-d{font-size:9pt;color:var(--muted);line-height:1.55;margin-top:3px}
+
+/* ── Patent card — newcv pat-card ───────────────────────────────────────── */
+.pat-card{
+  background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--petronas);
+  border-radius:5px;padding:16px 18px;break-inside:avoid;
+}
+.pat-head{display:flex;justify-content:space-between;align-items:baseline;gap:14px}
+.pat-title{font-family:var(--font-d);font-size:9.4pt;font-weight:600;color:var(--ink);letter-spacing:.02em}
+.pat-badge{font-family:var(--font-d);font-size:6.6pt;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--teal-ink);background:var(--teal-soft);border:1px solid rgba(0,210,190,.4);
+  padding:3px 9px;border-radius:2px;white-space:nowrap;flex-shrink:0}
+.pat-meta{font-size:8.5pt;color:var(--muted);margin-top:6px;line-height:1.55}
+
+/* ── Print ──────────────────────────────────────────────────────────────── */
+@media print{
+  body{background:#fff}
+  .toolbar{display:none}
+  .sheet{width:auto;min-height:0;margin:0;padding:11mm 12mm;box-shadow:none}
+  @page{size:A4;margin:0}
+  .tl-entry,.row,.sec,.proj-card,.pat-card{break-inside:avoid}
+}
+@media(max-width:760px){
+  .sheet{width:auto;margin:0;padding:24px 20px;box-shadow:none}
+  .skills{grid-template-columns:1fr}
+  .proj-grid{grid-template-columns:1fr}
+  .row-h,.pat-head{flex-direction:column;gap:2px}
+}
+</style>
+</head>
+<body>
+
+<div class="toolbar">
+  <span class="tb-name">Résumé · MSS</span>
+  <div class="tb-actions">
+    <a class="tb-btn ghost" href="index.html">← Portfolio</a>
+    <button class="tb-btn ghost" onclick="window.print()">Print</button>
+    <a class="tb-btn" href="Muhammed_Saaim_Saad_Resume.pdf" download>Download PDF</a>
+  </div>
+</div>
+
+<main class="sheet">
+
+  <header>
+    <div class="name">Muhammed Saaim <span class="ac">Saad</span></div>
+    <div class="title">Model-Based Development Engineer &nbsp;·&nbsp; Powertrain Embedded Software</div>
+    <div class="contact">
+      <a href="mailto:mdsaaimsaad@gmail.com">mdsaaimsaad@gmail.com</a><span class="sep">|</span>
+      <a href="tel:+918660859089">+91 86608 59089</a><span class="sep">|</span>
+      Bengaluru, India<span class="sep">|</span>
+      <a href="https://www.linkedin.com/in/muhammedsaaimsaad" target="_blank" rel="noopener">linkedin.com/in/muhammedsaaimsaad</a><span class="sep">|</span>
+      <a href="https://github.com/SaaimSaad" target="_blank" rel="noopener">github.com/SaaimSaad</a>
+    </div>
+  </header>
+
+  <div class="rule"></div>
+  <div style="height:14px"></div>
+
+  <section class="sec">
+    <div class="sec-h">Professional Summary</div>
+    <p class="summary">Model-Based Development Engineer with <b>3+ years</b> of automotive powertrain software experience at KPIT Technologies, delivering production-grade control software for <b>Cummins</b> across four vehicle programs spanning diesel and gasoline. Owns the full <b>V-model lifecycle</b> per change request — from ASPICE-compliant requirements through MATLAB/Simulink/Stateflow design, Embedded Coder generation, Polyspace static analysis (MISRA-C / CERT-C), MIL/SIL/composition/bench validation, and global multi-region Design Review Board presentations. Specialist in <b>Air Handling &amp; Combustion Controls</b> including aftertreatment, emissions, and OBD diagnostics. Co-inventor of a registered design patent; recognised by customer architects and held a team CSAT of 4.8/5.</p>
+  </section>
+
+  <section class="sec">
+    <div class="sec-h">Technical Skills</div>
+    <div class="skills">
+      <div class="sk">
+        <h4>MBD &amp; Modelling</h4>
+        <div class="tags">
+          <span class="tag">MATLAB</span><span class="tag">Simulink</span><span class="tag">Stateflow</span>
+          <span class="tag">Embedded Coder</span><span class="tag">Model Advisor</span><span class="tag">MAAB Guidelines</span>
+          <span class="tag">MIL / SIL</span><span class="tag">MC/DC Coverage</span>
+        </div>
+      </div>
+      <div class="sk">
+        <h4>Automotive &amp; Safety</h4>
+        <div class="tags">
+          <span class="tag">AUTOSAR Classic</span><span class="tag">PREEvision</span><span class="tag">ASPICE (SWE.3 / SWE.4)</span>
+          <span class="tag">MISRA-C</span><span class="tag">CERT-C</span><span class="tag">Polyspace</span>
+          <span class="tag">OBD Diagnostics</span><span class="tag">ISO 26262</span>
+        </div>
+      </div>
+      <div class="sk">
+        <h4>Tools &amp; Process</h4>
+        <div class="tags">
+          <span class="tag">PTC Windchill Integrity</span><span class="tag">GitLab</span><span class="tag">Git Extensions</span>
+          <span class="tag">C</span><span class="tag">Embedded C</span><span class="tag">MATLAB Scripting</span>
+          <span class="tag">V-Model</span><span class="tag">Agile / Scrum</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="sec-h">Professional Experience</div>
+    <div class="tl">
+
+      <div class="tl-entry">
+        <div class="tl-dot on"></div>
+        <div class="tl-meta">
+          <span class="tl-date">Sept 2023 — Present</span>
+          <span class="badge b-cur">Current</span>
+        </div>
+        <div class="tl-role">Software Engineer — Model-Based Development</div>
+        <div class="tl-co">KPIT Technologies · Client: Cummins Inc. · Bengaluru, India</div>
+        <ul class="b">
+          <li>Own end-to-end V-model delivery of Implementation &amp; Verification Change Requests for the <b>Air Handling &amp; Combustion Controls</b> (AHCC) family — sensors, actuators, controllers, virtual sensors, and diagnostics — across <span class="hl">four</span> active vehicle programs spanning diesel and gasoline.</li>
+          <li>Design and modify AUTOSAR-based Simulink/Stateflow models per MAAB guidelines and ASPICE SWE.3/SWE.4 requirement engineering; coordinate ARXML port and calibration changes with the PREEvision team for architecture integration.</li>
+          <li>Run Polyspace Code Prover &amp; Bug Finder on every delivery for <span class="hl">zero critical findings</span> and full MISRA-C / CERT-C compliance; supported the team's MISRA-C rollout by clearing check backlogs and improving MC/DC coverage during MIL/SIL validation.</li>
+          <li>Present design and verification changes at the customer <b>Design Review Board</b> to a global Cummins forum across India, US, China &amp; the UK — maintaining a <span class="hl">zero-DRB-failure</span> track record across all submitted CRs.</li>
+          <li>Perform composition- and bench-level testing via remote access to Cummins' US infrastructure (Test Levels L2/L3); report coverage across decision, condition, execution, and MC/DC criteria for MIL and SIL stages.</li>
+          <li>Migrated legacy <b>Core2 AUTOSAR</b> software components to <b>CSAR</b> architecture, improving modularity and enabling integration with next-generation platform software stacks.</li>
+          <li>Delivered a structured <b>Composition Testing</b> training programme to <span class="hl">17</span> engineers (archived to KPIT's training library); act as primary onboarding trainer with sessions on OBD diagnostics and verification testing.</li>
+          <li>Proposed restructuring the 22-member team into focused sub-teams with sub-leads — adopted by management and now operational; built a MATLAB script to auto-extract calibration table names and maintain a shared issue/resolution knowledge base.</li>
+          <li>Recognised by a Cummins architect during a DRB call for catching a design point the architect had missed; <span class="hl">4.8/5</span> team CSAT with multiple customer appreciation emails.</li>
+        </ul>
+      </div>
+
+      <div class="tl-entry">
+        <div class="tl-dot"></div>
+        <div class="tl-meta">
+          <span class="tl-date">Jan 2023 — Sept 2023</span>
+          <span class="badge b-int">Internship</span>
+        </div>
+        <div class="tl-role">Intern — Model-Based Development</div>
+        <div class="tl-co">KPIT Technologies · Pune &amp; Bengaluru, India</div>
+        <ul class="b">
+          <li>Developed and validated Simulink/Stateflow models for automotive control algorithms with complete requirement traceability across the software development lifecycle.</li>
+          <li>Conducted ECU verification and validation using CAN protocol and bench-testing; identified edge-case failures and supported MIL/SIL validation of model-based changes.</li>
+          <li>Authored requirement specifications for logic updates and performed ECU diagnostics, supporting cross-functional teams in root-cause analysis and documentation.</li>
+        </ul>
+      </div>
+
+      <div class="tl-entry">
+        <div class="tl-dot"></div>
+        <div class="tl-meta">
+          <span class="tl-date">Sept 2021</span>
+          <span class="badge b-int">Internship</span>
+        </div>
+        <div class="tl-role">Intern — Embedded Systems &amp; Vehicle Integration</div>
+        <div class="tl-co">Volvo / Martial Motors · Bengaluru, India</div>
+        <ul class="b">
+          <li>Supported engine assembly, ECU tuning, and system-level testing across vehicle platforms; gained hands-on exposure to sensor-ECU integration and real-time DTC monitoring.</li>
+          <li>Worked with a specialized body-work and vehicle-service team, which provided insight into the premium-vehicle service workflow.</li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="sec-h">Model-Based Design Projects</div>
+    <div class="proj-grid">
+
+      <div class="proj-card">
+        <div class="pc-header">
+          <div class="p-title">Boost-Pressure Control Model</div>
+          <span class="ps ps-wip">In Progress</span>
+        </div>
+        <div class="st-tags"><span class="st">Simulink</span><span class="st">Stateflow</span><span class="st">Embedded Coder</span></div>
+        <div class="p-desc">Closed-loop turbocharger air-path controller built the full MBD way — PI + feed-forward + anti-windup, turbo-lag model, ECO/SPORT/RACE modes, Stateflow supervisor, MISRA-style generated C; MIL/SIL with MC/DC coverage planned.</div>
+      </div>
+
+      <div class="proj-card">
+        <div class="pc-header">
+          <div class="p-title">Sensor Diagnostic Monitor</div>
+          <span class="ps ps-wip">In Progress</span>
+        </div>
+        <div class="st-tags"><span class="st">Stateflow</span><span class="st">OBD</span><span class="st">MISRA-C</span><span class="st">AUTOSAR</span></div>
+        <div class="p-desc">Model-based OBD diagnostic monitor for a redundant sensor pair — range / rate / correlation rationality, debounced fault confirmation, DTC + freeze-frame + MIL, and healing — with an AUTOSAR Classic SWC and headless requirement checks (REQ-DIAG-001…010).</div>
+      </div>
+
+      <div class="proj-card">
+        <div class="pc-header">
+          <div class="p-title">Torque Safety Monitor</div>
+          <span class="ps ps-wip">In Progress</span>
+        </div>
+        <div class="st-tags"><span class="st">ISO 26262</span><span class="st">E-Gas</span><span class="st">Stateflow</span><span class="st">AUTOSAR</span></div>
+        <div class="p-desc">ISO 26262 E-Gas three-level torque monitor for the ASIL-D unintended-acceleration goal — independent permissible-torque (L2), question/answer watchdog (L3), FTTI-bounded reaction, and a latched safe state — with an AUTOSAR Classic SWC and headless requirement checks (REQ-SAF-001…010).</div>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="sec-h">Education &amp; Certifications</div>
+    <div class="row">
+      <div class="row-h">
+        <div class="row-t">B.E. — Electronics &amp; Communication Engineering</div>
+        <div class="row-tag">2019 — 2023</div>
+      </div>
+      <div class="row-meta">New Horizon College of Engineering, Bengaluru</div>
+      <div class="row-d">Relevant coursework: Embedded Systems · Control Systems · Automotive Electronics · Digital Signal Processing</div>
+    </div>
+    <div class="row">
+      <div class="row-h">
+        <div class="row-t">AUTOSAR Fundamentals</div>
+        <div class="row-tag">Certification</div>
+      </div>
+      <div class="row-meta">Udemy (via KPIT Udemy Business)</div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="sec-h">Intellectual Property</div>
+    <div class="pat-card">
+      <div class="pat-head">
+        <div class="pat-title">Design Patent — Cropped Delta Wing for VTOL Drone</div>
+        <span class="pat-badge">Co-inventor</span>
+      </div>
+      <div class="pat-meta">Design No. 382551-001 · Patent Office of India, Class 12-07 · Registered 30 Mar 2023 · Certificate issued 31 Jan 2024 · New Horizon College of Engineering</div>
+    </div>
+  </section>
+
+</main>
+
+<script>
+// keep the toolbar out of the printed/saved PDF (belt-and-braces with @media print)
+window.addEventListener('beforeprint',()=>document.querySelector('.toolbar').style.display='none');
+window.addEventListener('afterprint',()=>document.querySelector('.toolbar').style.display='');
+</script>
+</body>
+</html>

@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VTOL Drone Patent — Muhammed Saaim Saad</title>
+<meta name="description" content="Design Patent — Cropped Delta Wing for VTOL Drone. Design No. 382551-001. Patent Office of India.">
+<meta name="theme-color" content="#080808">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23080808'/%3E%3Ctext x='16' y='23' font-family='Orbitron,Arial,sans-serif' font-size='17' font-weight='700' fill='%2300D2BE' text-anchor='middle'%3EM%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --bg:#080808;
+  --bg-surface:#0f0f0f;
+  --bg-raised:#171717;
+  --petronas:#00D2BE;
+  --petronas-dim:#009E8E;
+  --silver:#C8CCCE;
+  --silver-dim:#7A8490;
+  --white:#F4F4F4;
+  --font-d:'Orbitron',monospace;
+  --font-b:'Inter',sans-serif;
+  --ease:0.28s cubic-bezier(0.4,0,0.2,1);
+}
+
+html{scroll-behavior:smooth}
+body{font-family:var(--font-b);background:var(--bg);color:var(--silver);line-height:1.6;overflow-x:hidden}
+
+.carbon{
+  background-color:var(--bg);
+  background-image:
+    repeating-linear-gradient(45deg,rgba(255,255,255,.022) 0,rgba(255,255,255,.022) 1px,transparent 0,transparent 50%),
+    repeating-linear-gradient(-45deg,rgba(255,255,255,.022) 0,rgba(255,255,255,.022) 1px,transparent 0,transparent 50%);
+  background-size:6px 6px;
+}
+
+.wrap{max-width:1100px;margin:0 auto;padding:0 28px}
+.rule{height:1px;background:linear-gradient(90deg,transparent,rgba(200,204,206,.18) 25%,rgba(200,204,206,.32) 50%,rgba(200,204,206,.18) 75%,transparent)}
+
+.fi{opacity:0;transform:translateY(20px);transition:opacity .52s ease,transform .52s ease}
+.fi.v{opacity:1;transform:none}
+.fi.d1{transition-delay:.1s}.fi.d2{transition-delay:.2s}.fi.d3{transition-delay:.3s}
+
+.eyebrow{font-family:var(--font-d);font-size:.6rem;font-weight:600;letter-spacing:.35em;text-transform:uppercase;color:var(--petronas);margin-bottom:10px}
+.s-title{font-family:var(--font-d);font-size:clamp(1.5rem,3vw,2rem);font-weight:700;color:var(--white);letter-spacing:.04em;margin-bottom:6px}
+.bar{width:44px;height:2.5px;background:var(--petronas);margin:14px 0 38px}
+
+.btn-p{display:inline-block;font-family:var(--font-d);font-size:.6rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;background:var(--petronas);color:var(--bg);padding:13px 28px;border-radius:2px;text-decoration:none;transition:background var(--ease),transform var(--ease)}
+.btn-p:hover{background:var(--petronas-dim);transform:translateY(-2px)}
+.btn-s{display:inline-block;font-family:var(--font-d);font-size:.6rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;background:transparent;color:var(--silver);padding:13px 28px;border-radius:2px;text-decoration:none;border:1px solid rgba(200,204,206,.35);transition:border-color var(--ease),color var(--ease),transform var(--ease)}
+.btn-s:hover{border-color:var(--silver);color:var(--white);transform:translateY(-2px)}
+
+/* ── NAV ─── */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;height:62px;display:flex;align-items:center;transition:background var(--ease),border-color var(--ease)}
+nav.sc{background:rgba(8,8,8,.94);backdrop-filter:blur(14px);border-bottom:1px solid rgba(0,210,190,.14)}
+.nav-in{display:flex;align-items:center;justify-content:space-between;width:100%}
+.n-logo{font-family:var(--font-d);font-size:.85rem;font-weight:700;letter-spacing:.18em;color:var(--petronas);text-decoration:none}
+.back-link{font-family:var(--font-d);font-size:.58rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--silver-dim);text-decoration:none;display:flex;align-items:center;gap:8px;transition:color var(--ease)}
+.back-link:hover{color:var(--petronas)}
+.back-link::before{content:'←'}
+
+/* ── HERO ─── */
+#hero{min-height:100vh;display:flex;align-items:center;position:relative;overflow:hidden;padding-top:62px}
+
+.hero-grid{position:absolute;top:0;right:0;bottom:0;width:55%;background-image:linear-gradient(rgba(0,210,190,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,210,190,.04) 1px,transparent 1px);background-size:56px 56px;-webkit-mask-image:linear-gradient(to left,rgba(0,0,0,.45),transparent);mask-image:linear-gradient(to left,rgba(0,0,0,.45),transparent);pointer-events:none}
+
+.hero-content{position:relative;z-index:2;width:100%;padding:80px 0}
+
+.h-sup{font-family:var(--font-d);font-size:.6rem;letter-spacing:.4em;color:var(--petronas);text-transform:uppercase;margin-bottom:20px;display:flex;align-items:center;gap:12px}
+.h-sup::before{content:'';width:28px;height:1px;background:var(--petronas)}
+
+.h-title{font-family:var(--font-d);font-size:clamp(2rem,5.5vw,4rem);font-weight:900;color:var(--white);line-height:1.05;letter-spacing:.06em;margin-bottom:20px}
+.h-title em{color:var(--petronas);font-style:normal}
+
+.h-sub{font-size:clamp(.9rem,1.6vw,1.05rem);color:var(--silver-dim);max-width:520px;line-height:1.75;margin-bottom:36px}
+
+.h-reg-row{display:flex;flex-wrap:wrap;gap:24px;margin-bottom:44px}
+.h-reg-item{display:flex;flex-direction:column;gap:3px}
+.h-reg-label{font-family:var(--font-d);font-size:.52rem;letter-spacing:.2em;text-transform:uppercase;color:var(--silver-dim)}
+.h-reg-val{font-size:.9rem;color:var(--silver);font-weight:500}
+.h-reg-val.accent{color:var(--petronas);font-family:var(--font-d);font-size:.8rem;font-weight:700}
+
+.h-ctas{display:flex;gap:12px;flex-wrap:wrap}
+.hero-accent{position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--petronas),transparent 55%)}
+
+/* ── CERT SECTION ─── */
+#certificate{padding:96px 0;background:var(--bg-surface)}
+
+.cert-layout{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start}
+
+.cert-embed{
+  background:var(--bg-raised);border:1px solid rgba(0,210,190,.15);border-radius:6px;
+  overflow:hidden;aspect-ratio:3/4;display:flex;align-items:center;justify-content:center;
+  position:relative;
+}
+.cert-embed iframe{width:100%;height:100%;border:none}
+.cert-placeholder{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;
+  padding:40px;text-align:center;width:100%;height:100%;
+}
+.cert-placeholder-icon{width:56px;height:56px;color:var(--petronas);opacity:.5}
+.cert-placeholder p{font-size:.85rem;color:var(--silver-dim);line-height:1.6}
+
+.cert-info{display:flex;flex-direction:column;gap:24px}
+
+.info-block{
+  background:var(--bg-raised);border:1px solid rgba(255,255,255,.06);
+  border-left:3px solid var(--petronas);border-radius:6px;padding:24px;
+}
+.info-block h3{font-family:var(--font-d);font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--petronas);margin-bottom:12px}
+.info-block p{font-size:.9rem;color:var(--silver-dim);line-height:1.7}
+.info-block p strong{color:var(--silver)}
+
+.meta-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.meta-item{display:flex;flex-direction:column;gap:3px}
+.meta-label{font-family:var(--font-d);font-size:.5rem;letter-spacing:.18em;text-transform:uppercase;color:var(--silver-dim)}
+.meta-val{font-size:.85rem;color:var(--silver);font-weight:500}
+
+/* ── RESEARCH SECTION ─── */
+#research{padding:96px 0}
+
+.research-card{
+  background:var(--bg-surface);border:1px solid rgba(255,255,255,.07);border-radius:6px;
+  padding:40px;display:grid;grid-template-columns:1fr auto;gap:40px;align-items:center;
+}
+
+.research-card h3{font-family:var(--font-d);font-size:.75rem;letter-spacing:.2em;text-transform:uppercase;color:var(--white);margin-bottom:12px}
+.research-card p{font-size:.9rem;color:var(--silver-dim);line-height:1.75;margin-bottom:24px}
+
+.r-stats{display:flex;gap:32px;flex-wrap:wrap}
+.r-stat{display:flex;flex-direction:column;gap:3px}
+.r-stat-v{font-family:var(--font-d);font-size:1.1rem;font-weight:700;color:var(--petronas)}
+.r-stat-l{font-size:.65rem;color:var(--silver-dim);letter-spacing:.04em;text-transform:uppercase}
+
+.r-badge{
+  width:100px;height:100px;border-radius:50%;flex-shrink:0;
+  background:radial-gradient(circle,rgba(0,210,190,.1) 0%,rgba(0,210,190,.03) 60%,transparent 100%);
+  border:1px solid rgba(0,210,190,.18);
+  display:flex;align-items:center;justify-content:center;
+}
+.r-badge svg{width:48px;height:48px;color:var(--petronas);opacity:.6}
+
+/* ── INVENTORS ─── */
+#inventors{padding:96px 0;background:var(--bg-surface)}
+
+.inv-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+
+.inv-card{
+  background:var(--bg-raised);border:1px solid rgba(255,255,255,.06);border-radius:6px;
+  padding:22px 20px;display:flex;align-items:center;gap:14px;
+  transition:border-color var(--ease);
+}
+.inv-card:hover{border-color:rgba(0,210,190,.2)}
+.inv-card.highlight{border-color:rgba(0,210,190,.25);background:rgba(0,210,190,.04)}
+
+.inv-avatar{
+  width:40px;height:40px;border-radius:50%;flex-shrink:0;
+  background:rgba(0,210,190,.1);border:1px solid rgba(0,210,190,.25);
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--font-d);font-size:.75rem;font-weight:700;color:var(--petronas);
+}
+.inv-card.highlight .inv-avatar{background:rgba(0,210,190,.18)}
+.inv-name{font-size:.88rem;color:var(--silver);font-weight:500}
+.inv-role{font-family:var(--font-d);font-size:.5rem;letter-spacing:.12em;text-transform:uppercase;color:var(--silver-dim);margin-top:2px}
+.inv-card.highlight .inv-name{color:var(--white)}
+.inv-card.highlight .inv-role{color:var(--petronas)}
+
+/* ── FOOTER ─── */
+footer{padding:28px 0;border-top:1px solid rgba(255,255,255,.06)}
+.ft-in{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.ft-logo{font-family:var(--font-d);font-size:.68rem;letter-spacing:.22em;color:var(--petronas)}
+.ft-copy{font-size:.74rem;color:var(--silver-dim)}
+.ft-back{font-family:var(--font-d);font-size:.57rem;letter-spacing:.14em;text-transform:uppercase;color:var(--silver-dim);text-decoration:none;transition:color var(--ease)}
+.ft-back:hover{color:var(--petronas)}
+
+@media(max-width:900px){
+  .cert-layout{grid-template-columns:1fr}
+  .research-card{grid-template-columns:1fr}
+  .r-badge{display:none}
+  .inv-grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:560px){
+  .inv-grid{grid-template-columns:1fr}
+  .h-reg-row{flex-direction:column;gap:14px}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="wrap nav-in">
+    <a href="index.html" class="n-logo">MSS</a>
+    <a href="index.html#projects" class="back-link">All Projects</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero" class="carbon">
+  <div class="hero-grid"></div>
+  <div class="wrap hero-content">
+    <div class="h-sup fi">Design Patent &nbsp;·&nbsp; Patent Office of India</div>
+    <h1 class="h-title fi d1">CROPPED DELTA<br>WING FOR <em>VTOL</em><br>DRONE</h1>
+    <p class="h-sub fi d2">A registered aerodynamic design for a cropped delta wing configuration applied to Vertical Take-Off and Landing drone systems, optimising lift-to-drag ratio and stability during VTOL transition phases.</p>
+    <div class="h-reg-row fi d2">
+      <div class="h-reg-item">
+        <span class="h-reg-label">Design Number</span>
+        <span class="h-reg-val accent">382551-001</span>
+      </div>
+      <div class="h-reg-item">
+        <span class="h-reg-label">Class</span>
+        <span class="h-reg-val">12-07</span>
+      </div>
+      <div class="h-reg-item">
+        <span class="h-reg-label">Date Registered</span>
+        <span class="h-reg-val">30 March 2023</span>
+      </div>
+      <div class="h-reg-item">
+        <span class="h-reg-label">Certificate Issued</span>
+        <span class="h-reg-val">31 January 2024</span>
+      </div>
+    </div>
+    <div class="h-ctas fi d3">
+      <a href="Patent_Certificate.pdf" class="btn-p" target="_blank">View Certificate</a>
+      <a href="Patent_Report.pdf" class="btn-s" target="_blank">Research Paper</a>
+    </div>
+  </div>
+  <div class="hero-accent"></div>
+</section>
+
+<div class="rule"></div>
+
+<!-- CERTIFICATE SECTION -->
+<section id="certificate">
+  <div class="wrap">
+    <div class="eyebrow fi">Documentation</div>
+    <h2 class="s-title fi d1">Patent Certificate</h2>
+    <div class="bar fi d1"></div>
+    <div class="cert-layout">
+
+      <div class="cert-embed fi d1">
+        <div class="cert-placeholder">
+          <svg class="cert-placeholder-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="12" y1="18" x2="12" y2="12"/>
+            <line x1="9" y1="15" x2="15" y2="15"/>
+          </svg>
+          <p>Patent Certificate<br><strong style="color:var(--silver)">Design No. 382551-001</strong><br>Patent Office of India</p>
+          <a href="Patent_Certificate.pdf" class="btn-p" target="_blank" style="margin-top:8px">Open PDF ↗</a>
+        </div>
+      </div>
+
+      <div class="cert-info">
+
+        <div class="info-block fi d2">
+          <h3>Registration Details</h3>
+          <div class="meta-grid">
+            <div class="meta-item"><span class="meta-label">Design Number</span><span class="meta-val">382551-001</span></div>
+            <div class="meta-item"><span class="meta-label">Serial Number</span><span class="meta-val">155331</span></div>
+            <div class="meta-item"><span class="meta-label">Class</span><span class="meta-val">12-07</span></div>
+            <div class="meta-item"><span class="meta-label">Authority</span><span class="meta-val">Patent Office of India</span></div>
+            <div class="meta-item"><span class="meta-label">Date Registered</span><span class="meta-val">30 March 2023</span></div>
+            <div class="meta-item"><span class="meta-label">Certificate Issued</span><span class="meta-val">31 January 2024</span></div>
+            <div class="meta-item"><span class="meta-label">Legal Basis</span><span class="meta-val">Designs Act, 2000</span></div>
+            <div class="meta-item"><span class="meta-label">Protection Period</span><span class="meta-val">10 years (extendable to 15)</span></div>
+          </div>
+        </div>
+
+        <div class="info-block fi d3">
+          <h3>Design Description</h3>
+          <p>The <strong>Cropped Delta Wing</strong> design is a registered aerodynamic configuration developed for VTOL drone platforms. The design optimises the classic delta wing planform by cropping the leading-edge tips, reducing induced drag during hover-to-forward-flight transitions while maintaining structural rigidity and lift efficiency.</p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="rule"></div>
+
+<!-- RESEARCH PAPER -->
+<section id="research">
+  <div class="wrap">
+    <div class="eyebrow fi">Academic</div>
+    <h2 class="s-title fi d1">Research Paper</h2>
+    <div class="bar fi d1"></div>
+    <div class="research-card fi d2">
+      <div>
+        <h3>Cropped Delta Wing for VTOL Drone — Design Analysis</h3>
+        <p>The accompanying research paper documents the aerodynamic analysis, design methodology, and performance evaluation of the cropped delta wing configuration. It covers lift-to-drag optimisation, stability modelling during VTOL transition phases, and structural integrity assessment of the wing geometry.</p>
+        <div class="r-stats">
+          <div class="r-stat"><div class="r-stat-v">VTOL</div><div class="r-stat-l">Transition Optimised</div></div>
+          <div class="r-stat"><div class="r-stat-v">Class 12-07</div><div class="r-stat-l">Registration Class</div></div>
+          <div class="r-stat"><div class="r-stat-v">2023</div><div class="r-stat-l">Year Filed</div></div>
+        </div>
+        <div style="margin-top:28px">
+          <a href="Patent_Report.pdf" class="btn-p" target="_blank">Read Research Paper</a>
+        </div>
+      </div>
+      <div class="r-badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M2 20h20M4 20V10l8-8 8 8v10M9 20v-6h6v6"/>
+          <path d="M8 10h8"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="rule"></div>
+
+<!-- INVENTORS -->
+<section id="inventors">
+  <div class="wrap">
+    <div class="eyebrow fi">Team</div>
+    <h2 class="s-title fi d1">Co-Inventors</h2>
+    <div class="bar fi d1"></div>
+    <div class="inv-grid">
+
+      <div class="inv-card fi d1">
+        <div class="inv-avatar">RC</div>
+        <div>
+          <div class="inv-name">Rajarshi Chatterjee</div>
+          <div class="inv-role">Co-inventor</div>
+        </div>
+      </div>
+
+      <div class="inv-card highlight fi d2">
+        <div class="inv-avatar">SS</div>
+        <div>
+          <div class="inv-name">Muhammed Saaim Saad</div>
+          <div class="inv-role">Co-inventor</div>
+        </div>
+      </div>
+
+      <div class="inv-card fi d3">
+        <div class="inv-avatar">SS</div>
+        <div>
+          <div class="inv-name">Shreyas Shanbogh</div>
+          <div class="inv-role">Co-inventor</div>
+        </div>
+      </div>
+
+      <div class="inv-card fi d1">
+        <div class="inv-avatar">MJ</div>
+        <div>
+          <div class="inv-name">Melvin Jason H</div>
+          <div class="inv-role">Co-inventor</div>
+        </div>
+      </div>
+
+      <div class="inv-card fi d2">
+        <div class="inv-avatar">SJ</div>
+        <div>
+          <div class="inv-name">Dr. Sujin Jose A</div>
+          <div class="inv-role">Co-inventor &nbsp;·&nbsp; Faculty Advisor</div>
+        </div>
+      </div>
+
+      <div class="inv-card fi d3">
+        <div class="inv-avatar" style="font-size:.55rem;letter-spacing:-.02em">NHCE</div>
+        <div>
+          <div class="inv-name">New Horizon College of Engineering</div>
+          <div class="inv-role">Filing Institution</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="carbon">
+  <div class="wrap ft-in">
+    <span class="ft-logo">MSS · 2026</span>
+    <span class="ft-copy">Muhammed Saaim Saad · Patent No. 382551-001</span>
+    <a href="index.html" class="ft-back">Portfolio ↗</a>
+  </div>
+</footer>
+
+<script>
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => nav.classList.toggle('sc', scrollY > 20), {passive:true});
+
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('v'); io.unobserve(e.target); } });
+}, {threshold: 0.08});
+document.querySelectorAll('.fi').forEach(el => io.observe(el));
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Boost-Pressure Control Model — Muhammed Saaim Saad</title>
+<meta name="description" content="Model-based design of a diesel turbocharger boost-pressure controller — Simulink/Stateflow, Embedded Coder, MIL/SIL with MCDC coverage. Interactive closed-loop dashboard simulation.">
+<meta name="theme-color" content="#080808">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23080808'/%3E%3Ctext x='16' y='23' font-family='Orbitron,Arial,sans-serif' font-size='17' font-weight='700' fill='%2300D2BE' text-anchor='middle'%3EM%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#080808;--bg-surface:#0f0f0f;--bg-raised:#171717;
+  --petronas:#00D2BE;--petronas-dim:#009E8E;
+  --silver:#C8CCCE;--silver-dim:#7A8490;--white:#F4F4F4;
+  --amber:#C8A800;--red:#FF4444;--orange:#FF6A2A;
+  --font-d:'Orbitron',monospace;--font-b:'Inter',sans-serif;--font-m:'JetBrains Mono',monospace;
+  --pad:84px;--r:6px;--ease:0.28s cubic-bezier(0.4,0,0.2,1);
+}
+html{scroll-behavior:smooth;font-size:16px}
+body{font-family:var(--font-b);background:var(--bg);color:var(--silver);line-height:1.6;overflow-x:hidden}
+.carbon{background-color:var(--bg);background-image:
+  repeating-linear-gradient(45deg,rgba(255,255,255,.022) 0,rgba(255,255,255,.022) 1px,transparent 0,transparent 50%),
+  repeating-linear-gradient(-45deg,rgba(255,255,255,.022) 0,rgba(255,255,255,.022) 1px,transparent 0,transparent 50%);
+  background-size:6px 6px;}
+.wrap{max-width:1080px;margin:0 auto;padding:0 28px}
+.eyebrow{font-family:var(--font-d);font-size:.6rem;font-weight:600;letter-spacing:.35em;text-transform:uppercase;color:var(--petronas);margin-bottom:10px}
+.s-title{font-family:var(--font-d);font-size:clamp(1.45rem,3vw,2rem);font-weight:700;color:var(--white);letter-spacing:.04em;margin-bottom:6px}
+.s-sub{font-size:.95rem;color:var(--silver-dim);max-width:640px;line-height:1.7}
+.bar{width:44px;height:2.5px;background:var(--petronas);margin:14px 0 34px}
+.rule{height:1px;background:linear-gradient(90deg,transparent,rgba(200,204,206,.18) 25%,rgba(200,204,206,.32) 50%,rgba(200,204,206,.18) 75%,transparent)}
+.fi{opacity:0;transform:translateY(22px);transition:opacity .55s ease,transform .55s ease}
+.fi.v{opacity:1;transform:none}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;height:62px;display:flex;align-items:center;transition:background var(--ease),border-color var(--ease)}
+nav.sc{background:rgba(8,8,8,.94);backdrop-filter:blur(14px);border-bottom:1px solid rgba(0,210,190,.14)}
+.nav-in{display:flex;align-items:center;justify-content:space-between;width:100%}
+.n-logo{font-family:var(--font-d);font-size:.85rem;font-weight:700;letter-spacing:.18em;color:var(--petronas);text-decoration:none}
+.n-back{font-family:var(--font-d);font-size:.58rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--silver-dim);text-decoration:none;transition:color var(--ease)}
+.n-back:hover{color:var(--white)}
+
+/* HERO */
+#hero{padding:140px 0 60px;position:relative;overflow:hidden}
+.hero-grid{position:absolute;top:0;right:0;bottom:0;width:55%;background-image:linear-gradient(rgba(0,210,190,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,210,190,.04) 1px,transparent 1px);background-size:56px 56px;-webkit-mask-image:linear-gradient(to left,rgba(0,0,0,.5),transparent);mask-image:linear-gradient(to left,rgba(0,0,0,.5),transparent);pointer-events:none}
+.h-eyebrow{font-family:var(--font-d);font-size:.6rem;letter-spacing:.4em;color:var(--petronas);text-transform:uppercase;margin-bottom:18px;display:flex;align-items:center;gap:14px}
+.h-eyebrow::before{content:'';display:block;width:30px;height:1px;background:var(--petronas)}
+.h-title{font-family:var(--font-d);font-size:clamp(1.9rem,4.5vw,3rem);font-weight:800;color:var(--white);line-height:1.08;letter-spacing:.03em;margin-bottom:18px;position:relative;z-index:2}
+.h-lead{font-size:clamp(.95rem,1.6vw,1.08rem);color:var(--silver-dim);max-width:660px;line-height:1.7;margin-bottom:26px;position:relative;z-index:2}
+.chips{display:flex;flex-wrap:wrap;gap:8px;position:relative;z-index:2}
+.chip{font-family:var(--font-d);font-size:.55rem;letter-spacing:.14em;text-transform:uppercase;color:var(--petronas);background:rgba(0,210,190,.08);border:1px solid rgba(0,210,190,.2);padding:5px 11px;border-radius:2px}
+.chip.wip{color:var(--amber);background:rgba(200,168,0,.1);border-color:rgba(200,168,0,.25)}
+
+section{padding:var(--pad) 0}
+
+/* ===== SIM / CLUSTER ===== */
+.sim-wrap{background:var(--bg-raised);border:1px solid rgba(255,255,255,.07);border-top:2px solid var(--petronas);border-radius:var(--r);padding:22px}
+.sim-note,.cap{font-size:.78rem;color:var(--silver-dim);line-height:1.65}
+.cap{margin-top:12px}.cap b{color:var(--silver)}
+.sim-note{margin-top:14px;font-style:italic}.sim-note b{color:var(--silver);font-style:normal}
+
+/* top row: dials + knobs */
+.cluster-top{display:flex;justify-content:space-between;align-items:center;gap:22px;flex-wrap:wrap;margin-bottom:20px}
+.dials{display:flex;gap:12px;flex:1 1 480px}
+.gpanel{flex:1;background:radial-gradient(circle at 50% 36%,#141414,#0a0a0a);border:1px solid rgba(255,255,255,.06);border-radius:10px;padding:6px}
+.gauge{width:100%;height:auto;display:block}
+.knobs{display:flex;gap:16px;align-items:flex-start}
+.knob-wrap{display:flex;flex-direction:column;align-items:center;gap:5px}
+.knob{width:98px;height:98px;cursor:pointer;outline:none}
+.knob:focus-visible{filter:drop-shadow(0 0 7px rgba(0,210,190,.65))}
+.knob .rotor{transition:transform .42s cubic-bezier(.34,1.25,.5,1)}
+.knob-cap{font-family:var(--font-d);font-size:.5rem;letter-spacing:.2em;text-transform:uppercase;color:var(--silver-dim)}
+.gpanel-cap{margin-top:4px;text-align:center;font-family:var(--font-d);font-size:.5rem;letter-spacing:.2em;text-transform:uppercase;color:var(--silver-dim)}
+
+/* body: graph + controls */
+.cluster-body{display:grid;grid-template-columns:1fr 300px;gap:22px;align-items:start}
+canvas{width:100%;display:block;background:#0a0a0a;border:1px solid rgba(255,255,255,.06);border-radius:6px}
+.legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:12px;padding:10px 12px;background:var(--bg-surface);border:1px solid rgba(255,255,255,.06);border-radius:6px;font-size:.74rem;color:var(--silver-dim)}
+.legend span{display:inline-flex;align-items:center;gap:7px}
+.sw{width:15px;height:3px;border-radius:2px;display:inline-block}
+.sw.ref{height:0;border-top:2px dashed rgba(200,204,206,.75)}
+.sw.act{background:var(--amber)}.sw.boost{background:var(--petronas)}
+
+.cpanel{display:flex;flex-direction:column}
+.seg{display:flex;background:var(--bg-surface);border:1px solid rgba(255,255,255,.08);border-radius:4px;padding:3px;margin-bottom:14px}
+.seg-btn{flex:1;font-family:var(--font-d);font-size:.54rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;padding:8px 0;border:none;background:transparent;color:var(--silver-dim);cursor:pointer;border-radius:2px;transition:all var(--ease)}
+.seg-btn.active{background:rgba(0,210,190,.14);color:var(--petronas);box-shadow:inset 0 0 0 1px rgba(0,210,190,.3)}
+
+.ctrl{margin-bottom:12px}
+.ctrl label{display:flex;justify-content:space-between;font-family:var(--font-d);font-size:.5rem;letter-spacing:.1em;text-transform:uppercase;color:var(--silver-dim);margin-bottom:6px}
+.ctrl label span{color:var(--petronas)}
+.ctrl input[type=range]{width:100%;accent-color:var(--petronas);cursor:pointer}
+#sl-auto .ctrl input[type=range]{accent-color:var(--orange)}
+
+.btn-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}
+.btn{font-family:var(--font-d);font-size:.54rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:9px 10px;border-radius:2px;cursor:pointer;border:1px solid rgba(200,204,206,.3);background:transparent;color:var(--silver);transition:all var(--ease);flex:1}
+.btn:hover{border-color:var(--silver);color:var(--white)}
+.btn.fault{border-color:rgba(255,68,68,.4);color:var(--red)}
+.btn.fault:hover{background:rgba(255,68,68,.12)}
+.btn.hill{border-color:rgba(200,168,0,.4);color:var(--amber)}
+.btn.hill:hover{background:rgba(200,168,0,.12)}
+
+.readouts{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:14px}
+.ro{background:var(--bg-surface);border:1px solid rgba(255,255,255,.06);border-radius:4px;padding:9px 11px}
+.ro-l{font-family:var(--font-d);font-size:.5rem;letter-spacing:.14em;text-transform:uppercase;color:var(--silver-dim);margin-bottom:4px}
+.ro-v{font-family:var(--font-d);font-size:1rem;font-weight:700;color:var(--petronas)}
+.mode-pill{display:inline-block;font-family:var(--font-d);font-size:.58rem;letter-spacing:.1em;padding:3px 9px;border-radius:2px}
+.m-RUN{color:var(--petronas);background:rgba(0,210,190,.12);border:1px solid rgba(0,210,190,.3)}
+.m-FAULT{color:var(--red);background:rgba(255,68,68,.12);border:1px solid rgba(255,68,68,.35)}
+.m-OFF,.m-INIT,.m-CRANK{color:var(--silver-dim);background:rgba(200,204,206,.06);border:1px solid rgba(200,204,206,.16)}
+
+/* generic cards */
+.card{background:var(--bg-raised);border:1px solid rgba(255,255,255,.06);border-radius:var(--r);padding:24px}
+table{width:100%;border-collapse:collapse;font-size:.84rem}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid rgba(255,255,255,.06);vertical-align:top}
+th{font-family:var(--font-d);font-size:.52rem;letter-spacing:.14em;text-transform:uppercase;color:var(--silver-dim)}
+td .rid{font-family:var(--font-m);color:var(--petronas);font-size:.8rem}
+.req-type{font-size:.66rem;color:var(--silver-dim)}
+pre{background:#0a0a0a;border:1px solid rgba(255,255,255,.07);border-radius:var(--r);padding:20px 22px;overflow-x:auto;font-family:var(--font-m);font-size:.8rem;line-height:1.62;color:var(--silver)}
+.cm{color:var(--silver-dim)}.kw{color:var(--petronas)}.fn{color:#9ecbff}.nu{color:var(--amber)}
+.art{display:flex;gap:16px;align-items:flex-start;padding:16px 0;border-bottom:1px solid rgba(255,255,255,.06)}
+.art:last-child{border-bottom:none}
+.art-status{font-family:var(--font-d);font-size:.5rem;letter-spacing:.1em;text-transform:uppercase;padding:4px 8px;border-radius:2px;white-space:nowrap;flex-shrink:0;margin-top:2px}
+.st-done{color:var(--petronas);background:rgba(0,210,190,.1);border:1px solid rgba(0,210,190,.25)}
+.st-pending{color:var(--silver-dim);background:rgba(200,204,206,.05);border:1px solid rgba(200,204,206,.14)}
+.art h4{font-family:var(--font-d);font-size:.72rem;letter-spacing:.06em;color:var(--white);margin-bottom:4px}
+.art p{font-size:.85rem;color:var(--silver-dim);line-height:1.6}
+.art a{color:var(--petronas);text-decoration:none}.art a:hover{text-decoration:underline}
+.btn-p{display:inline-block;font-family:var(--font-d);font-size:.6rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;background:var(--petronas);color:var(--bg);padding:13px 28px;border-radius:2px;text-decoration:none;transition:background var(--ease),transform var(--ease)}
+.btn-p:hover{background:var(--petronas-dim);transform:translateY(-2px)}
+.btn-s{display:inline-block;font-family:var(--font-d);font-size:.6rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;background:transparent;color:var(--silver);padding:13px 28px;border-radius:2px;text-decoration:none;border:1px solid rgba(200,204,206,.35);transition:all var(--ease)}
+.btn-s:hover{border-color:var(--silver);color:var(--white)}
+footer{padding:28px 0;border-top:1px solid rgba(255,255,255,.06)}
+.ft-in{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.ft-logo{font-family:var(--font-d);font-size:.68rem;letter-spacing:.22em;color:var(--petronas)}
+.ft-copy{font-size:.74rem;color:var(--silver-dim)}
+
+/* THEORY — diagram + formula cards */
+.diagram{width:100%;height:auto;display:block}
+.formula-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:22px}
+.formula{background:var(--bg-surface);border:1px solid rgba(255,255,255,.06);border-left:2px solid var(--petronas);border-radius:4px;padding:13px 15px;min-width:0}
+.formula.wide{grid-column:1 / -1}
+.formula code{display:block;font-family:var(--font-m);font-size:.78rem;color:var(--white);margin-bottom:7px;white-space:normal;overflow-wrap:break-word}
+.formula p{font-size:.8rem;color:var(--silver-dim);line-height:1.55}
+.formula b{color:var(--silver);font-weight:600}
+.legend-line{display:flex;gap:20px;flex-wrap:wrap;margin-top:16px;font-size:.74rem;color:var(--silver-dim)}
+.legend-line span{display:inline-flex;align-items:center;gap:7px}
+.legend-line i{width:13px;height:13px;border-radius:3px;display:inline-block}
+.lg-gen{background:rgba(0,210,190,.18);border:1px solid var(--petronas)}
+.lg-plant{background:rgba(120,128,134,.14);border:1px solid var(--silver-dim)}
+
+/* verified-results stat strip */
+.stat-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:8px}
+.stat{background:var(--bg-surface);border:1px solid rgba(255,255,255,.06);border-top:2px solid var(--petronas);border-radius:5px;padding:14px 15px}
+.s-val{font-family:var(--font-d);font-size:1.5rem;font-weight:700;color:var(--white);line-height:1}
+.s-lab{font-family:var(--font-d);font-size:.5rem;letter-spacing:.16em;text-transform:uppercase;color:var(--silver-dim);margin-top:9px}
+.s-req{font-size:.72rem;color:var(--petronas);margin-top:5px}
+.stat-cap{font-size:.72rem;color:var(--silver-dim);margin:0 0 24px}
+
+/* CODE — tabs */
+.tabs{display:flex;flex-wrap:wrap;gap:2px;border-bottom:1px solid rgba(255,255,255,.08)}
+.tab{font-family:var(--font-d);font-size:.55rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:10px 16px;border:none;background:transparent;color:var(--silver-dim);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:color var(--ease),border-color var(--ease)}
+.tab:hover{color:var(--silver)}
+.tab[aria-selected=true]{color:var(--petronas);border-bottom-color:var(--petronas)}
+.tabpanel[hidden]{display:none}
+.tabpanel pre{border-top-left-radius:0;border-top-right-radius:0}
+
+@media(max-width:860px){
+  :root{--pad:60px}
+  .cluster-body{grid-template-columns:1fr}
+  .hero-grid{display:none}
+  .knobs{flex:1 1 100%;justify-content:center}
+  .formula-grid{grid-template-columns:1fr}
+}
+@media(prefers-reduced-motion:reduce){.fi{opacity:1;transform:none}.knob .rotor{transition:none}}
+</style>
+</head>
+<body>
+
+<nav id="nav">
+  <div class="wrap nav-in">
+    <a href="index.html" class="n-logo">MSS</a>
+    <a href="index.html#projects" class="n-back">← All Projects</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero" class="carbon">
+  <div class="hero-grid"></div>
+  <div class="wrap">
+    <div class="h-eyebrow fi">Project · Powertrain MBD · Control</div>
+    <h1 class="h-title fi">Boost-Pressure<br>Control Model</h1>
+    <p class="h-lead fi">A model-based design of a diesel turbocharger boost-pressure (air-path) controller — a discrete PI loop with feed-forward and back-calculation anti-windup, a speed×load setpoint map, speed-dependent turbo authority (so low-rev turbo lag is real), and a Stateflow safety supervisor (INIT→OFF→CRANK→RUN→FAULT). Built the full MBD way: requirements → Simulink/Stateflow model → generated C → MIL/SIL with structural coverage. The cluster below is a live, in-browser simulation of the same control law — start it, pick a drive mode, rev it in Auto or tune it in Manual, then hit a hill or break the sensor.</p>
+    <div class="chips fi">
+      <span class="chip">Simulink</span><span class="chip">Stateflow</span>
+      <span class="chip">Embedded Coder</span><span class="chip">MISRA-C</span>
+      <span class="chip">MIL / SIL</span><span class="chip">MCDC Coverage</span>
+      <span class="chip wip">In Progress</span>
+    </div>
+  </div>
+</section>
+
+<div class="rule"></div>
+
+<!-- INTERACTIVE CLUSTER -->
+<section id="sim">
+  <div class="wrap">
+    <div class="eyebrow fi">Live · Try It</div>
+    <h2 class="s-title fi">Turbo Cluster</h2>
+    <div class="bar fi"></div>
+    <p class="s-sub fi" style="margin-bottom:22px"><b style="color:var(--silver)">New here?</b> Turn the red key to <b style="color:var(--silver)">START</b>, pick a drive <b style="color:var(--silver)">mode</b>, then (in Auto) push the throttle. Watch the controller hold boost on target as the revs and speed climb — then hit a hill or break the sensor.</p>
+
+    <div class="sim-wrap fi">
+      <!-- TOP: dials + knobs -->
+      <div class="cluster-top">
+        <div class="dials">
+          <div class="gpanel"><svg class="gauge" id="g-boost" viewBox="0 0 200 196" aria-label="Boost pressure dial"></svg><div class="gpanel-cap">Boost</div></div>
+          <div class="gpanel"><svg class="gauge" id="g-tach"  viewBox="0 0 200 196" aria-label="Engine rpm dial"></svg><div class="gpanel-cap">Engine</div></div>
+          <div class="gpanel"><svg class="gauge" id="g-speed" viewBox="0 0 200 196" aria-label="Vehicle speed dial"></svg><div class="gpanel-cap">Speed</div></div>
+        </div>
+        <div class="knobs">
+          <div class="knob-wrap"><svg class="knob" id="knob-power" viewBox="0 0 120 120" tabindex="0" role="button" aria-label="Engine start stop"></svg><div class="knob-cap">Ignition</div></div>
+          <div class="knob-wrap"><svg class="knob" id="knob-mode" viewBox="0 0 120 120" tabindex="0" role="slider" aria-label="Drive mode"></svg><div class="knob-cap">Drive Mode</div></div>
+        </div>
+      </div>
+
+      <!-- BODY: graph + control column -->
+      <div class="cluster-body">
+        <div class="graph-col">
+          <canvas id="plot" width="720" height="250"></canvas>
+          <div class="legend">
+            <span><i class="sw ref"></i> Target (what the engine wants)</span>
+            <span><i class="sw boost"></i> Actual boost</span>
+            <span><i class="sw act"></i> Valve effort</span>
+          </div>
+          <p class="cap"><b>What you're watching:</b> the teal line is the boost the engine is actually getting — it should chase the dashed target. Amber is how hard the controller works the turbo valve. A <b style="color:var(--red)">red</b> line means the safety supervisor caught a bad sensor and dropped to limp mode.</p>
+        </div>
+
+        <div class="cpanel">
+          <div class="seg" role="group" aria-label="Target mode">
+            <button class="seg-btn active" id="sel-auto" aria-pressed="true">Auto</button>
+            <button class="seg-btn" id="sel-manual" aria-pressed="false">Manual</button>
+          </div>
+
+          <div id="sl-auto">
+            <div class="ctrl">
+              <label>Throttle <span id="v-thr">0%</span></label>
+              <input type="range" id="s-thr" min="0" max="100" value="0" step="1">
+            </div>
+          </div>
+
+          <div id="sl-manual" style="display:none">
+            <div class="ctrl">
+              <label>Boost Target <span id="v-ref">85 kPa</span></label>
+              <input type="range" id="s-ref" min="10" max="145" value="85" step="1">
+            </div>
+            <div class="ctrl">
+              <label>Proportional Kp <span id="v-kp">0.010</span></label>
+              <input type="range" id="s-kp" min="0" max="0.05" value="0.010" step="0.001">
+            </div>
+            <div class="ctrl">
+              <label>Integral Ki <span id="v-ki">0.050</span></label>
+              <input type="range" id="s-ki" min="0" max="0.3" value="0.050" step="0.005">
+            </div>
+          </div>
+
+          <div class="btn-row">
+            <button class="btn hill" id="b-hill">Hit a Hill</button>
+            <button class="btn fault" id="b-fault">Break Sensor</button>
+            <button class="btn" id="b-reset">Reset</button>
+          </div>
+
+          <div class="readouts">
+            <div class="ro"><div class="ro-l">Target</div><div class="ro-v" id="ro-ref">—</div></div>
+            <div class="ro"><div class="ro-l">Valve</div><div class="ro-v" id="ro-u">—</div></div>
+            <div class="ro"><div class="ro-l">Boost</div><div class="ro-v" id="ro-boost">—</div></div>
+            <div class="ro"><div class="ro-l">Mode</div><div class="ro-v"><span id="ro-mode" class="mode-pill m-OFF">OFF</span></div></div>
+          </div>
+        </div>
+      </div>
+
+      <p class="sim-note">A browser simulation of the discrete control law (PI + feed-forward + back-calculation anti-windup) against a first-order air-path plant — the same algorithm and parameters as the Simulink model in the repo. <b>Not</b> the Simulink artifact itself.</p>
+    </div>
+  </div>
+</section>
+
+<div class="rule"></div>
+
+<!-- THEORY / HOW IT WORKS -->
+<section id="theory">
+  <div class="wrap">
+    <div class="eyebrow fi">Theory</div>
+    <h2 class="s-title fi">How It Works</h2>
+    <div class="bar fi"></div>
+    <p class="s-sub fi" style="margin-bottom:26px">The whole control loop on one page — what each block does, and the maths behind it. The same law runs in the cluster above.</p>
+    <div class="card fi">
+      <svg class="diagram" viewBox="0 0 960 300" font-family="Inter,sans-serif" role="img" aria-label="Boost-pressure control loop diagram">
+        <defs>
+          <marker id="ta" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#00D2BE"/></marker>
+          <marker id="tad" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#7A8490"/></marker>
+          <style>
+            .bx{fill:#15211f;stroke:#00D2BE;stroke-width:1.4}
+            .bx2{fill:#121314;stroke:#7A8490;stroke-width:1.2}
+            .lb{fill:#F4F4F4;font-size:13.5px;font-weight:600}
+            .sl{fill:#8a93a0;font-size:10.5px}
+            .ln{stroke:#00D2BE;stroke-width:1.8;fill:none;marker-end:url(#ta)}
+            .lnd{stroke:#7A8490;stroke-width:1.5;fill:none;marker-end:url(#tad);stroke-dasharray:4 3}
+          </style>
+        </defs>
+
+        <!-- supervisor band -->
+        <rect class="bx" x="24" y="16" width="912" height="42" rx="6"/>
+        <text class="lb" x="480" y="34" text-anchor="middle">Supervisor</text>
+        <text class="sl" x="480" y="49" text-anchor="middle">INIT · OFF · CRANK · RUN · FAULT</text>
+        <path class="lnd" d="M520,58 L520,128"/>
+        <text class="sl" x="528" y="98" text-anchor="start">enable</text>
+
+        <!-- main signal row -->
+        <rect class="bx2" x="40" y="130" width="154" height="64" rx="6"/>
+        <text class="lb" x="117" y="159" text-anchor="middle">Driver</text>
+        <text class="sl" x="117" y="177" text-anchor="middle">ignition · mode · throttle</text>
+
+        <rect class="bx" x="214" y="130" width="140" height="64" rx="6"/>
+        <text class="lb" x="284" y="159" text-anchor="middle">Target</text>
+        <text class="sl" x="284" y="177" text-anchor="middle">speed × load</text>
+
+        <circle class="bx" cx="392" cy="162" r="15"/>
+        <text class="lb" x="392" y="167" text-anchor="middle">Σ</text>
+        <text class="sl" x="381" y="174" text-anchor="middle">−</text>
+
+        <rect class="bx" x="430" y="130" width="180" height="64" rx="6"/>
+        <text class="lb" x="520" y="159" text-anchor="middle">Controller</text>
+        <text class="sl" x="520" y="177" text-anchor="middle">PI + anti-windup</text>
+
+        <rect class="bx2" x="636" y="130" width="150" height="64" rx="6"/>
+        <text class="lb" x="711" y="159" text-anchor="middle">Turbo</text>
+        <text class="sl" x="711" y="177" text-anchor="middle">valve → boost</text>
+
+        <rect class="bx2" x="810" y="130" width="110" height="64" rx="6"/>
+        <text class="lb" x="865" y="159" text-anchor="middle">Boost</text>
+        <text class="sl" x="865" y="177" text-anchor="middle">kPa</text>
+
+        <!-- forward arrows -->
+        <path class="ln" d="M194,162 L212,162"/>
+        <path class="ln" d="M354,162 L375,162"/>
+        <path class="ln" d="M407,162 L428,162"/>
+        <path class="ln" d="M610,162 L634,162"/>
+        <text class="sl" x="622" y="154" text-anchor="middle">u_act</text>
+        <path class="ln" d="M786,162 L808,162"/>
+
+        <!-- sensor + single feedback path -->
+        <rect class="bx" x="430" y="236" width="180" height="46" rx="6"/>
+        <text class="lb" x="520" y="258" text-anchor="middle">Sensor</text>
+        <text class="sl" x="520" y="274" text-anchor="middle">range · rate</text>
+        <path class="lnd" d="M865,194 L865,259 L612,259"/>
+        <path class="lnd" d="M430,259 L392,259 L392,179"/>
+        <text class="sl" x="700" y="252" text-anchor="middle">measured boost</text>
+      </svg>
+
+      <div class="legend-line">
+        <span><i class="lg-gen"></i> Controller software</span>
+        <span><i class="lg-plant"></i> Driver &amp; plant</span>
+      </div>
+
+      <p class="sim-note" style="margin-top:18px">Read it left-to-right: the <b>Driver</b> sets a boost <b>Target</b> (from a speed × load map); the <b>Controller</b> compares target to the <b>measured</b> boost and works the turbo valve (<code style="font-family:var(--font-m)">u_act</code>). The turbo's authority grows with engine speed, so full boost only arrives once it spools — that's <b>turbo lag</b>. Boost feeds back at 100 Hz; a <b>hill</b> shows up as a load disturbance the loop rejects, and if the <b>Sensor</b> reads out-of-range or jumps implausibly the <b>Supervisor</b> latches a safe <b style="color:var(--red)">FAULT</b> limp. The teal blocks are the controller software; the grey blocks are the driver and the physical plant.</p>
+
+      <div class="formula-grid">
+        <div class="formula"><code>τ·ṗ = −(p − p_amb) + K_eff·u + d</code><p><b>Plant (air-path):</b> a first-order lag — boost climbs toward <code style="display:inline">K_eff·u</code> above ambient; <code style="display:inline">d</code> is load (e.g. a hill). Solved at Ts = 10 ms.</p></div>
+        <div class="formula"><code>K_eff = K_act·(a_min + (1−a_min)·min(rpm/n_spool, 1))</code><p><b>Turbo authority:</b> the turbo gets stronger with revs. Below spool-up (<code style="display:inline">n_spool</code>) it can't make full boost — modelled turbo lag.</p></div>
+        <div class="formula"><code>u_ff = (p_ref − p_amb) / K_act</code><p><b>Feed-forward:</b> an open-loop guess of the valve position for the target, so the loop starts close and PI only trims the remainder.</p></div>
+        <div class="formula"><code>u = sat(u_ff + Kp·e + I),  e = p_ref − p_meas<br>I += Ts·(Ki·e + Kaw·(u − u_unsat))</code><p><b>PI + anti-windup:</b> PI removes steady-state error; back-calculation (<code style="display:inline">Kaw</code>) bleeds the integrator whenever the valve saturates, so it never winds up.</p></div>
+        <div class="formula wide"><code>p_ref = clamp( p_min + (p_max(mode)−p_min)·load·(0.45 + 0.55·speedN) )</code><p><b>Setpoint map:</b> throttle (load) and revs set the target; the drive mode picks the ceiling <code style="display:inline">p_max</code>. Speed gates how much boost is actually requested.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="rule"></div>
+
+<!-- ARCHITECTURE -->
+<section id="arch">
+  <div class="wrap">
+    <div class="eyebrow fi">Design</div>
+    <h2 class="s-title fi">Architecture</h2>
+    <div class="bar fi"></div>
+    <div class="card fi">
+      <svg viewBox="0 0 960 434" style="width:100%;height:auto" font-family="Inter,sans-serif" role="img" aria-label="System architecture: HMI, code-generated controller, and plant layers">
+        <defs>
+          <marker id="aar" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#00D2BE"/></marker>
+          <marker id="aag" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#7A8490"/></marker>
+          <style>
+            .abx{fill:#15211f;stroke:#00D2BE;stroke-width:1.4}
+            .abx2{fill:#121314;stroke:#7A8490;stroke-width:1.2}
+            .alb{fill:#F4F4F4;font-size:13.5px;font-weight:600}
+            .asl{fill:#8a93a0;font-size:10.5px}
+            .alane{fill:#00D2BE;font-size:10.5px;font-weight:600;letter-spacing:.08em}
+            .alane2{fill:#7A8490;font-size:10.5px;font-weight:600;letter-spacing:.08em}
+            .aln{stroke:#00D2BE;stroke-width:1.7;fill:none;marker-end:url(#aar)}
+            .alnd{stroke:#7A8490;stroke-width:1.5;fill:none;marker-end:url(#aag);stroke-dasharray:4 3}
+          </style>
+        </defs>
+
+        <!-- lane bands -->
+        <rect x="16" y="14"  width="928" height="94"  rx="10" fill="rgba(255,255,255,.02)" stroke="rgba(255,255,255,.06)" stroke-width="1"/>
+        <rect x="16" y="190" width="928" height="102" rx="10" fill="rgba(0,210,190,.05)" stroke="#00D2BE" stroke-width="1.4" stroke-dasharray="6 4"/>
+        <rect x="16" y="312" width="928" height="112" rx="10" fill="rgba(255,255,255,.02)" stroke="rgba(255,255,255,.06)" stroke-width="1"/>
+
+        <!-- HMI lane -->
+        <text class="alane2" x="30" y="30" text-anchor="start">HMI · BROWSER (HAND-BUILT)</text>
+        <rect class="abx2" x="30"  y="40" width="204" height="58" rx="6"/>
+        <text class="alb" x="132" y="66" text-anchor="middle">Ignition</text>
+        <text class="asl" x="132" y="83" text-anchor="middle">engine on · off</text>
+        <rect class="abx2" x="262" y="40" width="204" height="58" rx="6"/>
+        <text class="alb" x="364" y="66" text-anchor="middle">Drive Mode</text>
+        <text class="asl" x="364" y="83" text-anchor="middle">ECO · SPORT · RACE</text>
+        <rect class="abx2" x="494" y="40" width="204" height="58" rx="6"/>
+        <text class="alb" x="596" y="66" text-anchor="middle">Throttle</text>
+        <text class="asl" x="596" y="83" text-anchor="middle">load · target</text>
+        <rect class="abx2" x="726" y="40" width="204" height="58" rx="6"/>
+        <text class="alb" x="828" y="66" text-anchor="middle">Dials</text>
+        <text class="asl" x="828" y="83" text-anchor="middle">Boost · RPM · Speed</text>
+
+        <!-- HMI -> controller interface -->
+        <path class="aln" d="M440,100 L440,188"/>
+        <text class="asl" x="432" y="148" text-anchor="end">inputs</text>
+        <path class="aln" d="M560,188 L560,100"/>
+        <text class="asl" x="568" y="148" text-anchor="start">to dials</text>
+
+        <!-- controller lane label (the band is the code-gen boundary) -->
+        <text class="alane" x="30" y="206" text-anchor="start">CONTROLLER · CODE-GENERATED · EMBEDDED CODER · 100 Hz</text>
+        <rect class="abx" x="30"  y="216" width="204" height="60" rx="6"/>
+        <text class="alb" x="132" y="244" text-anchor="middle">Supervisor</text>
+        <text class="asl" x="132" y="261" text-anchor="middle">Stateflow · 5 modes</text>
+        <rect class="abx" x="262" y="216" width="204" height="60" rx="6"/>
+        <text class="alb" x="364" y="244" text-anchor="middle">Target</text>
+        <text class="asl" x="364" y="261" text-anchor="middle">speed × load</text>
+        <rect class="abx" x="494" y="216" width="204" height="60" rx="6"/>
+        <text class="alb" x="596" y="244" text-anchor="middle">Controller</text>
+        <text class="asl" x="596" y="261" text-anchor="middle">PI + anti-windup</text>
+        <rect class="abx" x="726" y="216" width="204" height="60" rx="6"/>
+        <text class="alb" x="828" y="244" text-anchor="middle">Sensor</text>
+        <text class="asl" x="828" y="261" text-anchor="middle">range · rate</text>
+
+        <!-- controller -> plant interface (over Air-path) -->
+        <path class="aln" d="M460,292 L460,310"/>
+        <text class="asl" x="452" y="306" text-anchor="end">u_act</text>
+        <path class="alnd" d="M540,310 L540,292"/>
+        <text class="asl" x="548" y="306" text-anchor="start">p_meas</text>
+
+        <!-- Plant lane -->
+        <text class="alane2" x="30" y="330" text-anchor="start">PLANT / VEHICLE · MIL SIMULATION STAND-IN</text>
+        <rect class="abx2" x="30"  y="346" width="290" height="58" rx="6"/>
+        <text class="alb" x="175" y="372" text-anchor="middle">Engine speed</text>
+        <text class="asl" x="175" y="389" text-anchor="middle">throttle → rpm</text>
+        <rect class="abx2" x="335" y="346" width="290" height="58" rx="6"/>
+        <text class="alb" x="480" y="372" text-anchor="middle">Air-path</text>
+        <text class="asl" x="480" y="389" text-anchor="middle">τ lag · K_eff(rpm)</text>
+        <rect class="abx2" x="640" y="346" width="290" height="58" rx="6"/>
+        <text class="alb" x="785" y="372" text-anchor="middle">Vehicle speed</text>
+        <text class="asl" x="785" y="389" text-anchor="middle">rpm → km/h</text>
+      </svg>
+      <p class="sim-note" style="margin-top:18px">Three layers. The <b>HMI</b> (grey, top) is the hand-built browser cockpit — knobs, throttle, dials. The <b>controller</b> (teal, inside the dashed boundary) is the part that becomes generated C via Embedded Coder, running at a fixed <b>100 Hz</b>: the Stateflow supervisor, the setpoint map, the PI controller, and the sensor-rationality monitor. The <b>plant / vehicle</b> (grey, bottom) — air-path lag with speed-dependent turbo authority plus the engine- and vehicle-speed models — is a <b>MIL simulation stand-in</b>, not deployed code. The interface across the boundary is small and explicit: <code style="font-family:var(--font-m)">key_on · mode · throttle · p_meas</code> in, <code style="font-family:var(--font-m)">u_act · mode · fault_code</code> out.</p>
+    </div>
+  </div>
+</section>
+
+<div class="rule"></div>
+
+<!-- REQUIREMENTS -->
+<section id="reqs">
+  <div class="wrap">
+    <div class="eyebrow fi">Traceability</div>
+    <h2 class="s-title fi">Requirements</h2>
+    <div class="bar fi"></div>
+    <p class="s-sub fi" style="margin-bottom:22px">The <b style="color:var(--silver)">Verification</b> column lists the <b>planned</b> MIL/SIL methods (run on a personal MATLAB). The control law itself is re-proven headlessly today by <code>verify_control_law.js</code> — independent of Simulink — and exercised live in the cluster above.</p>
+
+    <div class="stat-strip fi">
+      <div class="stat"><div class="s-val">2.8 %</div><div class="s-lab">Overshoot</div><div class="s-req">req ≤ 10 %</div></div>
+      <div class="stat"><div class="s-val">0.46 s</div><div class="s-lab">Settling</div><div class="s-req">req ≤ 1.0 s</div></div>
+      <div class="stat"><div class="s-val">0.0 kPa</div><div class="s-lab">Steady-state error</div><div class="s-req">req ≤ 2 kPa</div></div>
+      <div class="stat"><div class="s-val">0 – 1</div><div class="s-lab">Actuator</div><div class="s-req">in range · no wind-up</div></div>
+    </div>
+    <p class="stat-cap fi">Latest headless run · <code>verify_control_law.js</code> — REQ-BP-001/002/004/005 all pass.</p>
+
+    <div class="card fi" style="padding:6px 8px;margin-bottom:18px">
+      <p style="font-family:var(--font-d);font-size:.52rem;letter-spacing:.14em;text-transform:uppercase;color:var(--silver-dim);padding:10px 12px 2px">Interface · 100 Hz (Ts = 10 ms)</p>
+      <table>
+        <thead><tr><th>Signal</th><th>Dir</th><th>Type · Range</th></tr></thead>
+        <tbody>
+          <tr><td><code>p_meas</code></td><td>in</td><td>single, kPa · 90 … 350</td></tr>
+          <tr><td><code>engine_speed</code></td><td>in</td><td>single, rpm · 0 … 6000</td></tr>
+          <tr><td><code>torque_demand</code></td><td>in</td><td>single, % · 0 … 100</td></tr>
+          <tr><td><code>key_on</code></td><td>in</td><td>boolean · 0 / 1</td></tr>
+          <tr><td><code>drive_mode</code></td><td>in</td><td>enum · ECO / SPORT / RACE</td></tr>
+          <tr><td><code>u_act</code></td><td>out</td><td>single, — · 0 … 1 (VGT / wastegate)</td></tr>
+          <tr><td><code>mode</code></td><td>out</td><td>uint8 · 0 … 4 (INIT…FAULT)</td></tr>
+          <tr><td><code>fault_code</code></td><td>out</td><td>uint8 · 0 = OK, else bitfield</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card fi" style="padding:6px 8px">
+      <table>
+        <thead><tr><th>ID</th><th>Requirement</th><th>Verification</th></tr></thead>
+        <tbody>
+          <tr><td><span class="rid">REQ-BP-001</span><br><span class="req-type">Functional</span></td><td>In RUN, regulate measured boost to setpoint with steady-state error ≤ 2 kPa for any constant target in range.</td><td>MIL · <code>tc_step</code></td></tr>
+          <tr><td><span class="rid">REQ-BP-002</span><br><span class="req-type">Performance</span></td><td>Step response settles (±2 kPa) ≤ 1.0 s with overshoot ≤ 10 %.</td><td>MIL · <code>tc_step</code></td></tr>
+          <tr><td><span class="rid">REQ-BP-003</span><br><span class="req-type">Safety</span></td><td>On a debounced sensor fault, enter FAULT and command the safe actuator value within 100 ms.</td><td>MIL · <code>tc_fault</code></td></tr>
+          <tr><td><span class="rid">REQ-BP-004</span><br><span class="req-type">Robustness</span></td><td>Back-calculation anti-windup prevents integrator wind-up during actuator saturation.</td><td>MIL · <code>tc_windup</code></td></tr>
+          <tr><td><span class="rid">REQ-BP-005</span><br><span class="req-type">Interface</span></td><td>Conform to the interface above; outputs stay within declared ranges (u_act ∈ [0,1], mode ∈ [0,4]).</td><td>Analysis + all MIL tests</td></tr>
+          <tr><td><span class="rid">REQ-BP-006</span><br><span class="req-type">Functional</span></td><td>Boost target is a monotonic engine-speed × demand map, clamped to <code>[pref_min, pref_max(mode)]</code>.</td><td>Analysis · <code>tc_map</code></td></tr>
+          <tr><td><span class="rid">REQ-BP-007</span><br><span class="req-type">Robustness</span></td><td>When commanded boost exceeds what the turbo can deliver at the current speed (turbo lag), the actuator saturates without instability or wind-up.</td><td>MIL · <code>tc_lag</code></td></tr>
+          <tr><td><span class="rid">REQ-BP-008</span><br><span class="req-type">Functional · HMI</span></td><td>Drive mode (ECO/SPORT/RACE) scales the boost ceiling, rev-limit and top speed; target and limits stay within the active mode's bounds.</td><td>Analysis · <code>tc_modes</code></td></tr>
+          <tr><td><span class="rid">REQ-BP-009</span><br><span class="req-type">Supervisor</span></td><td>On power-up begin in INIT and transition to OFF once initialisation completes.</td><td>MIL · <code>tc_modes</code></td></tr>
+          <tr><td><span class="rid">REQ-BP-010</span><br><span class="req-type">Supervisor</span></td><td>Closed loop is active only in RUN; OFF, CRANK and FAULT drive their defined open-loop actuator values.</td><td>MIL · <code>tc_modes</code></td></tr>
+          <tr><td><span class="rid">REQ-BP-011</span><br><span class="req-type">Supervisor</span></td><td>RUN → FAULT is latched; recovery to RUN requires debounced <code>sensor_valid</code> and <code>key_on</code>.</td><td>MIL · <code>tc_fault</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<div class="rule"></div>
+
+<!-- GENERATED C -->
+<section id="code">
+  <div class="wrap">
+    <div class="eyebrow fi">Production C</div>
+    <h2 class="s-title fi">Controller Setup</h2>
+    <div class="bar fi"></div>
+    <p class="s-sub fi" style="margin-bottom:22px">The deployed controller and its setup, in MISRA-aligned C — the same algorithm running in the cluster above. Embedded Coder produces this from the Simulink model in the repo; shown here in equivalent hand form.</p>
+    <div class="card fi" style="padding:0;border:none;background:transparent">
+      <div class="tabs" role="tablist" aria-label="Controller setup">
+        <button class="tab" role="tab" id="tab-params" aria-controls="tp-params" aria-selected="true">Parameters</button>
+        <button class="tab" role="tab" id="tab-controller" aria-controls="tp-controller" aria-selected="false" tabindex="-1">Controller</button>
+        <button class="tab" role="tab" id="tab-supervisor" aria-controls="tp-supervisor" aria-selected="false" tabindex="-1">Supervisor</button>
+        <button class="tab" role="tab" id="tab-interface" aria-controls="tp-interface" aria-selected="false" tabindex="-1">Interface</button>
+      </div>
+      <div class="tabpanel" role="tabpanel" id="tp-params" aria-labelledby="tab-params"><pre><span class="cm">/* boost_params.h — one parameter set (mirrors matlab/params.m).
+ * Controller executes at Ts = 0.01 s (100 Hz). */</span>
+<span class="kw">#define</span> TS          <span class="nu">0.01F</span>    <span class="cm">/* sample time [s] */</span>
+
+<span class="cm">/* plant — MIL simulation stand-in, NOT code-generated */</span>
+<span class="kw">#define</span> TAU         <span class="nu">0.30F</span>    <span class="cm">/* air-path time constant [s] */</span>
+<span class="kw">#define</span> K_ACT       <span class="nu">180.0F</span>   <span class="cm">/* actuator effectiveness [kPa/unit] */</span>
+<span class="kw">#define</span> P_AMB       <span class="nu">100.0F</span>   <span class="cm">/* ambient / baseline pressure [kPa] */</span>
+
+<span class="cm">/* PI controller + back-calculation anti-windup */</span>
+<span class="kw">#define</span> KP          <span class="nu">0.010F</span>   <span class="cm">/* proportional gain [1/kPa] */</span>
+<span class="kw">#define</span> KI          <span class="nu">0.050F</span>   <span class="cm">/* integral gain [1/(kPa*s)] */</span>
+<span class="kw">#define</span> KAW         <span class="nu">2.0F</span>     <span class="cm">/* anti-windup gain */</span>
+<span class="kw">#define</span> DU_MAX      <span class="nu">0.05F</span>    <span class="cm">/* max actuator step / sample */</span>
+<span class="kw">#define</span> U_MIN       <span class="nu">0.0F</span>
+<span class="kw">#define</span> U_MAX       <span class="nu">1.0F</span>
+
+<span class="cm">/* open-loop actuator value per mode */</span>
+<span class="kw">#define</span> U_OFF       <span class="nu">0.0F</span>
+<span class="kw">#define</span> U_CRANK     <span class="nu">0.3F</span>
+<span class="kw">#define</span> U_SAFE      <span class="nu">0.3F</span>     <span class="cm">/* FAULT limp */</span>
+<span class="kw">#define</span> N_CRANK     <span class="nu">600.0F</span>   <span class="cm">/* rpm to permit RUN */</span>
+
+<span class="cm">/* sensor rationality */</span>
+<span class="kw">#define</span> P_MIN       <span class="nu">90.0F</span>
+<span class="kw">#define</span> P_MAX       <span class="nu">350.0F</span>
+<span class="kw">#define</span> DP_MAX      <span class="nu">60.0F</span>    <span class="cm">/* max plausible step [kPa] */</span>
+<span class="kw">#define</span> T_DEBOUNCE  <span class="nu">0.05F</span>    <span class="cm">/* fault/recovery debounce [s] */</span>
+
+<span class="cm">/* setpoint-map bounds (p_max set by drive mode) */</span>
+<span class="kw">#define</span> PREF_MIN    <span class="nu">110.0F</span>
+<span class="kw">#define</span> PREF_MAX    <span class="nu">275.0F</span>   <span class="cm">/* RACE ceiling; &lt;= P_AMB + K_ACT */</span>
+<span class="kw">#define</span> N_REF_MAX   <span class="nu">4000.0F</span>  <span class="cm">/* map speed normaliser [rpm] */</span>
+
+<span class="cm">/* turbo authority (lag):
+ *   K_eff = K_ACT*(A_MIN + (1-A_MIN)*min(n/N_SPOOL,1)) */</span>
+<span class="kw">#define</span> N_SPOOL     <span class="nu">2200.0F</span>
+<span class="kw">#define</span> A_MIN       <span class="nu">0.35F</span>
+
+<span class="cm">/* drive-mode presets (HMI):  pref_max / rev-limit / top speed
+ *   ECO   : 200 kPa | 4000 rpm | 150 km/h
+ *   SPORT : 250 kPa | 5000 rpm | 205 km/h
+ *   RACE  : 275 kPa | 6000 rpm | 255 km/h */</span></pre></div>
+      <div class="tabpanel" role="tabpanel" id="tp-controller" aria-labelledby="tab-controller" hidden><pre><span class="cm">/* boost_controller_step — discrete PI + feed-forward + back-calc anti-windup.
+ * Executed at Ts = 0.01 s. Closed loop active only in RUN mode. */</span>
+<span class="kw">void</span> <span class="fn">boost_controller_step</span>(<span class="kw">const</span> BoostCtrlIn *<span class="kw">const</span> in,
+                           BoostCtrlOut *<span class="kw">const</span> out)
+{
+    <span class="kw">static</span> <span class="kw">real32_T</span> integ = <span class="nu">0.0F</span>;          <span class="cm">/* integrator state */</span>
+    <span class="kw">const</span> <span class="kw">real32_T</span> u_ff = (in-&gt;p_ref - P_AMB) / K_ACT;
+
+    <span class="cm">/* sensor rationality: range + rate, result drives the supervisor */</span>
+    <span class="kw">boolean_T</span> range_bad = (in-&gt;p_meas &lt; P_MIN) || (in-&gt;p_meas &gt; P_MAX);
+    <span class="kw">boolean_T</span> rate_bad  = <span class="fn">fabsf</span>(in-&gt;p_meas - in-&gt;p_meas_prev) &gt; DP_MAX;
+    out-&gt;fault_code = (<span class="kw">uint8_T</span>)range_bad | ((<span class="kw">uint8_T</span>)rate_bad &lt;&lt; <span class="nu">1</span>);
+
+    <span class="kw">if</span> (in-&gt;mode == MODE_RUN) {
+        <span class="kw">real32_T</span> e       = in-&gt;p_ref - in-&gt;p_meas;
+        <span class="kw">real32_T</span> u_unsat = u_ff + (KP * e) + integ;
+
+        <span class="cm">/* rate limit around the feed-forward operating point */</span>
+        <span class="kw">real32_T</span> du      = u_unsat - u_ff;
+        du = (du &gt; DU_MAX) ? DU_MAX : ((du &lt; -DU_MAX) ? -DU_MAX : du);
+        <span class="kw">real32_T</span> u_rl    = u_ff + du;
+
+        <span class="cm">/* saturate to actuator limits */</span>
+        out-&gt;u_act = (u_rl &gt; U_MAX) ? U_MAX : ((u_rl &lt; U_MIN) ? U_MIN : u_rl);
+
+        <span class="cm">/* back-calculation anti-windup (REQ-BP-004) */</span>
+        integ += TS * ((KI * e) + (KAW * (out-&gt;u_act - u_unsat)));
+    } <span class="kw">else</span> {
+        out-&gt;u_act = u_ff;   <span class="cm">/* open-loop modes; supervisor sets actual command */</span>
+        integ      = <span class="nu">0.0F</span>;  <span class="cm">/* seed for bumpless transfer into RUN */</span>
+    }
+}</pre></div>
+      <div class="tabpanel" role="tabpanel" id="tp-supervisor" aria-labelledby="tab-supervisor" hidden><pre><span class="cm">/* boost_supervisor_step — INIT-&gt;OFF-&gt;CRANK-&gt;RUN-&gt;FAULT (Stateflow).
+ * Closed loop runs only in RUN (REQ-BP-010); Ts = 0.01 s. */</span>
+<span class="kw">void</span> <span class="fn">boost_supervisor_step</span>(<span class="kw">const</span> SupIn *<span class="kw">const</span> in, SupState *<span class="kw">const</span> s)
+{
+    <span class="cm">/* debounce sensor health before latching (REQ-BP-003) */</span>
+    <span class="kw">if</span> (in-&gt;sensor_bad) { s-&gt;db_fault += TS; s-&gt;db_valid = <span class="nu">0.0F</span>; }
+    <span class="kw">else</span>               { s-&gt;db_valid += TS; s-&gt;db_fault = <span class="nu">0.0F</span>; }
+    <span class="kw">boolean_T</span> s_fault = (s-&gt;db_fault &gt;= T_DEBOUNCE);
+    <span class="kw">boolean_T</span> s_valid = (s-&gt;db_valid &gt;= T_DEBOUNCE);
+
+    <span class="kw">switch</span> (s-&gt;mode) {
+    <span class="kw">case</span> MODE_INIT:
+        s-&gt;integ_reset = <span class="kw">true</span>; s-&gt;mode = MODE_OFF;        <span class="cm">/* REQ-BP-009 */</span>
+        <span class="kw">break</span>;
+    <span class="kw">case</span> MODE_OFF:
+        <span class="kw">if</span> (in-&gt;key_on &amp;&amp; in-&gt;rpm &gt; <span class="nu">0.0F</span>) s-&gt;mode = MODE_CRANK;
+        <span class="kw">break</span>;
+    <span class="kw">case</span> MODE_CRANK:
+        <span class="kw">if</span> (!in-&gt;key_on || in-&gt;rpm &lt;= <span class="nu">0.0F</span>) s-&gt;mode = MODE_OFF;
+        <span class="kw">else if</span> (in-&gt;rpm &gt;= N_CRANK &amp;&amp; !s_fault) {
+            s-&gt;mode = MODE_RUN; s-&gt;integ_reset = <span class="kw">true</span>;     <span class="cm">/* bumpless */</span>
+        }
+        <span class="kw">break</span>;
+    <span class="kw">case</span> MODE_RUN:
+        <span class="kw">if</span> (!in-&gt;key_on || in-&gt;rpm &lt;= <span class="nu">0.0F</span>) s-&gt;mode = MODE_OFF;
+        <span class="kw">else if</span> (s_fault)                  s-&gt;mode = MODE_FAULT; <span class="cm">/* latched */</span>
+        <span class="kw">break</span>;
+    <span class="kw">case</span> MODE_FAULT:
+        <span class="kw">if</span> (!in-&gt;key_on || in-&gt;rpm &lt;= <span class="nu">0.0F</span>) s-&gt;mode = MODE_OFF;
+        <span class="kw">else if</span> (s_valid) {                              <span class="cm">/* REQ-BP-011 */</span>
+            s-&gt;mode = MODE_RUN; s-&gt;integ_reset = <span class="kw">true</span>;
+        }
+        <span class="kw">break</span>;
+    <span class="kw">default</span>: s-&gt;mode = MODE_INIT; <span class="kw">break</span>;
+    }
+}</pre></div>
+      <div class="tabpanel" role="tabpanel" id="tp-interface" aria-labelledby="tab-interface" hidden><pre><span class="cm">/* boost_controller_types.h — I/O contract (REQ-BP-005). */</span>
+<span class="kw">typedef enum</span> { MODE_INIT = <span class="nu">0</span>, MODE_OFF, MODE_CRANK,
+               MODE_RUN,  MODE_FAULT } BoostMode;   <span class="cm">/* 0 … 4 */</span>
+
+<span class="kw">typedef enum</span> { DRIVE_ECO = <span class="nu">0</span>, DRIVE_SPORT,
+               DRIVE_RACE } DriveMode;
+
+<span class="kw">typedef struct</span> {
+    <span class="kw">real32_T</span>  p_meas;        <span class="cm">/* measured boost [kPa] 90 … 350 */</span>
+    <span class="kw">real32_T</span>  p_meas_prev;   <span class="cm">/* previous sample (rate check) */</span>
+    <span class="kw">real32_T</span>  p_ref;         <span class="cm">/* target from setpoint map */</span>
+    <span class="kw">real32_T</span>  engine_speed;  <span class="cm">/* [rpm] 0 … 6000 */</span>
+    <span class="kw">real32_T</span>  torque_demand; <span class="cm">/* [%]   0 … 100 */</span>
+    <span class="kw">boolean_T</span> key_on;        <span class="cm">/* ignition / run request */</span>
+    DriveMode drive_mode;    <span class="cm">/* ECO / SPORT / RACE */</span>
+    BoostMode mode;          <span class="cm">/* supervisor state (gates loop) */</span>
+} BoostCtrlIn;
+
+<span class="kw">typedef struct</span> {
+    <span class="kw">real32_T</span>  u_act;         <span class="cm">/* actuator cmd 0 … 1 (VGT/wastegate) */</span>
+    BoostMode mode;          <span class="cm">/* current supervisor mode */</span>
+    <span class="kw">uint8_T</span>   fault_code;    <span class="cm">/* 0 = OK; bit0 range, bit1 rate */</span>
+} BoostCtrlOut;</pre></div>
+    </div>
+  </div>
+</section>
+
+<script>
+// Controller-setup tabs (accessible: click + arrow keys)
+(function(){
+  const tabs=[...document.querySelectorAll('#code .tab')];
+  if(!tabs.length) return;
+  const panels=tabs.map(t=>document.getElementById(t.getAttribute('aria-controls')));
+  function sel(i){tabs.forEach((t,k)=>{const on=k===i;t.setAttribute('aria-selected',on?'true':'false');t.tabIndex=on?0:-1;panels[k].hidden=!on;});}
+  tabs.forEach((t,i)=>{
+    t.addEventListener('click',()=>{sel(i);t.focus();});
+    t.addEventListener('keydown',e=>{
+      let n;
+      if(e.key==='ArrowRight'||e.key==='ArrowDown') n=(i+1)%tabs.length;
+      else if(e.key==='ArrowLeft'||e.key==='ArrowUp') n=(i-1+tabs.length)%tabs.length;
+      else if(e.key==='Home') n=0;
+      else if(e.key==='End') n=tabs.length-1;
+      else return;
+      e.preventDefault();sel(n);tabs[n].focus();
+    });
+  });
+})();
+</script>
+
+<div class="rule"></div>
+
+<!-- ARTIFACTS -->
+<section id="artifacts">
+  <div class="wrap">
+    <div class="eyebrow fi">MBD Artifacts</div>
+    <h2 class="s-title fi">Build &amp; Verification</h2>
+    <div class="bar fi"></div>
+    <div class="card fi">
+      <div class="art">
+        <span class="art-status st-done">Done</span>
+        <div><h4>Model defined as code</h4><p>The Simulink model and Stateflow supervisor are constructed via the Simulink API in <a href="https://github.com/SaaimSaad" target="_blank" rel="noopener"><code>build_model.m</code></a> — reviewable and diffable in git, not an opaque binary. Requirements, design, and test plan are in the repo and track the same control law, supervisor, drive modes, and turbo-authority model shown above.</p></div>
+      </div>
+      <div class="art">
+        <span class="art-status st-done">Done</span>
+        <div><h4>Control law verified (browser + reference tests)</h4><p>The control law is exercised live above and checked against requirement thresholds in <code>test/test_boost_control.m</code> and <code>verify_control_law.js</code> (reference checks, independent of Simulink).</p></div>
+      </div>
+      <div class="art">
+        <span class="art-status st-pending">Pending</span>
+        <div><h4>Simulink/Stateflow model diagram</h4><p>The rendered <code>.slx</code> diagram — produced by running <code>build_model.m</code> on a personal MATLAB (Home / trial / MATLAB Online). Screenshot will be embedded here.</p></div>
+      </div>
+      <div class="art">
+        <span class="art-status st-pending">Pending</span>
+        <div><h4>Generated C + MCDC coverage report</h4><p>Embedded Coder output (<code>gen_code.m</code>) and the decision/condition/MCDC coverage report (<code>collect_coverage.m</code>), targeting 100 % structural coverage across the test suite.</p></div>
+      </div>
+      <div style="margin-top:24px;display:flex;gap:11px;flex-wrap:wrap">
+        <a href="https://github.com/SaaimSaad" class="btn-p" target="_blank" rel="noopener">View Repository →</a>
+        <a href="index.html#projects" class="btn-s">Back to Projects</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="carbon">
+  <div class="wrap ft-in">
+    <span class="ft-logo">MSS · 2026</span>
+    <span class="ft-copy">Muhammed Saaim Saad · Boost-Pressure Control Model</span>
+    <a href="index.html" class="n-back">Portfolio ↗</a>
+  </div>
+</footer>
+
+<script>
+// Nav scroll + fade-in
+const nav=document.getElementById('nav');
+addEventListener('scroll',()=>nav.classList.toggle('sc',scrollY>20),{passive:true});
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('v');io.unobserve(e.target)}}),{threshold:.08});
+document.querySelectorAll('.fi').forEach(el=>io.observe(el));
+</script>
+
+<script>
+// ════════════════════════════════════════════════════════════════════
+// Turbo Cluster — boost-pressure closed-loop simulation.
+// Mirrors the MATLAB Controller block: discrete PI + feed-forward +
+// back-calculation anti-windup, first-order air-path plant with
+// speed-dependent turbo authority, speed×load setpoint map, and the
+// INIT→OFF→CRANK→RUN→FAULT supervisor. Drive modes + vehicle speed are
+// sim-layer inputs around the unchanged control law.
+// ════════════════════════════════════════════════════════════════════
+(function(){
+  const NS='http://www.w3.org/2000/svg';
+  const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+  const el=id=>document.getElementById(id);
+  const P = {
+    Ts:0.01, tau:0.30, K_act:180, p_amb:100,
+    Kp:0.010, Ki:0.050, Kaw:2.0, du_max:0.05, u_min:0, u_max:1,
+    p_min:90, p_max:350, dp_max:60, t_debounce:0.05,
+    u_off:0.0, u_crank:0.3, u_safe:0.3, n_crank:600,
+    pref_min:110, pref_max:245, n_ref_max:4000,
+    n_spool:2200, a_min:0.35,
+    idle:850, rpm_max:4900, kEng:2.5
+  };
+  const MODE={INIT:0,OFF:1,CRANK:2,RUN:3,FAULT:4};
+  const NAME=['INIT','OFF','CRANK','RUN','FAULT'];
+
+  // drive-mode presets (meaningful): ceiling, rev-limit, throttle sharpness, top speed
+  const PRESETS={
+    ECO:  {prefMax:200, rpmMax:4000, kEng:1.9, vMax:150},
+    SPORT:{prefMax:250, rpmMax:5000, kEng:2.5, vMax:205},
+    RACE: {prefMax:275, rpmMax:6000, kEng:3.4, vMax:255}
+  };
+  let vMaxCur=PRESETS.SPORT.vMax;
+
+  // ---- inputs / discrete-event state ----
+  let throttle=0, engineOn=false, running=false, hillTimer=0, faultTimer=0;
+  let mode_target='AUTO', manualSetpoint=185;
+  const key_on=()=>engineOn;
+
+  // ---- continuous + controller state ----
+  let st, buf=[]; const WIN=6;
+  function reset(){
+    st={p:P.p_amb, p_meas_prev:P.p_amb, I:0, u:0, mode:MODE.INIT, rpm:0, v:0,
+        ref:P.pref_min, dbValid:0, dbFault:0, t:0};
+    buf=[]; engineOn=false; running=false; faultTimer=0; hillTimer=0;
+  }
+
+  function setpointMap(rpm,thr){
+    const sN=clamp(rpm/P.n_ref_max,0,1), lN=thr/100;
+    const t=lN*(0.45+0.55*sN);
+    return clamp(P.pref_min+(P.pref_max-P.pref_min)*t, P.pref_min, P.pref_max);
+  }
+  const authority=rpm=>P.a_min+(1-P.a_min)*clamp(rpm/P.n_spool,0,1);
+
+  // ---- one discrete step at Ts ----
+  function step(){
+    // engine-speed model
+    //   AUTO  : throttle commands the revs (throttle → rpm → boost target)
+    //   MANUAL: revs follow the achieved boost (more boost → more power → more rpm),
+    //           so the rpm & speed dials track the boost you dial in.
+    let tgtRpm;
+    if(!key_on()){ running=false; tgtRpm=0; }
+    else if(!running){ tgtRpm=0; }
+    else if(mode_target==='MANUAL'){
+      const boostFrac=clamp((st.p-P.p_amb)/(P.pref_max-P.p_amb),0,1);
+      tgtRpm=P.idle+boostFrac*(P.rpm_max-P.idle);
+    }
+    else { tgtRpm=P.idle+(throttle/100)*(P.rpm_max-P.idle); }
+    st.rpm+=(tgtRpm-st.rpm)*P.kEng*P.Ts;
+    if(tgtRpm===0 && st.rpm<1) st.rpm=0;
+    const rpm=st.rpm;
+
+    // vehicle speed model: first-order lag on rpm → acceleration feel
+    const vTgt=(P.rpm_max>0?rpm/P.rpm_max:0)*vMaxCur;
+    st.v+=(vTgt-st.v)*0.9*P.Ts;
+    if(st.v<0.2 && vTgt===0) st.v=0;
+
+    // measured boost (+ optional injected sensor fault)
+    let p_meas=st.p;
+    if(faultTimer>0){ p_meas=P.p_max+100; faultTimer-=P.Ts; }
+
+    const bad=(p_meas<P.p_min)||(p_meas>P.p_max)||(Math.abs(p_meas-st.p_meas_prev)>P.dp_max);
+    if(bad){ st.dbFault+=P.Ts; st.dbValid=0; } else { st.dbValid+=P.Ts; st.dbFault=0; }
+    const sFault=st.dbFault>=P.t_debounce, sValid=st.dbValid>=P.t_debounce;
+
+    switch(st.mode){
+      case MODE.INIT:  st.mode=MODE.OFF; st.I=0; break;
+      case MODE.OFF:   if(key_on()&&rpm>0) st.mode=MODE.CRANK; break;
+      case MODE.CRANK: if(!key_on()||rpm<=0) st.mode=MODE.OFF;
+                       else if(rpm>=P.n_crank&&!sFault){ st.mode=MODE.RUN; st.I=0; } break;
+      case MODE.RUN:   if(!key_on()||rpm<=0) st.mode=MODE.OFF;
+                       else if(sFault) st.mode=MODE.FAULT; break;
+      case MODE.FAULT: if(!key_on()||rpm<=0) st.mode=MODE.OFF;
+                       else if(sValid){ st.mode=MODE.RUN; st.I=0; } break;
+    }
+
+    const p_ref=(mode_target==='MANUAL')?manualSetpoint:setpointMap(rpm,throttle);
+    st.ref=p_ref;
+
+    const u_ff=(p_ref-P.p_amb)/P.K_act;
+    if(st.mode===MODE.RUN){
+      const e=p_ref-p_meas;
+      const u_unsat=u_ff+P.Kp*e+st.I;
+      let du=clamp(u_unsat-u_ff,-P.du_max,P.du_max);
+      const u=clamp(u_ff+du,P.u_min,P.u_max);
+      st.I+=P.Ts*(P.Ki*e+P.Kaw*(u-u_unsat));
+      st.u=u;
+    } else if(st.mode===MODE.CRANK){ st.u=P.u_crank; st.I=0; }
+    else if(st.mode===MODE.FAULT){ st.u=P.u_safe; st.I=0; }
+    else { st.u=P.u_off; st.I=0; }
+
+    let d=0; if(hillTimer>0){ d=-45; hillTimer-=P.Ts; }
+    const K_eff=P.K_act*authority(rpm);
+    const dp=(-(st.p-P.p_amb)+K_eff*st.u+d)/P.tau;
+    st.p+=P.Ts*dp;
+
+    st.p_meas_prev=p_meas; st.t+=P.Ts;
+    buf.push({t:st.t,ref:p_ref,p:st.p,u:st.u,mode:st.mode});
+    while(buf.length&&st.t-buf[0].t>WIN) buf.shift();
+  }
+
+  // ════════════════ ANALOG DIAL (Luce style: gloss bezel + chrome rim, amber→white scale, orange needle) ════════════════
+  const RM = (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  function gauge(svg,opt){
+    const cx=100,cy=98,rFace=78,rBezel=89,rRim=83.5;
+    const tickO=72,tickMinI=67,tickMajI=59,rNum=49,tipR=62,tail=16,rRed=74;
+    const start=135,sweep=270,id=opt.idp;
+    const pol=(deg,rad)=>{const a=deg*Math.PI/180;return [cx+rad*Math.cos(a),cy+rad*Math.sin(a)];};
+    const arc=(d0,d1,rad)=>{const[x0,y0]=pol(d0,rad),[x1,y1]=pol(d1,rad);const lg=(d1-d0)>180?1:0;return `M${x0.toFixed(2)} ${y0.toFixed(2)} A${rad} ${rad} 0 ${lg} 1 ${x1.toFixed(2)} ${y1.toFixed(2)}`;};
+    const mk=(t,a,txt,parent)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(txt!=null)e.textContent=txt;(parent||svg).appendChild(e);return e;};
+    // amber (lower span) → white (upper span) tick/numeral colour
+    const AMB=[233,176,18], WHT=[238,241,243];
+    const tcol=t=>{const k=clamp((t-0.40)/0.30,0,1),c=AMB.map((a,i)=>Math.round(a+(WHT[i]-a)*k));return `rgb(${c[0]},${c[1]},${c[2]})`;};
+    const defs=document.createElementNS(NS,'defs');
+    defs.innerHTML=
+      `<linearGradient id="${id}bz" x1="0" y1="0" x2="0" y2="1">
+         <stop offset="0%" stop-color="#44484c"/><stop offset="22%" stop-color="#1b1d1f"/>
+         <stop offset="60%" stop-color="#070808"/><stop offset="100%" stop-color="#26292c"/></linearGradient>
+       <linearGradient id="${id}cr" x1="0" y1="0" x2="1" y2="1">
+         <stop offset="0%" stop-color="#f6f8f9"/><stop offset="28%" stop-color="#7c8186"/>
+         <stop offset="52%" stop-color="#d2d7da"/><stop offset="76%" stop-color="#565b60"/>
+         <stop offset="100%" stop-color="#eef1f2"/></linearGradient>
+       <radialGradient id="${id}fc" cx="50%" cy="30%" r="88%">
+         <stop offset="0%" stop-color="#111315"/><stop offset="52%" stop-color="#070708"/>
+         <stop offset="100%" stop-color="#000000"/></radialGradient>
+       <linearGradient id="${id}sh" x1="0" y1="0" x2="0.55" y2="1">
+         <stop offset="0%" stop-color="rgba(255,255,255,.22)"/><stop offset="40%" stop-color="rgba(255,255,255,.05)"/>
+         <stop offset="64%" stop-color="rgba(255,255,255,0)"/></linearGradient>
+       <linearGradient id="${id}nd" x1="0" y1="0" x2="1" y2="0">
+         <stop offset="0%" stop-color="#5e2208"/><stop offset="42%" stop-color="#FF6A2A"/>
+         <stop offset="84%" stop-color="#FF4322"/><stop offset="100%" stop-color="#FFD2B4"/></linearGradient>
+       <radialGradient id="${id}hub" cx="40%" cy="36%" r="72%">
+         <stop offset="0%" stop-color="#3c3f43"/><stop offset="58%" stop-color="#17191c"/><stop offset="100%" stop-color="#090a0b"/></radialGradient>
+       <filter id="${id}gl" x="-60%" y="-60%" width="220%" height="220%">
+         <feDropShadow dx="0" dy="0" stdDeviation="2.3" flood-color="#FF5A2A" flood-opacity="0.9"/></filter>
+       <clipPath id="${id}cp"><circle cx="${cx}" cy="${cy}" r="${rFace}"/></clipPath>`;
+    svg.appendChild(defs);
+    mk('circle',{cx,cy,r:rBezel,fill:`url(#${id}bz)`});                                  // gloss black bezel
+    mk('circle',{cx,cy,r:rRim,fill:'none',stroke:`url(#${id}cr)`,'stroke-width':2});      // thin chrome rim
+    mk('circle',{cx,cy,r:rRim-2,fill:'none',stroke:'rgba(0,0,0,.6)','stroke-width':1.4}); // inner shadow groove
+    mk('circle',{cx,cy,r:rFace,fill:`url(#${id}fc)`});                                    // glass face
+    const red=mk('path',{d:'',stroke:'#FF3B3B','stroke-width':3,fill:'none','stroke-linecap':'round',opacity:.95});
+    const majors=opt.ticks, per=5, total=majors*per;
+    for(let i=0;i<=total;i++){const t=i/total,d=start+t*sweep,isMaj=i%per===0;
+      const [x0,y0]=pol(d,tickO),[x1,y1]=pol(d,isMaj?tickMajI:tickMinI);
+      const col=tcol(t);
+      mk('line',{x1:x0,y1:y0,x2:x1,y2:y1,stroke:col,'stroke-width':isMaj?2:1,'stroke-linecap':'round',opacity:isMaj?.95:.42});
+      if(isMaj){const [lx,ly]=pol(d,rNum);const lv=opt.min+t*(opt.max-opt.min);mk('text',{x:lx,y:ly+3.4,'text-anchor':'middle','font-size':9.5,'font-family':'Inter,sans-serif','font-weight':400,fill:col,opacity:.94},opt.fmtTick?opt.fmtTick(lv):Math.round(lv));}
+    }
+    // domed glass reflection (diagonal sheen), clipped to the face
+    mk('ellipse',{cx:cx-10,cy:cy-34,rx:70,ry:50,transform:`rotate(-20 ${cx} ${cy})`,fill:`url(#${id}sh)`,'clip-path':`url(#${id}cp)`});
+    const g=document.createElementNS(NS,'g'); g.setAttribute('filter',`url(#${id}gl)`); svg.appendChild(g);
+    const np=`M ${cx+tipR} ${cy} L ${cx+6} ${cy-3.0} L ${cx-tail} ${cy-1.8} L ${cx-tail} ${cy+1.8} L ${cx+6} ${cy+3.0} Z`;
+    mk('path',{d:np,fill:`url(#${id}nd)`},null,g);
+    mk('circle',{cx,cy,r:9,fill:`url(#${id}hub)`,stroke:'rgba(255,255,255,.12)','stroke-width':1});
+    mk('circle',{cx,cy,r:3.4,fill:'#FF5A2A'});
+    mk('circle',{cx:cx-2.4,cy:cy-2.6,r:1.3,fill:'rgba(255,255,255,.5)'});
+    mk('rect',{x:cx-30,y:cy+38,width:60,height:18,rx:3,fill:'rgba(0,0,0,.45)',stroke:'rgba(150,160,168,.28)','stroke-width':1});
+    const vT=mk('text',{x:cx,y:cy+47,'text-anchor':'middle','dominant-baseline':'central','font-size':13,'font-family':'Orbitron,monospace','font-weight':700,fill:'#EDEFF1'},'—');
+    mk('text',{x:cx,y:cy+66,'text-anchor':'middle','font-size':7.5,'letter-spacing':1.3,'font-family':'Inter,sans-serif',fill:'#7A8490'},opt.unit);
+    function setRed(rf){ if(rf==null){red.setAttribute('d','');return;} const t0=clamp((rf-opt.min)/(opt.max-opt.min),0,1); red.setAttribute('d',arc(start+t0*sweep,start+sweep,rRed)); }
+    setRed(opt.redFrom);
+    let curA=null;                                                                       // damped needle angle → smooth motion
+    return { set:(v)=>{const t=clamp((v-opt.min)/(opt.max-opt.min),0,1),ta=start+t*sweep;
+               curA=(curA===null||RM)?ta:curA+(ta-curA)*0.28;
+               g.setAttribute('transform',`rotate(${curA.toFixed(2)} ${cx} ${cy})`);
+               vT.textContent=opt.fmtVal?opt.fmtVal(v):Math.round(v);},
+             setRed };
+  }
+  const gBoost=gauge(el('g-boost'),{idp:'b',min:0,max:200,ticks:8,redFrom:150,label:'BOOST',unit:'kPa'});
+  const gTach =gauge(el('g-tach'), {idp:'t',min:0,max:6000,ticks:6,redFrom:4900,label:'ENGINE',unit:'RPM',fmtTick:v=>Math.round(v/1000)});
+  const gSpeed=gauge(el('g-speed'),{idp:'s',min:0,max:280,ticks:7,redFrom:null,label:'SPEED',unit:'km/h'});
+
+  // ════════════════ ROTARY KNOB (red 2-pos / silver 3-pos) — domed, machined, gloss ════════════════
+  function knob(svg,opt){
+    const cx=60,cy=60,rBody=33,labelR=50,n=opt.positions.length,red=opt.body==='red';
+    const mk=(t,a,txt,parent)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(txt!=null)e.textContent=txt;(parent||svg).appendChild(e);return e;};
+    const defs=document.createElementNS(NS,'defs');
+    defs.innerHTML = (red
+      ? `<radialGradient id="${opt.idp}b" cx="38%" cy="30%" r="80%"><stop offset="0%" stop-color="#ff9b7a"/><stop offset="34%" stop-color="#ec1c1c"/><stop offset="74%" stop-color="#9c0d0d"/><stop offset="100%" stop-color="#560606"/></radialGradient>`
+      : `<radialGradient id="${opt.idp}b" cx="38%" cy="30%" r="82%"><stop offset="0%" stop-color="#fbfdfe"/><stop offset="32%" stop-color="#c4cacf"/><stop offset="62%" stop-color="#80868c"/><stop offset="100%" stop-color="#383c40"/></radialGradient>`)
+      + `<radialGradient id="${opt.idp}d" cx="50%" cy="50%" r="58%"><stop offset="0%" stop-color="rgba(0,0,0,0)"/><stop offset="70%" stop-color="rgba(0,0,0,0)"/><stop offset="100%" stop-color="rgba(0,0,0,.42)"/></radialGradient>`
+      + `<filter id="${opt.idp}sh" x="-45%" y="-45%" width="190%" height="190%"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000" flood-opacity="0.55"/></filter>`;
+    svg.appendChild(defs);
+    // dished housing
+    mk('circle',{cx,cy,r:rBody+8,fill:'#0a0b0c',stroke:'rgba(255,255,255,.06)','stroke-width':1.5});
+    mk('circle',{cx,cy,r:rBody+4,fill:'none',stroke:'rgba(0,0,0,.55)','stroke-width':2});
+    // labels (clickable)
+    const labels=opt.positions.map((p,i)=>{
+      const rad=p.deg*Math.PI/180, x=cx+labelR*Math.sin(rad), y=cy-labelR*Math.cos(rad);
+      const e=mk('text',{x:x.toFixed(1),y:(y+3).toFixed(1),'text-anchor':'middle','font-size':7.6,'font-family':'Orbitron,monospace','letter-spacing':.5,fill:'#7A8490',style:'cursor:pointer'},p.label);
+      e.addEventListener('click',ev=>{ev.stopPropagation();select(i);});
+      return e;
+    });
+    // machined knurl ring (silver only)
+    if(!red){ for(let i=0;i<48;i++){const a=i/48*2*Math.PI,r1=rBody+1,r2=rBody+3.4;
+      mk('line',{x1:cx+r1*Math.cos(a),y1:cy+r1*Math.sin(a),x2:cx+r2*Math.cos(a),y2:cy+r2*Math.sin(a),stroke:'rgba(180,186,190,.5)','stroke-width':.8}); } }
+    // domed body (shadowed)
+    const bodyG=mk('g',{filter:`url(#${opt.idp}sh)`});
+    mk('circle',{cx,cy,r:rBody,fill:`url(#${opt.idp}b)`,stroke:red?'rgba(70,0,0,.55)':'rgba(255,255,255,.22)','stroke-width':1},null,bodyG);
+    mk('circle',{cx,cy,r:rBody,fill:`url(#${opt.idp}d)`},null,bodyG);
+    // gloss reflection
+    mk('ellipse',{cx:cx-6,cy:cy-10,rx:16,ry:9,transform:`rotate(-20 ${cx} ${cy})`,fill:'rgba(255,255,255,.18)'});
+    const rotor=mk('g',{class:'rotor'});
+    mk('rect',{x:cx-2.4,y:cy-rBody+3,width:4.8,height:14,rx:2.4,fill:red?'#FFFFFF':'#1b1d20',stroke:red?'none':'rgba(255,255,255,.3)','stroke-width':.6},null,rotor);
+    // center cap
+    mk('circle',{cx,cy,r:7,fill:red?'rgba(120,8,8,.85)':'#2a2d30',stroke:'rgba(0,0,0,.5)','stroke-width':1});
+    mk('circle',{cx:cx-2,cy:cy-2,r:2,fill:'rgba(255,255,255,.32)'});
+    let cur=0;
+    function select(i){ cur=i; const d=opt.positions[i].deg;
+      rotor.setAttribute('transform',`rotate(${d} ${cx} ${cy})`);
+      labels.forEach((L,k)=>L.setAttribute('fill',k===i?opt.positions[k].color:'#7A8490'));
+      svg.setAttribute('aria-valuetext',opt.positions[i].label);
+      if(opt.onSelect)opt.onSelect(i);
+    }
+    svg.addEventListener('click',()=>select((cur+1)%n));
+    svg.addEventListener('keydown',e=>{
+      if(['ArrowRight','ArrowUp'].includes(e.key)){e.preventDefault();select((cur+1)%n);}
+      else if(['ArrowLeft','ArrowDown'].includes(e.key)){e.preventDefault();select((cur-1+n)%n);}
+      else if(['Enter',' '].includes(e.key)){e.preventDefault();select((cur+1)%n);}
+    });
+    return select;
+  }
+
+  function applyMode(m){
+    const p=PRESETS[m]; P.pref_max=p.prefMax; P.rpm_max=p.rpmMax; P.kEng=p.kEng; vMaxCur=p.vMax;
+    gTach.setRed(p.rpmMax);
+    gBoost.setRed(p.prefMax-P.p_amb);   // boost redline tracks the mode ceiling (gauge), lands on a 25-major
+    // cap the manual Boost Target to this mode's ceiling (slider is gauge = abs − ambient)
+    const sref=el('s-ref'), maxG=Math.round(p.prefMax-P.p_amb);
+    sref.max=maxG;
+    if(parseFloat(sref.value)>maxG){ sref.value=maxG; el('v-ref').textContent=maxG+' kPa'; }
+    if(manualSetpoint>p.prefMax) manualSetpoint=p.prefMax;
+  }
+
+  const powerSel=knob(el('knob-power'),{idp:'kp',body:'red',
+    positions:[{label:'STOP',deg:-40,color:'#FF6666'},{label:'START',deg:40,color:'#00D2BE'}],
+    onSelect:i=>{ engineOn=(i===1); if(engineOn) running=true; }});
+  const MODES=['ECO','SPORT','RACE'];
+  const modeSel=knob(el('knob-mode'),{idp:'km',body:'silver',
+    positions:[{label:'ECO',deg:-54,color:'#00D2BE'},{label:'SPORT',deg:0,color:'#C8A800'},{label:'RACE',deg:54,color:'#FF4444'}],
+    onSelect:i=>applyMode(MODES[i])});
+
+  // ════════════════ AUTO / MANUAL ════════════════
+  function setTarget(m){
+    mode_target=m; const auto=(m==='AUTO');
+    el('sl-auto').style.display=auto?'':'none';
+    el('sl-manual').style.display=auto?'none':'';
+    el('sel-auto').classList.toggle('active',auto); el('sel-manual').classList.toggle('active',!auto);
+    el('sel-auto').setAttribute('aria-pressed',auto); el('sel-manual').setAttribute('aria-pressed',!auto);
+  }
+  el('sel-auto').addEventListener('click',()=>setTarget('AUTO'));
+  el('sel-manual').addEventListener('click',()=>setTarget('MANUAL'));
+
+  // ════════════════ PLOT ════════════════
+  const cv=el('plot'),cx2=cv.getContext('2d');
+  function fit(){const r=cv.getBoundingClientRect(),d=devicePixelRatio||1;cv.width=r.width*d;cv.height=250*d;cx2.setTransform(d,0,0,d,0,0);}
+  addEventListener('resize',fit);fit();
+  function draw(){
+    const W=cv.width/(devicePixelRatio||1),H=250;cx2.clearRect(0,0,W,H);
+    const x0=44,x1=W-46,y0=14,y1=H-22,pa=-10,pb=200,A=P.p_amb;   // plot in GAUGE boost (abs − ambient)
+    const X=t=>x0+((t-(st.t-WIN))/WIN)*(x1-x0), Yp=v=>y1-((v-pa)/(pb-pa))*(y1-y0), Yu=v=>y1-v*(y1-y0);
+    cx2.strokeStyle='rgba(255,255,255,.05)';cx2.lineWidth=1;cx2.font='10px JetBrains Mono,monospace';cx2.fillStyle='#7A8490';
+    for(let v=0;v<=200;v+=50){const y=Yp(v);cx2.beginPath();cx2.moveTo(x0,y);cx2.lineTo(x1,y);cx2.stroke();cx2.fillText(v,x0-6-cx2.measureText(v).width,y+3);}
+    cx2.fillText('kPa',6,y0-5);
+    if(buf.length>1){
+      cx2.strokeStyle='rgba(200,168,0,.6)';cx2.lineWidth=1.2;cx2.beginPath();
+      buf.forEach((d,i)=>{const x=X(d.t),y=Yu(d.u);i?cx2.lineTo(x,y):cx2.moveTo(x,y);});cx2.stroke();
+      cx2.strokeStyle='rgba(200,204,206,.7)';cx2.setLineDash([5,4]);cx2.lineWidth=1.3;cx2.beginPath();
+      buf.forEach((d,i)=>{const x=X(d.t),y=Yp(d.ref-A);i?cx2.lineTo(x,y):cx2.moveTo(x,y);});cx2.stroke();cx2.setLineDash([]);
+      cx2.lineWidth=2;cx2.beginPath();let pf=buf[0].mode===MODE.FAULT;cx2.strokeStyle=pf?'#FF4444':'#00D2BE';
+      buf.forEach((d,i)=>{const x=X(d.t),y=Yp(d.p-A),f=d.mode===MODE.FAULT;
+        if(f!==pf){cx2.stroke();cx2.beginPath();cx2.strokeStyle=f?'#FF4444':'#00D2BE';cx2.moveTo(x,y);pf=f;}else{i?cx2.lineTo(x,y):cx2.moveTo(x,y);}});cx2.stroke();
+    }
+    cx2.fillStyle='rgba(200,168,0,.8)';cx2.fillText('valve',x1-30,y0+10);
+  }
+
+  // ════════════════ READOUTS ════════════════
+  function readouts(){
+    // displays are GAUGE boost (= absolute − ambient), so they read 0 at rest
+    el('ro-ref').textContent=Math.round(st.ref-P.p_amb)+' kPa';
+    el('ro-u').textContent=st.u.toFixed(2);
+    el('ro-boost').textContent=Math.round(st.p-P.p_amb)+' kPa';
+    const m=el('ro-mode');m.textContent=NAME[st.mode];m.className='mode-pill m-'+NAME[st.mode];
+    gBoost.set(st.p-P.p_amb); gTach.set(st.rpm); gSpeed.set(st.v);
+  }
+
+  // ════════════════ MAIN LOOP ════════════════
+  let last=performance.now(),acc=0;
+  function frame(now){
+    let dt=(now-last)/1000;last=now;if(dt>0.1)dt=0.1;acc+=dt;
+    while(acc>=P.Ts){step();acc-=P.Ts;}
+    draw();readouts();requestAnimationFrame(frame);
+  }
+
+  // ════════════════ CONTROLS ════════════════
+  const bind=(id,vid,fmt,set)=>{const s=el(id);const u=()=>{set(parseFloat(s.value));el(vid).textContent=fmt(parseFloat(s.value));};s.addEventListener('input',u);u();};
+  bind('s-thr','v-thr',v=>Math.round(v)+'%',v=>throttle=v);
+  bind('s-ref','v-ref',v=>Math.round(v)+' kPa',v=>manualSetpoint=v+P.p_amb);  // slider is gauge; store absolute
+  bind('s-kp','v-kp',v=>v.toFixed(3),v=>P.Kp=v);
+  bind('s-ki','v-ki',v=>v.toFixed(3),v=>P.Ki=v);
+  el('b-hill').addEventListener('click',()=>{hillTimer=2.2;});
+  el('b-fault').addEventListener('click',()=>{faultTimer=0.5;});
+  el('b-reset').addEventListener('click',()=>{ throttle=0; el('s-thr').value=0; el('v-thr').textContent='0%'; reset(); powerSel(0); });
+
+  // ---- init ----
+  reset();
+  modeSel(1);     // SPORT
+  powerSel(0);    // STOP
+  setTarget('AUTO');
+  requestAnimationFrame(frame);
+})();
+</script>
+
+</body>
+</html>
