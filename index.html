@@ -3,936 +3,1604 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Muhammed Saaim Saad — ADAS Engineer</title>
+<title>Muhammed Saaim Saad — MBD Engineer</title>
+<meta name="description" content="Model-Based Development Engineer specialising in AUTOSAR, ISO 26262, and MATLAB/Simulink. Based in Bengaluru, India.">
+<meta name="theme-color" content="#080808">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23080808'/%3E%3Ctext x='16' y='23' font-family='Orbitron,Arial,sans-serif' font-size='17' font-weight='700' fill='%2300D2BE' text-anchor='middle'%3EM%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #080b0f;
-    --bg2: #0d1117;
-    --bg3: #111820;
-    --surface: #131c26;
-    --border: #1e2d3d;
-    --teal: #00d4ff;
-    --teal2: #00a8cc;
-    --silver: #c0cdd8;
-    --white: #eef2f6;
-    --dim: #5a7080;
-    --accent: #ff3b3b;
-    --mercedes: #00d2be;
-    --f1red: #e8002d;
-    --gold: #c9a84c;
-  }
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; }
-  body {
-    background: var(--bg);
-    color: var(--silver);
-    font-family: 'DM Sans', sans-serif;
-    font-weight: 300;
-    overflow-x: hidden;
-    cursor: none;
-  }
-  .cursor {
-    width: 10px; height: 10px;
-    background: var(--teal);
-    border-radius: 50%;
-    position: fixed; top: 0; left: 0;
-    pointer-events: none; z-index: 9999;
-    mix-blend-mode: screen;
-  }
-  .cursor-ring {
-    width: 36px; height: 36px;
-    border: 1px solid rgba(0,212,255,0.4);
-    border-radius: 50%;
-    position: fixed; top: 0; left: 0;
-    pointer-events: none; z-index: 9998;
-    transition: transform 0.25s ease;
-  }
-  body::before {
-    content: '';
-    position: fixed; inset: 0;
-    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px);
-    pointer-events: none; z-index: 1000;
-  }
-  body::after {
-    content: '';
-    position: fixed; inset: 0;
-    background-image:
-      linear-gradient(rgba(0,212,255,0.025) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(0,212,255,0.025) 1px, transparent 1px);
-    background-size: 60px 60px;
-    pointer-events: none; z-index: 0;
-  }
-  nav {
-    position: fixed; top: 0; left: 0; right: 0;
-    z-index: 500;
-    padding: 18px 48px;
-    display: flex; justify-content: space-between; align-items: center;
-    background: rgba(8,11,15,0.88);
-    backdrop-filter: blur(16px);
-    border-bottom: 1px solid var(--border);
-  }
-  .nav-logo {
-    font-family: 'Orbitron', monospace;
-    font-size: 13px; font-weight: 700;
-    color: var(--teal);
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-  }
-  .nav-links { display: flex; gap: 36px; list-style: none; }
-  .nav-links a {
-    font-family: 'DM Mono', monospace;
-    font-size: 11px; font-weight: 400;
-    color: var(--dim);
-    text-decoration: none;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    transition: color 0.2s;
-    position: relative;
-  }
-  .nav-links a::after {
-    content: '';
-    position: absolute; bottom: -4px; left: 0; right: 0;
-    height: 1px; background: var(--teal);
-    transform: scaleX(0); transition: transform 0.2s;
-  }
-  .nav-links a:hover { color: var(--teal); }
-  .nav-links a:hover::after { transform: scaleX(1); }
-  #hero {
-    min-height: 100vh;
-    display: flex; align-items: center;
-    padding: 120px 48px 80px;
-    position: relative; overflow: hidden;
-  }
-  .hero-content { position: relative; z-index: 2; max-width: 700px; }
-  .hero-tag {
-    font-family: 'DM Mono', monospace;
-    font-size: 11px; color: var(--teal);
-    letter-spacing: 0.2em; text-transform: uppercase;
-    margin-bottom: 20px;
-    display: flex; align-items: center; gap: 12px;
-  }
-  .hero-tag::before { content: ''; width: 32px; height: 1px; background: var(--teal); }
-  h1.name {
-    font-family: 'Orbitron', monospace;
-    font-size: clamp(36px, 6vw, 70px);
-    font-weight: 900;
-    color: var(--white);
-    line-height: 1;
-    letter-spacing: -0.02em;
-    margin-bottom: 8px;
-  }
-  h1.name span { color: var(--teal); }
-  .hero-title {
-    font-family: 'DM Mono', monospace;
-    font-size: clamp(11px, 1.8vw, 14px);
-    color: var(--dim);
-    letter-spacing: 0.12em;
-    margin-bottom: 32px;
-    text-transform: uppercase;
-  }
-  .hero-summary {
-    font-size: 15px; line-height: 1.85;
-    color: var(--silver);
-    max-width: 560px;
-    margin-bottom: 40px;
-    font-weight: 300;
-  }
-  .hero-stats { display: flex; gap: 48px; margin-bottom: 40px; }
-  .stat-num {
-    font-family: 'Orbitron', monospace;
-    font-size: 28px; font-weight: 700;
-    color: var(--teal); line-height: 1;
-  }
-  .stat-label {
-    font-family: 'DM Mono', monospace;
-    font-size: 10px; color: var(--dim);
-    text-transform: uppercase; letter-spacing: 0.12em;
-    margin-top: 4px;
-  }
-  .status-bar {
-    display: flex; align-items: center; gap: 10px;
-    padding: 12px 20px;
-    background: rgba(0,212,255,0.06);
-    border: 1px solid rgba(0,212,255,0.15);
-    margin-bottom: 28px;
-  }
-  .status-dot {
-    width: 7px; height: 7px;
-    border-radius: 50%; background: #22c55e;
-    animation: pulse 2s infinite;
-  }
-  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
-  .status-text {
-    font-family: 'DM Mono', monospace;
-    font-size: 11px; color: var(--teal); letter-spacing: 0.1em;
-  }
-  .hero-cta { display: flex; gap: 16px; flex-wrap: wrap; }
-  .btn {
-    font-family: 'DM Mono', monospace;
-    font-size: 11px; letter-spacing: 0.15em;
-    text-transform: uppercase;
-    padding: 14px 28px;
-    text-decoration: none;
-    transition: all 0.2s;
-    display: inline-block;
-    cursor: none;
-  }
-  .btn-primary { background: var(--teal); color: var(--bg); font-weight: 500; }
-  .btn-primary:hover { background: var(--white); }
-  .btn-outline { border: 1px solid var(--border); color: var(--silver); }
-  .btn-outline:hover { border-color: var(--teal); color: var(--teal); }
-  .hero-deco {
-    position: absolute; right: 0; top: 0; bottom: 0;
-    width: 45%; z-index: 1; overflow: hidden;
-  }
-  .hero-ring {
-    position: absolute; border-radius: 50%;
-    border: 1px solid rgba(0,212,255,0.07);
-  }
-  .hr1 { width: 600px; height: 600px; right: -200px; top: 50%; transform: translateY(-50%); }
-  .hr2 { width: 400px; height: 400px; right: -80px; top: 50%; transform: translateY(-50%); }
-  .hr3 { width: 200px; height: 200px; right: 60px; top: 50%; transform: translateY(-50%); }
-  .telemetry-bar {
-    position: absolute; right: 48px; top: 50%;
-    transform: translateY(-50%);
-    display: flex; flex-direction: column; gap: 14px;
-    z-index: 2;
-  }
-  .tel-item { display: flex; align-items: center; gap: 12px; }
-  .tel-label {
-    font-family: 'DM Mono', monospace;
-    font-size: 9px; color: var(--dim);
-    letter-spacing: 0.15em; text-transform: uppercase;
-    width: 70px; text-align: right;
-  }
-  .tel-bar-wrap {
-    width: 120px; height: 3px;
-    background: var(--border);
-    position: relative; overflow: hidden;
-  }
-  .tel-bar-fill {
-    height: 100%; background: var(--teal);
-    animation: telFill 2s ease forwards;
-  }
-  @keyframes telFill { from { width: 0; } }
-  .tel-val {
-    font-family: 'DM Mono', monospace;
-    font-size: 10px; color: var(--teal); width: 36px;
-  }
-  section { padding: 100px 48px; position: relative; z-index: 1; }
-  .section-tag {
-    font-family: 'DM Mono', monospace;
-    font-size: 10px; color: var(--teal);
-    letter-spacing: 0.2em; text-transform: uppercase;
-    margin-bottom: 12px;
-    display: flex; align-items: center; gap: 12px;
-  }
-  .section-tag::before { content: '//'; color: var(--dim); }
-  h2.section-title {
-    font-family: 'Orbitron', monospace;
-    font-size: clamp(22px, 4vw, 38px);
-    font-weight: 700; color: var(--white);
-    letter-spacing: -0.02em; margin-bottom: 56px;
-  }
-  #skills { background: var(--bg2); }
-  .skills-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 2px;
-  }
-  .skill-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    padding: 28px 24px;
-    transition: border-color 0.2s, transform 0.2s;
-    position: relative; overflow: hidden;
-  }
-  .skill-card::before {
-    content: '';
-    position: absolute; top: 0; left: 0;
-    width: 3px; height: 100%;
-    background: var(--teal);
-    transform: scaleY(0); transform-origin: bottom;
-    transition: transform 0.3s;
-  }
-  .skill-card:hover { border-color: rgba(0,212,255,0.3); transform: translateY(-2px); }
-  .skill-card:hover::before { transform: scaleY(1); }
-  .skill-card-title {
-    font-family: 'DM Mono', monospace;
-    font-size: 10px; color: var(--teal);
-    letter-spacing: 0.15em; text-transform: uppercase;
-    margin-bottom: 16px;
-  }
-  .skill-tags { display: flex; flex-wrap: wrap; gap: 8px; }
-  .tag {
-    font-family: 'DM Mono', monospace;
-    font-size: 10px; padding: 4px 10px;
-    background: rgba(0,212,255,0.06);
-    border: 1px solid rgba(0,212,255,0.15);
-    color: var(--silver); letter-spacing: 0.05em;
-  }
-  #experience { background: var(--bg); }
-  .exp-timeline { position: relative; }
-  .exp-timeline::before {
-    content: '';
-    position: absolute; left: 0; top: 0; bottom: 0;
-    width: 1px;
-    background: linear-gradient(180deg, var(--teal), transparent);
-    opacity: 0.3;
-  }
-  .exp-item { padding-left: 40px; padding-bottom: 60px; position: relative; }
-  .exp-dot {
-    position: absolute; left: -5px; top: 6px;
-    width: 11px; height: 11px;
-    border: 2px solid var(--teal);
-    background: var(--bg); border-radius: 50%;
-  }
-  .exp-date {
-    font-family: 'DM Mono', monospace;
-    font-size: 10px; color: var(--dim);
-    letter-spacing: 0.12em; text-transform: uppercase;
-    margin-bottom: 8px;
-  }
-  .exp-role {
-    font-family: 'Orbitron', monospace;
-    font-size: 14px; font-weight: 600;
-    color: var(--white); margin-bottom: 4px;
-  }
-  .exp-company {
-    font-family: 'DM Mono', monospace;
-    font-size: 12px; color: var(--teal); margin-bottom: 20px;
-  }
-  .exp-badge {
-    display: inline-block;
-    font-family: 'DM Mono', monospace;
-    font-size: 10px; padding: 3px 10px;
-    border: 1px solid rgba(0,210,190,0.3);
-    color: var(--mercedes);
-    margin-bottom: 16px; margin-right: 8px;
-  }
-  .exp-bullets { list-style: none; }
-  .exp-bullets li {
-    font-size: 13px; color: var(--silver);
-    line-height: 1.75; padding: 5px 0;
-    padding-left: 18px; position: relative; font-weight: 300;
-  }
-  .exp-bullets li::before {
-    content: '▸';
-    position: absolute; left: 0;
-    color: var(--teal); font-size: 10px;
-  }
-  #projects { background: var(--bg2); }
-  .projects-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 20px;
-  }
-  .project-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    padding: 32px 28px;
-    position: relative; overflow: hidden;
-    transition: border-color 0.2s, transform 0.2s;
-    cursor: none;
-  }
-  .project-card:hover { border-color: rgba(0,212,255,0.4); transform: translateY(-4px); }
-  .project-card::after {
-    content: '';
-    position: absolute; bottom: 0; left: 0; right: 0;
-    height: 2px;
-    background: linear-gradient(90deg, var(--teal), transparent);
-    transform: scaleX(0); transform-origin: left;
-    transition: transform 0.3s;
-  }
-  .project-card:hover::after { transform: scaleX(1); }
-  .project-num {
-    font-family: 'Orbitron', monospace;
-    font-size: 40px; font-weight: 900;
-    color: rgba(0,212,255,0.07);
-    position: absolute; top: 16px; right: 20px; line-height: 1;
-  }
-  .project-type {
-    font-family: 'DM Mono', monospace;
-    font-size: 9px; color: var(--teal);
-    letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 12px;
-  }
-  .project-title {
-    font-family: 'Orbitron', monospace;
-    font-size: 13px; font-weight: 600;
-    color: var(--white); line-height: 1.4; margin-bottom: 14px;
-  }
-  .project-desc {
-    font-size: 13px; color: var(--silver);
-    line-height: 1.75; margin-bottom: 20px; font-weight: 300;
-  }
-  .project-links { display: flex; gap: 12px; }
-  .project-link {
-    font-family: 'DM Mono', monospace;
-    font-size: 10px; color: var(--teal);
-    text-decoration: none;
-    letter-spacing: 0.1em; text-transform: uppercase;
-    border-bottom: 1px solid rgba(0,212,255,0.3);
-    padding-bottom: 2px; transition: border-color 0.2s;
-  }
-  .project-link:hover { border-color: var(--teal); }
-  .project-card.add-card {
-    border-style: dashed;
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
-    text-align: center; min-height: 260px;
-    gap: 14px; background: transparent;
-  }
-  .add-icon { font-size: 28px; color: var(--dim); opacity: 0.35; }
-  .add-text {
-    font-family: 'DM Mono', monospace;
-    font-size: 11px; color: var(--dim);
-    letter-spacing: 0.1em; text-transform: uppercase;
-    line-height: 1.8;
-  }
-  #racing { background: var(--bg); }
-  .racing-grid {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 2px;
-  }
-  .racing-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    padding: 40px 36px;
-    position: relative; overflow: hidden;
-  }
-  .racing-card.f1 { border-top: 3px solid var(--f1red); }
-  .racing-card.motogp { border-top: 3px solid var(--gold); }
-  .racing-icon { font-size: 44px; margin-bottom: 18px; display: block; }
-  .racing-card-title {
-    font-family: 'Orbitron', monospace;
-    font-size: 18px; font-weight: 700;
-    color: var(--white); margin-bottom: 12px;
-  }
-  .racing-card.f1 .racing-card-title { color: var(--mercedes); }
-  .racing-card p {
-    font-size: 13px; color: var(--silver);
-    line-height: 1.85; font-weight: 300;
-  }
-  .driver-badge {
-    display: inline-flex; align-items: center; gap: 8px;
-    padding: 8px 16px; margin-top: 20px;
-    background: rgba(0,210,190,0.08);
-    border: 1px solid rgba(0,210,190,0.2);
-    font-family: 'DM Mono', monospace;
-    font-size: 11px; color: var(--mercedes); letter-spacing: 0.1em;
-  }
-  .driver-num {
-    font-family: 'Orbitron', monospace;
-    font-size: 24px; font-weight: 900;
-    color: var(--mercedes); opacity: 0.15;
-    position: absolute; bottom: 20px; right: 28px;
-  }
-  #connection { background: var(--bg2); padding-top: 80px; }
-  .connection-grid {
-    display: grid; grid-template-columns: 1fr 1fr;
-    gap: 60px; align-items: center;
-  }
-  .connection-text p {
-    font-size: 14px; line-height: 1.9;
-    color: var(--silver); font-weight: 300; margin-bottom: 16px;
-  }
-  .connection-text strong { color: var(--teal); font-weight: 500; }
-  .connection-metrics {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 2px;
-  }
-  .metric-box {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    padding: 24px 20px;
-  }
-  .metric-val {
-    font-family: 'Orbitron', monospace;
-    font-size: 22px; font-weight: 700;
-    color: var(--teal); margin-bottom: 6px;
-  }
-  .metric-desc {
-    font-family: 'DM Mono', monospace;
-    font-size: 10px; color: var(--dim);
-    text-transform: uppercase; letter-spacing: 0.1em;
-  }
-  #education { background: var(--bg); }
-  .edu-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-left: 3px solid var(--teal);
-    padding: 36px 32px; max-width: 600px;
-  }
-  .edu-degree {
-    font-family: 'Orbitron', monospace;
-    font-size: 15px; font-weight: 700;
-    color: var(--white); margin-bottom: 8px;
-  }
-  .edu-school {
-    font-family: 'DM Mono', monospace;
-    font-size: 12px; color: var(--teal); margin-bottom: 20px;
-  }
-  #contact { background: var(--bg2); }
-  .contact-inner {
-    display: grid; grid-template-columns: 1fr 1fr;
-    gap: 80px; align-items: start;
-  }
-  .contact-heading {
-    font-family: 'Orbitron', monospace;
-    font-size: clamp(18px, 3vw, 30px);
-    font-weight: 700; color: var(--white);
-    line-height: 1.2; margin-bottom: 20px;
-  }
-  .contact-heading span { color: var(--teal); }
-  .contact-text {
-    font-size: 14px; color: var(--silver);
-    line-height: 1.85; font-weight: 300; margin-bottom: 32px;
-  }
-  .contact-links { display: flex; flex-direction: column; gap: 12px; }
-  .contact-link {
-    display: flex; align-items: center; gap: 16px;
-    text-decoration: none; padding: 16px 20px;
-    border: 1px solid var(--border);
-    transition: border-color 0.2s, background 0.2s;
-  }
-  .contact-link:hover {
-    border-color: rgba(0,212,255,0.4);
-    background: rgba(0,212,255,0.04);
-  }
-  .contact-link-icon { font-size: 15px; width: 20px; text-align: center; }
-  .contact-link-label {
-    font-family: 'DM Mono', monospace;
-    font-size: 10px; color: var(--dim);
-    text-transform: uppercase; letter-spacing: 0.1em; flex: 1;
-  }
-  .contact-link-val { font-size: 13px; color: var(--silver); }
-  .contact-link:hover .contact-link-val { color: var(--teal); }
-  footer {
-    padding: 28px 48px;
-    background: var(--bg);
-    border-top: 1px solid var(--border);
-    display: flex; justify-content: space-between; align-items: center;
-    position: relative; z-index: 1;
-  }
-  .footer-copy, .footer-teal {
-    font-family: 'DM Mono', monospace;
-    font-size: 10px; letter-spacing: 0.1em;
-  }
-  .footer-copy { color: var(--dim); }
-  .footer-teal { color: var(--teal); }
-  .fade-in {
-    opacity: 0; transform: translateY(20px);
-    transition: opacity 0.6s ease, transform 0.6s ease;
-  }
-  .fade-in.visible { opacity: 1; transform: none; }
-  @media (max-width: 768px) {
-    nav { padding: 16px 24px; }
-    .nav-links { display: none; }
-    section { padding: 64px 24px; }
-    #hero { padding: 100px 24px 60px; }
-    .hero-stats { gap: 28px; }
-    .hero-deco { display: none; }
-    .racing-grid, .connection-grid, .contact-inner { grid-template-columns: 1fr; }
-    footer { flex-direction: column; gap: 10px; text-align: center; }
-  }
+/* ── Reset ─────────────────────────────────────────────────────────────── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --bg:#080808;
+  --bg-surface:#0f0f0f;
+  --bg-raised:#171717;
+  --petronas:#00D2BE;
+  --petronas-dim:#009E8E;
+  --silver:#C8CCCE;
+  --silver-dim:#7A8490;
+  --white:#F4F4F4;
+  --font-d:'Orbitron',monospace;
+  --font-b:'Inter',sans-serif;
+  --pad:100px;
+  --r:6px;
+  --ease:0.28s cubic-bezier(0.4,0,0.2,1);
+}
+
+html{scroll-behavior:smooth;font-size:16px}
+body{font-family:var(--font-b);background:var(--bg);color:var(--silver);line-height:1.6;overflow-x:hidden}
+
+/* ── Carbon fibre ──────────────────────────────────────────────────────── */
+.carbon{
+  background-color:var(--bg);
+  background-image:
+    repeating-linear-gradient(45deg,rgba(255,255,255,.022) 0,rgba(255,255,255,.022) 1px,transparent 0,transparent 50%),
+    repeating-linear-gradient(-45deg,rgba(255,255,255,.022) 0,rgba(255,255,255,.022) 1px,transparent 0,transparent 50%);
+  background-size:6px 6px;
+}
+
+/* ── Layout ────────────────────────────────────────────────────────────── */
+.wrap{max-width:1140px;margin:0 auto;padding:0 28px}
+
+/* ── Typography helpers ────────────────────────────────────────────────── */
+.eyebrow{
+  font-family:var(--font-d);font-size:.6rem;font-weight:600;
+  letter-spacing:.35em;text-transform:uppercase;color:var(--petronas);
+  margin-bottom:10px;
+}
+.s-title{
+  font-family:var(--font-d);
+  font-size:clamp(1.55rem,3vw,2.1rem);
+  font-weight:700;color:var(--white);letter-spacing:.04em;
+  margin-bottom:6px;
+}
+.s-sub{font-size:.95rem;color:var(--silver-dim);max-width:520px;line-height:1.7}
+.bar{width:44px;height:2.5px;background:var(--petronas);margin:14px 0 38px}
+
+/* Metal rule */
+.rule{height:1px;background:linear-gradient(90deg,transparent,rgba(200,204,206,.18) 25%,rgba(200,204,206,.32) 50%,rgba(200,204,206,.18) 75%,transparent)}
+
+/* Fade-in */
+.fi{opacity:0;transform:translateY(22px);transition:opacity .55s ease,transform .55s ease}
+.fi.v{opacity:1;transform:none}
+.fi.d1{transition-delay:.1s}.fi.d2{transition-delay:.2s}.fi.d3{transition-delay:.3s}.fi.d4{transition-delay:.4s}
+
+/* Buttons */
+.btn-p{
+  display:inline-block;font-family:var(--font-d);font-size:.6rem;font-weight:700;
+  letter-spacing:.2em;text-transform:uppercase;background:var(--petronas);color:var(--bg);
+  padding:13px 28px;border-radius:2px;text-decoration:none;border:none;cursor:pointer;
+  transition:background var(--ease),transform var(--ease);
+}
+.btn-p:hover{background:var(--petronas-dim);transform:translateY(-2px)}
+
+.btn-s{
+  display:inline-block;font-family:var(--font-d);font-size:.6rem;font-weight:700;
+  letter-spacing:.2em;text-transform:uppercase;background:transparent;color:var(--silver);
+  padding:13px 28px;border-radius:2px;text-decoration:none;
+  border:1px solid rgba(200,204,206,.35);cursor:pointer;
+  transition:border-color var(--ease),color var(--ease),transform var(--ease);
+}
+.btn-s:hover{border-color:var(--silver);color:var(--white);transform:translateY(-2px)}
+
+/* Tag */
+.tag{
+  display:inline-block;font-size:.7rem;color:var(--silver-dim);
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);
+  padding:4px 10px;border-radius:2px;letter-spacing:.02em;
+}
+
+/* ── NAV ───────────────────────────────────────────────────────────────── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;height:62px;
+  display:flex;align-items:center;
+  transition:background var(--ease),border-color var(--ease);
+}
+nav.sc{background:rgba(8,8,8,.94);backdrop-filter:blur(14px);border-bottom:1px solid rgba(0,210,190,.14)}
+
+.nav-in{display:flex;align-items:center;justify-content:space-between;width:100%}
+
+.n-logo{
+  font-family:var(--font-d);font-size:.85rem;font-weight:700;
+  letter-spacing:.18em;color:var(--petronas);text-decoration:none;
+}
+
+.n-links{display:flex;align-items:center;gap:32px;list-style:none}
+.n-links a{
+  font-family:var(--font-d);font-size:.58rem;font-weight:600;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--silver-dim);text-decoration:none;
+  position:relative;padding-bottom:3px;transition:color var(--ease);
+}
+.n-links a::after{
+  content:'';position:absolute;bottom:0;left:0;width:0;height:1.5px;
+  background:var(--petronas);transition:width var(--ease);
+}
+.n-links a:hover,.n-links a.act{color:var(--white)}
+.n-links a:hover::after,.n-links a.act::after{width:100%}
+
+.n-cta{
+  font-family:var(--font-d);font-size:.58rem;font-weight:700;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--petronas);border:1px solid rgba(0,210,190,.5);
+  padding:7px 16px;border-radius:2px;text-decoration:none;
+  transition:background var(--ease),color var(--ease);
+}
+.n-cta:hover{background:var(--petronas);color:var(--bg)}
+
+.hbg{display:none;background:none;border:none;cursor:pointer;flex-direction:column;gap:5px;padding:4px}
+.hbg span{display:block;width:22px;height:1.5px;background:var(--silver);transition:all var(--ease)}
+
+.mob-nav{
+  display:none;position:fixed;top:62px;left:0;right:0;
+  background:rgba(6,6,6,.97);backdrop-filter:blur(14px);
+  border-bottom:1px solid rgba(0,210,190,.14);
+  padding:24px 28px;z-index:99;flex-direction:column;gap:0;
+}
+.mob-nav.open{display:flex}
+.mob-nav a{
+  font-family:var(--font-d);font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--silver-dim);text-decoration:none;padding:14px 0;
+  border-bottom:1px solid rgba(255,255,255,.05);transition:color var(--ease);
+}
+.mob-nav a:last-child{border-bottom:none}
+.mob-nav a:hover{color:var(--petronas)}
+
+/* ── HERO ──────────────────────────────────────────────────────────────── */
+#hero{min-height:100vh;display:flex;align-items:center;position:relative;overflow:hidden}
+
+.hero-grid{
+  position:absolute;top:0;right:0;bottom:0;width:55%;
+  background-image:
+    linear-gradient(rgba(0,210,190,.04) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,210,190,.04) 1px,transparent 1px);
+  background-size:56px 56px;
+  -webkit-mask-image:linear-gradient(to left,rgba(0,0,0,.5),transparent);
+  mask-image:linear-gradient(to left,rgba(0,0,0,.5),transparent);
+  pointer-events:none;
+}
+
+.hero-content{position:relative;z-index:2;padding-top:62px;width:100%}
+
+.h-eyebrow{
+  font-family:var(--font-d);font-size:.6rem;letter-spacing:.4em;color:var(--petronas);
+  text-transform:uppercase;margin-bottom:22px;display:flex;align-items:center;gap:14px;
+}
+.h-eyebrow::before{content:'';display:block;width:30px;height:1px;background:var(--petronas)}
+
+.h-name{
+  font-family:var(--font-d);
+  font-size:clamp(2.6rem,6.5vw,5rem);
+  font-weight:900;color:var(--white);line-height:1.03;
+  letter-spacing:.06em;margin-bottom:18px;
+}
+.h-name em{color:var(--petronas);font-style:normal}
+
+.h-role{
+  font-size:clamp(.9rem,1.8vw,1.1rem);font-weight:300;
+  color:var(--silver-dim);letter-spacing:.06em;margin-bottom:18px;line-height:1.7;
+}
+.h-role strong{color:var(--silver);font-weight:500}
+
+.h-lead{
+  font-size:clamp(.95rem,1.45vw,1.08rem);font-weight:300;line-height:1.75;
+  color:var(--silver);max-width:600px;margin-bottom:30px;
+}
+.h-lead b{color:var(--white);font-weight:500}
+
+.h-ctas{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:64px}
+
+.h-stats{
+  position:relative;display:flex;flex-wrap:wrap;
+  border-top:1px solid rgba(255,255,255,.07);padding:32px 0 36px;gap:0;
+}
+.h-stats::after{content:'';position:absolute;left:0;right:0;bottom:0;height:2px;background:linear-gradient(90deg,var(--petronas),transparent 55%)}
+.h-stat{padding-right:36px;margin-right:36px;border-right:1px solid rgba(255,255,255,.07)}
+.h-stat:last-child{border-right:none;margin-right:0;padding-right:0}
+.h-stat-v{
+  font-family:var(--font-d);font-size:1.55rem;font-weight:700;
+  color:var(--petronas);line-height:1;margin-bottom:6px;
+  text-shadow:0 0 20px rgba(0,210,190,.22);
+}
+.h-stat-l{font-size:.62rem;color:var(--silver-dim);letter-spacing:.12em;text-transform:uppercase}
+
+
+/* ── ABOUT ─────────────────────────────────────────────────────────────── */
+#about{padding:var(--pad) 0}
+.about-in{
+  max-width:660px;border-left:3px solid var(--petronas);
+  padding-left:30px;
+}
+.about-in p{font-size:1rem;line-height:1.8;color:var(--silver)}
+.about-in p+p{margin-top:14px}
+
+/* ── EXPERTISE ─────────────────────────────────────────────────────────── */
+#expertise{padding:var(--pad) 0;background:var(--bg-surface)}
+
+.exp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+
+.exp-card{
+  background:var(--bg-raised);border-top:2px solid var(--petronas);
+  padding:30px 26px;border-radius:var(--r);
+  transition:transform var(--ease),box-shadow var(--ease);
+}
+.exp-card:hover{transform:translateY(-5px);box-shadow:0 16px 40px rgba(0,0,0,.4)}
+
+.exp-icon{width:38px;height:38px;color:var(--petronas);margin-bottom:18px}
+.exp-card h3{font-family:var(--font-d);font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--white);margin-bottom:14px}
+.exp-tags{display:flex;flex-wrap:wrap;gap:7px}
+
+/* ── EXPERIENCE ────────────────────────────────────────────────────────── */
+#experience{padding:var(--pad) 0}
+
+.tl{position:relative;padding-left:30px}
+.tl::before{
+  content:'';position:absolute;left:6px;top:8px;bottom:0;width:2px;
+  background:linear-gradient(to bottom,var(--petronas),rgba(0,210,190,.08));
+}
+
+.tl-entry{position:relative;margin-bottom:48px}
+.tl-entry:last-child{margin-bottom:0}
+
+.tl-dot{
+  position:absolute;left:-30px;top:6px;width:14px;height:14px;
+  border-radius:50%;background:var(--bg);border:2px solid var(--petronas);z-index:1;
+}
+.tl-dot.on{background:var(--petronas);box-shadow:0 0 14px rgba(0,210,190,.45)}
+
+.tl-meta{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:5px}
+.tl-date{font-family:var(--font-d);font-size:.58rem;letter-spacing:.18em;color:var(--petronas);text-transform:uppercase}
+
+.badge{font-size:.6rem;padding:2px 9px;border-radius:2px;letter-spacing:.04em}
+.b-cur{background:rgba(0,210,190,.1);color:var(--petronas);border:1px solid rgba(0,210,190,.28)}
+.b-int{background:rgba(200,204,206,.05);color:var(--silver-dim);border:1px solid rgba(200,204,206,.13)}
+
+.tl-role{font-family:var(--font-d);font-size:.95rem;font-weight:600;color:var(--white);letter-spacing:.04em;margin-bottom:3px}
+.tl-co{font-size:.85rem;color:var(--silver-dim);margin-bottom:14px}
+
+.tl-ul{list-style:none;display:flex;flex-direction:column;gap:8px}
+.tl-ul li{font-size:.9rem;color:var(--silver);padding-left:16px;position:relative;line-height:1.62}
+.tl-ul li::before{content:'•';position:absolute;left:2px;top:-1px;color:var(--petronas);font-size:1.05em;line-height:1.62}
+.tl-ul .m{color:var(--petronas);font-weight:600}
+
+/* ── PROJECTS ──────────────────────────────────────────────────────────── */
+#projects{padding:var(--pad) 0;background:var(--bg-surface)}
+
+.proj-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:22px}
+
+.proj-card{
+  background:var(--bg-raised);border:1px solid rgba(255,255,255,.06);
+  border-radius:var(--r);padding:26px;
+  display:flex;flex-direction:column;gap:14px;position:relative;overflow:hidden;
+  transition:border-color var(--ease),transform var(--ease);
+}
+.proj-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,var(--petronas),transparent 60%);
+  opacity:0;transition:opacity var(--ease);
+}
+.proj-card:hover{border-color:rgba(0,210,190,.25);transform:translateY(-3px)}
+.proj-card:hover::before{opacity:1}
+.proj-card.dim{opacity:.58}
+
+.pc-header{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+
+.st-tags{display:flex;flex-wrap:wrap;gap:6px}
+.st{
+  font-family:var(--font-d);font-size:.52rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--petronas);background:rgba(0,210,190,.08);border:1px solid rgba(0,210,190,.2);
+  padding:3px 8px;border-radius:2px;
+}
+
+.ps{font-family:var(--font-d);font-size:.52rem;letter-spacing:.1em;text-transform:uppercase;padding:4px 10px;border-radius:2px;white-space:nowrap;flex-shrink:0}
+.ps-done{background:rgba(0,210,190,.1);color:var(--petronas);border:1px solid rgba(0,210,190,.25)}
+.ps-wip{background:rgba(200,160,0,.1);color:#C8A800;border:1px solid rgba(200,160,0,.22)}
+.ps-soon{background:rgba(200,204,206,.05);color:var(--silver-dim);border:1px solid rgba(200,204,206,.14)}
+
+.p-title{font-family:var(--font-d);font-size:.9rem;font-weight:600;color:var(--white);letter-spacing:.04em;line-height:1.35}
+.p-desc{font-size:.875rem;color:var(--silver-dim);line-height:1.65;flex:1}
+
+.p-foot{
+  display:flex;align-items:center;justify-content:space-between;
+  padding-top:14px;border-top:1px solid rgba(255,255,255,.06);
+}
+.p-link{
+  display:flex;align-items:center;gap:6px;
+  font-family:var(--font-d);font-size:.57rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--silver-dim);text-decoration:none;transition:color var(--ease);
+}
+.p-link:hover{color:var(--petronas)}
+.p-link svg{width:14px;height:14px;flex-shrink:0}
+
+/* ── PATENT ────────────────────────────────────────────────────────────── */
+#patent{padding:var(--pad) 0}
+
+.pat-card{
+  background:var(--bg-surface);
+  border:1px solid rgba(0,210,190,.18);border-left:4px solid var(--petronas);
+  border-radius:var(--r);padding:46px;
+  display:grid;grid-template-columns:1fr auto;gap:40px;align-items:center;
+  position:relative;overflow:hidden;
+}
+.pat-card::after{
+  content:'';position:absolute;top:0;right:0;bottom:0;width:180px;
+  background:linear-gradient(to left,rgba(0,210,190,.03),transparent);pointer-events:none;
+}
+
+.pat-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:var(--font-d);font-size:.57rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--petronas);background:rgba(0,210,190,.08);border:1px solid rgba(0,210,190,.2);
+  padding:5px 14px;border-radius:2px;margin-bottom:18px;
+}
+.pat-badge::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--petronas)}
+
+.pat-title{
+  font-family:var(--font-d);
+  font-size:clamp(1.1rem,2.5vw,1.55rem);
+  font-weight:700;color:var(--white);letter-spacing:.04em;
+  margin-bottom:14px;line-height:1.3;
+}
+.pat-desc{font-size:.9rem;color:var(--silver-dim);line-height:1.75;margin-bottom:22px;max-width:540px}
+
+.pat-meta{display:grid;grid-template-columns:repeat(3,auto);gap:20px 28px;margin-bottom:28px}
+.pm-label{font-family:var(--font-d);font-size:.52rem;letter-spacing:.18em;text-transform:uppercase;color:var(--silver-dim);margin-bottom:3px}
+.pm-val{font-size:.875rem;color:var(--silver);font-weight:500}
+
+.pat-ctas{display:flex;gap:11px;flex-wrap:wrap}
+.pat-inv{font-size:.78rem;color:var(--silver-dim);margin-top:14px}
+.pat-inv span{color:var(--silver)}
+
+.pat-seal{
+  width:110px;height:110px;border-radius:50%;flex-shrink:0;
+  background:radial-gradient(circle,rgba(0,210,190,.1) 0%,rgba(0,210,190,.03) 60%,transparent 100%);
+  border:1px solid rgba(0,210,190,.18);
+  display:flex;align-items:center;justify-content:center;
+}
+.pat-seal svg{width:52px;height:52px;color:var(--petronas);opacity:.6}
+
+/* ── MOTORSPORT ────────────────────────────────────────────────────────── */
+#motorsport{padding:var(--pad) 0;background:var(--bg-surface)}
+
+.ms-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:22px}
+
+.ms-card{
+  background:var(--bg-raised);border:1px solid rgba(255,255,255,.06);
+  border-radius:var(--r);padding:34px 30px;
+  transition:border-color var(--ease);
+}
+.ms-card:hover{border-color:rgba(0,210,190,.2)}
+.ms-head{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;margin-bottom:16px}
+.ms-icon{width:40px;height:40px;color:var(--petronas);display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
+.ms-icon svg{width:30px;height:30px;display:block}
+.ms-viz{flex-shrink:0;opacity:.96}
+.ms-card h3{font-family:var(--font-d);font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:var(--white);margin-bottom:10px}
+.ms-card p{font-size:.88rem;color:var(--silver-dim);line-height:1.72;margin-bottom:18px}
+
+.spec-row{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:7px 0;border-bottom:1px solid rgba(255,255,255,.05);font-size:.8rem;
+}
+.spec-row:last-child{border-bottom:none}
+.spec-label{color:var(--silver-dim)}
+.spec-val{font-family:var(--font-d);font-size:.68rem;letter-spacing:.04em;color:var(--petronas)}
+
+/* premium pull-quote */
+.ms-quote{max-width:760px;margin:0 0 32px;padding:16px 24px;border-left:2px solid var(--petronas);background:linear-gradient(90deg,rgba(0,210,190,.05),transparent);border-radius:0 4px 4px 0}
+.ms-quote p{font-family:var(--font-d);font-size:.92rem;font-weight:500;font-style:italic;color:var(--white);line-height:1.62;letter-spacing:.01em}
+.ms-quote span{display:block;margin-top:11px;font-family:var(--font-d);font-size:.55rem;font-style:normal;letter-spacing:.24em;text-transform:uppercase;color:var(--petronas)}
+
+/* lean-angle arc gauge (MotoGP) */
+.lean-arc .arc-bg{stroke:rgba(255,255,255,.09)}
+.lean-arc .arc-fg{stroke:var(--petronas);stroke-dasharray:120;stroke-dashoffset:120;transition:stroke-dashoffset 1.3s cubic-bezier(.4,0,.2,1)}
+.lean-arc.go .arc-fg{stroke-dashoffset:34}
+.lean-arc .lean-val{fill:var(--white);font-family:var(--font-d);font-size:13px;font-weight:700}
+
+/* telemetry trace (F1) */
+.telem .tl-grid{stroke:rgba(255,255,255,.07);stroke-width:1}
+.telem .tl-line{fill:none;stroke:var(--petronas);stroke-width:1.7;stroke-linejoin:round;stroke-linecap:round;stroke-dasharray:320;stroke-dashoffset:320;transition:stroke-dashoffset 1.6s ease}
+.telem.go .tl-line{stroke-dashoffset:0}
+
+/* track -> code mapping strip */
+.map-strip{margin-top:32px;background:var(--bg-raised);border:1px solid rgba(255,255,255,.06);border-top:2px solid var(--petronas);border-radius:var(--r);overflow:hidden}
+.map-cap{font-family:var(--font-d);font-size:.52rem;letter-spacing:.2em;text-transform:uppercase;color:var(--silver-dim);padding:15px 22px 6px}
+.map-row{display:grid;grid-template-columns:1fr 26px 1.25fr;align-items:center;gap:12px;padding:13px 22px;border-top:1px solid rgba(255,255,255,.05);transition:background var(--ease)}
+.map-row:hover{background:rgba(0,210,190,.045)}
+.map-track{font-family:var(--font-d);font-size:.62rem;letter-spacing:.07em;text-transform:uppercase;color:var(--silver)}
+.map-arrow{color:var(--petronas);text-align:center;font-size:.95rem}
+.map-code{font-size:.85rem;color:var(--silver-dim);line-height:1.5}
+.map-code b{color:var(--petronas);font-weight:600}
+
+@media(max-width:920px){
+  .ms-viz{display:none}
+  .map-row{grid-template-columns:1fr;gap:3px}
+  .map-arrow{display:none}
+}
+@media(prefers-reduced-motion:reduce){
+  .lean-arc .arc-fg{transition:none;stroke-dashoffset:34}
+  .telem .tl-line{transition:none;stroke-dashoffset:0}
+}
+
+/* ── CONTACT ───────────────────────────────────────────────────────────── */
+#contact{padding:var(--pad) 0}
+
+.ct-in{display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:start}
+.ct-pitch{font-size:.98rem;color:var(--silver-dim);line-height:1.8}
+
+.ct-links{display:flex;flex-direction:column;gap:12px}
+.ct-link{
+  display:flex;align-items:center;gap:16px;text-decoration:none;
+  padding:15px 18px;background:var(--bg-surface);
+  border:1px solid rgba(255,255,255,.07);border-radius:var(--r);
+  transition:border-color var(--ease),transform var(--ease);
+}
+.ct-link:hover{border-color:rgba(0,210,190,.3);transform:translateX(5px)}
+.ct-icon{
+  width:36px;height:36px;background:rgba(0,210,190,.08);border-radius:4px;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--petronas);
+}
+.ct-icon svg{width:17px;height:17px}
+.ct-lbl{font-family:var(--font-d);font-size:.54rem;letter-spacing:.14em;text-transform:uppercase;color:var(--silver-dim);display:block;margin-bottom:2px}
+.ct-val{font-size:.875rem;color:var(--silver);font-weight:500}
+
+/* ── FOOTER ────────────────────────────────────────────────────────────── */
+footer{padding:28px 0;border-top:1px solid rgba(255,255,255,.06)}
+.ft-in{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.ft-logo{font-family:var(--font-d);font-size:.68rem;letter-spacing:.22em;color:var(--petronas)}
+.ft-copy{font-size:.74rem;color:var(--silver-dim)}
+.ft-link{font-family:var(--font-d);font-size:.57rem;letter-spacing:.14em;text-transform:uppercase;color:var(--silver-dim);text-decoration:none;transition:color var(--ease)}
+.ft-link:hover{color:var(--petronas)}
+
+/* ── Responsive ────────────────────────────────────────────────────────── */
+@media(max-width:920px){
+  :root{--pad:72px}
+  .exp-grid{grid-template-columns:1fr}
+  .proj-grid{grid-template-columns:1fr}
+  .ms-grid{grid-template-columns:1fr}
+  .ct-in{grid-template-columns:1fr;gap:40px}
+  .pat-card{grid-template-columns:1fr;padding:30px}
+  .pat-seal{display:none}
+  .pat-meta{grid-template-columns:repeat(2,auto)}
+  .n-links,.n-cta{display:none}
+  .hbg{display:flex}
+}
+@media(max-width:600px){
+  :root{--pad:56px}
+  .h-stats{flex-direction:column;gap:20px}
+  .h-stat{border-right:none;padding-right:0;margin-right:0;border-bottom:1px solid rgba(255,255,255,.07);padding-bottom:20px}
+  .h-stat:last-child{border-bottom:none;padding-bottom:0}
+  .ft-in{flex-direction:column;text-align:center}
+}
+
+/* ── EASTER EGG ──────────────────────────────────────────────────────── */
+.ee-moto,.ee-motogp{cursor:pointer;user-select:none;-webkit-user-select:none;transition:filter var(--ease)}
+.ee-moto:hover,.ee-motogp:hover{filter:brightness(1.2)}
+.ee-motogp{position:relative}
+.ee-motogp::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;background:rgba(0,210,190,.3);opacity:0;transition:opacity var(--ease)}
+.ee-motogp:hover::after{opacity:1}
+
+/* Footer racer hint */
+.ee-hint{
+  display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  font-family:var(--font-d);font-size:.6rem;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--silver-dim);
+}
+.ee-hint .ee-count{color:var(--petronas);font-weight:700;margin:0 4px}
+.ee-pills{display:flex;gap:6px;margin-left:8px;align-items:center}
+.ee-pill{
+  width:11px;height:11px;border-radius:50%;
+  background:transparent;border:1px solid rgba(200,204,206,.3);
+  transition:all var(--ease);position:relative;
+}
+.ee-pill.unlocked{box-shadow:0 0 8px rgba(0,210,190,.35)}
+.ee-pill:hover::after{
+  content:attr(data-tip);position:absolute;
+  bottom:20px;left:50%;transform:translateX(-50%);
+  background:#000;color:var(--silver);
+  padding:5px 10px;border-radius:3px;
+  font-family:var(--font-b);font-size:.65rem;letter-spacing:.05em;
+  text-transform:none;white-space:nowrap;
+  border:1px solid rgba(0,210,190,.25);
+  pointer-events:none;z-index:1001;
+}
+
+.ee-reset-btn{
+  width:20px;height:20px;border-radius:50%;
+  background:transparent;border:1px solid rgba(200,204,206,.35);
+  color:var(--silver-dim);font-size:.85rem;font-family:var(--font-d);
+  cursor:pointer;display:inline-flex;align-items:center;justify-content:center;
+  margin-left:4px;padding:0;line-height:1;
+  transition:all .4s ease;
+}
+.ee-reset-btn:hover{color:var(--petronas);border-color:var(--petronas);transform:rotate(180deg)}
+.ee-reset-btn.spinning{transform:rotate(360deg);color:var(--petronas);border-color:var(--petronas)}
+
+/* Modal */
+.ee-modal{
+  position:fixed;inset:0;z-index:1000;
+  background:rgba(0,0,0,.85);backdrop-filter:blur(8px);
+  display:none;align-items:center;justify-content:center;
+  opacity:0;transition:opacity .35s ease;padding:24px;
+}
+.ee-modal.open{display:flex;opacity:1}
+.ee-modal-bg{
+  position:absolute;inset:0;
+  background-image:
+    repeating-linear-gradient(45deg,rgba(255,255,255,.022) 0,rgba(255,255,255,.022) 1px,transparent 0,transparent 50%),
+    repeating-linear-gradient(-45deg,rgba(255,255,255,.022) 0,rgba(255,255,255,.022) 1px,transparent 0,transparent 50%);
+  background-size:6px 6px;opacity:.5;
+}
+
+.ee-card{
+  position:relative;z-index:2;
+  background:var(--bg-raised);
+  border:1px solid rgba(255,255,255,.1);
+  border-left:5px solid var(--ee-accent,#00D2BE);
+  border-radius:8px;padding:48px 56px;
+  max-width:520px;width:100%;
+  transform:translateX(40px);opacity:0;
+  transition:transform .45s cubic-bezier(.2,.8,.2,1),opacity .35s ease;
+  box-shadow:0 30px 80px rgba(0,0,0,.6);
+}
+.ee-modal.open .ee-card{transform:translateX(0);opacity:1}
+
+.ee-num{
+  font-family:var(--font-d);font-size:5.2rem;font-weight:900;
+  color:var(--ee-accent,#00D2BE);line-height:1;letter-spacing:.02em;
+  margin-bottom:10px;
+}
+.ee-name{
+  font-family:var(--font-d);font-size:1.35rem;font-weight:700;
+  color:var(--white);letter-spacing:.04em;margin-bottom:5px;
+}
+.ee-nick{
+  font-family:var(--font-d);font-size:.62rem;letter-spacing:.25em;
+  text-transform:uppercase;color:var(--ee-accent,#00D2BE);
+  margin-bottom:24px;
+}
+.ee-stats{
+  display:flex;flex-direction:column;gap:9px;
+  padding:18px 0;
+  border-top:1px solid rgba(255,255,255,.06);
+  border-bottom:1px solid rgba(255,255,255,.06);
+  margin-bottom:22px;
+}
+.ee-stat-row{display:flex;justify-content:space-between;font-size:.85rem;align-items:baseline}
+.ee-stat-row .lbl{color:var(--silver-dim);font-family:var(--font-d);font-size:.55rem;letter-spacing:.18em;text-transform:uppercase}
+.ee-stat-row .val{color:var(--silver);font-weight:500}
+.ee-quote{
+  font-size:.93rem;color:var(--silver);font-style:italic;
+  line-height:1.55;border-left:2px solid var(--ee-accent,#00D2BE);
+  padding-left:14px;margin-bottom:22px;
+}
+.ee-close{
+  font-family:var(--font-d);font-size:.55rem;letter-spacing:.2em;
+  color:var(--silver-dim);text-transform:uppercase;
+}
+.ee-close kbd{
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);
+  padding:2px 7px;border-radius:3px;font-family:var(--font-d);
+  font-size:.55rem;color:var(--silver);margin:0 3px;
+}
+
+/* Hint button + hints modal content */
+.ee-hint-btn{
+  width:20px;height:20px;border-radius:50%;
+  background:transparent;border:1px solid rgba(200,204,206,.35);
+  color:var(--silver-dim);font-size:.65rem;font-family:var(--font-d);font-weight:700;
+  cursor:pointer;display:inline-flex;align-items:center;justify-content:center;
+  margin-left:6px;padding:0;line-height:1;
+  transition:all var(--ease);
+}
+.ee-hint-btn:hover{color:var(--petronas);border-color:var(--petronas);transform:scale(1.1)}
+
+.ee-hints-title{
+  font-family:var(--font-d);font-size:.68rem;font-weight:700;
+  letter-spacing:.25em;text-transform:uppercase;
+  color:var(--petronas);margin-bottom:8px;
+}
+.ee-hints-sub{
+  font-size:.85rem;color:var(--silver-dim);
+  margin-bottom:22px;line-height:1.55;
+}
+.ee-hints-list{display:flex;flex-direction:column;gap:10px}
+.ee-hint-row{
+  display:flex;align-items:flex-start;gap:14px;
+  padding:13px 16px;
+  background:rgba(255,255,255,.02);
+  border-left:2px solid rgba(255,255,255,.08);
+  border-radius:3px;
+  transition:all var(--ease);
+}
+.ee-hint-row.found{
+  border-left-color:var(--petronas);
+  background:rgba(0,210,190,.05);
+}
+.ee-hint-mark{
+  font-family:var(--font-d);font-size:.8rem;font-weight:700;
+  color:var(--silver-dim);flex-shrink:0;min-width:18px;
+}
+.ee-hint-row.found .ee-hint-mark{color:var(--petronas)}
+.ee-hint-text{
+  font-size:.87rem;color:var(--silver-dim);
+  font-style:italic;line-height:1.5;
+}
+.ee-hint-row.found .ee-hint-text{
+  text-decoration:line-through;
+  text-decoration-color:rgba(0,210,190,.4);
+  font-style:normal;color:var(--silver);
+}
+
+/* Confetti */
+.ee-confetti{position:fixed;inset:0;pointer-events:none;z-index:999;overflow:hidden}
+.ee-conf{
+  position:absolute;width:9px;height:9px;top:-20px;
+  animation:eeConfFall 3.2s linear forwards;
+}
+@keyframes eeConfFall{
+  0%{transform:translateY(0) rotate(0);opacity:1}
+  100%{transform:translateY(110vh) rotate(720deg);opacity:.3}
+}
+
+@media(max-width:600px){
+  .ee-card{padding:36px 28px}
+  .ee-num{font-size:4rem}
+  .ee-name{font-size:1.15rem}
+}
+
+/* ── LIVELY: REV-LIGHT STRIP ──────────────────────────────────────────── */
+.rev-strip{
+  position:fixed;top:0;left:0;right:0;height:4px;
+  display:flex;align-items:stretch;z-index:200;
+  background:transparent;pointer-events:none;
+}
+.rev-seg{
+  flex:1;background:rgba(255,255,255,.04);
+  transition:background .25s ease,box-shadow .25s ease;
+}
+.rev-gap{width:2px;background:rgba(0,210,190,.18)}
+.rev-seg.lit[data-c="g"]{background:#00D2BE;box-shadow:0 0 6px rgba(0,210,190,.7),0 1px 4px rgba(0,210,190,.4)}
+.rev-seg.lit[data-c="y"]{background:#FFD700;box-shadow:0 0 6px rgba(255,215,0,.7),0 1px 4px rgba(255,215,0,.4)}
+.rev-seg.lit[data-c="o"]{background:#FF6B00;box-shadow:0 0 7px rgba(255,107,0,.75),0 1px 5px rgba(255,107,0,.45)}
+.rev-seg.lit[data-c="r"]{background:#FF1A1A;box-shadow:0 0 9px rgba(255,26,26,.85),0 1px 6px rgba(255,26,26,.5)}
+
+/* F1 race-start: override colors to RED for the start lights ceremony */
+.rev-seg.lit-start{
+  background:#FF1A1A!important;
+  box-shadow:0 0 10px rgba(255,26,26,.95),0 1px 8px rgba(255,26,26,.6)!important;
+  transition:background .08s ease,box-shadow .08s ease;
+}
+
+/* ── LIVELY: TYPEWRITER ──────────────────────────────────────────────── */
+.type-caret{
+  display:inline-block;color:var(--petronas);font-weight:300;
+  margin-left:1px;animation:typeBlink 1s steps(1,end) infinite;
+}
+.type-caret.done{animation:none;opacity:0;transition:opacity .6s ease}
+@keyframes typeBlink{50%{opacity:0}}
+
+/* ── LIVELY: LIVE STATUS PILL ────────────────────────────────────────── */
+.live-status{
+  display:inline-flex;align-items:center;gap:10px;
+  font-family:var(--font-d);font-size:.62rem;font-weight:500;
+  letter-spacing:.18em;text-transform:uppercase;color:var(--silver-dim);
+  background:rgba(255,255,255,.025);
+  border:1px solid rgba(0,210,190,.15);border-radius:3px;
+  padding:7px 14px;margin-bottom:32px;
+}
+.live-dot{
+  width:7px;height:7px;border-radius:50%;background:var(--petronas);
+  box-shadow:0 0 8px rgba(0,210,190,.6);
+  animation:livePulse 1.6s ease-in-out infinite;
+}
+@keyframes livePulse{
+  0%,100%{opacity:1;transform:scale(1)}
+  50%{opacity:.45;transform:scale(.85)}
+}
+.live-lbl{color:var(--petronas);font-weight:600}
+.live-greet{color:var(--silver);font-weight:500}
+.live-sep{color:rgba(200,204,206,.3)}
+.live-time{color:var(--silver);font-weight:600;margin-left:4px}
+.live-tz{color:var(--silver-dim);font-size:.55rem;margin-left:4px}
+
+/* ── LIVELY: 3D CARD TILT ─────────────────────────────────────────────── */
+.proj-grid,.exp-grid{perspective:1200px}
+.proj-card,.exp-card{
+  transform-style:preserve-3d;
+  will-change:transform;
+  transition:transform .4s cubic-bezier(.2,.8,.2,1),border-color var(--ease),box-shadow var(--ease);
+}
+.proj-card.tilting,.exp-card.tilting{transition:none}
+
+/* ── LIVELY: Reduced motion ──────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce){
+  .live-dot{animation:none}
+  .type-caret{animation:none;opacity:0}
+  .rev-seg{transition:none}
+  .proj-card,.exp-card{transition:none!important;transform:none!important}
+}
 </style>
 </head>
 <body>
-<div class="cursor" id="cursor"></div>
-<div class="cursor-ring" id="cursorRing"></div>
 
-<nav>
-  <div class="nav-logo">MSS // Portfolio</div>
-  <ul class="nav-links">
-    <li><a href="#skills">Skills</a></li>
-    <li><a href="#experience">Experience</a></li>
-    <li><a href="#projects">Projects</a></li>
-    <li><a href="#racing">Personal</a></li>
-    <li><a href="#contact">Contact</a></li>
-  </ul>
+<!-- ── REV-LIGHT STRIP (scroll progress / F1 tachometer) ──────────────── -->
+<div class="rev-strip" id="rev-strip" aria-hidden="true">
+  <span class="rev-seg" data-c="g"></span><span class="rev-seg" data-c="g"></span><span class="rev-seg" data-c="g"></span><span class="rev-seg" data-c="g"></span><span class="rev-gap"></span>
+  <span class="rev-seg" data-c="y"></span><span class="rev-seg" data-c="y"></span><span class="rev-seg" data-c="y"></span><span class="rev-seg" data-c="y"></span><span class="rev-gap"></span>
+  <span class="rev-seg" data-c="o"></span><span class="rev-seg" data-c="o"></span><span class="rev-gap"></span>
+  <span class="rev-seg" data-c="r"></span><span class="rev-seg" data-c="r"></span>
+</div>
+
+<!-- ── NAV ─────────────────────────────────────────────────────────────── -->
+<nav id="nav">
+  <div class="wrap nav-in">
+    <a href="#hero" class="n-logo">MSS</a>
+    <ul class="n-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#expertise">Expertise</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#patent">Patent</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <a href="patent.html" class="n-cta">Patent ↗</a>
+    <button class="hbg" id="hbg" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
 </nav>
 
-<section id="hero">
-  <div class="hero-content">
-    <div class="hero-tag">ADAS &amp; Embedded Systems Engineer</div>
-    <h1 class="name">MUHAMMED<br><span>SAAIM SAAD</span></h1>
-    <div class="hero-title">Model-Based Development &nbsp;·&nbsp; AUTOSAR &nbsp;·&nbsp; Functional Safety</div>
-    <p class="hero-summary">
-      3 years building safety-critical software for premium vehicle platforms.
-      Specializing in MATLAB/Simulink algorithm development, AUTOSAR architecture,
-      and end-to-end system integration — with a passion for pushing the boundary
-      between control theory and real-world automotive intelligence.
+<!-- Mobile nav -->
+<div class="mob-nav" id="mnav">
+  <a href="#about"      onclick="mn()">About</a>
+  <a href="#expertise"  onclick="mn()">Expertise</a>
+  <a href="#experience" onclick="mn()">Experience</a>
+  <a href="#projects"   onclick="mn()">Projects</a>
+  <a href="#patent"     onclick="mn()">Patent</a>
+  <a href="#contact"    onclick="mn()">Contact</a>
+  <a href="patent.html">Patent Showcase ↗</a>
+</div>
+
+<!-- ── HERO ────────────────────────────────────────────────────────────── -->
+<section id="hero" class="carbon">
+  <div class="hero-grid"></div>
+  <div class="wrap hero-content">
+    <div class="h-eyebrow fi">MBD Engineer &nbsp;·&nbsp; Bengaluru, India</div>
+    <h1 class="h-name fi d1">MUHAMMED<br>SAAIM <em>SAAD</em></h1>
+    <p class="h-role fi d2">
+      <strong>Model-Based Development Engineer</strong><br>
+      <span class="typed" id="h-typed" data-text="Automotive Embedded Systems  ·  AUTOSAR  ·  ISO 26262"></span><span class="type-caret" id="type-caret">|</span>
     </p>
-    <div class="hero-stats">
-      <div class="stat"><div class="stat-num">3+</div><div class="stat-label">Years Exp</div></div>
-      <div class="stat"><div class="stat-num">40%</div><div class="stat-label">Effort Saved</div></div>
-      <div class="stat"><div class="stat-num">4.8+</div><div class="stat-label">CSAT Score</div></div>
+    <p class="h-lead fi d2">Safety-critical <b>powertrain</b> control software, built the full model-based way — from <b>ISO 26262</b> requirements through Simulink/Stateflow design and <b>MISRA-clean</b> generated C to MIL/SIL verification — delivered across four Cummins vehicle programs.</p>
+    <div class="live-status fi d2" id="live-status">
+      <span class="live-dot"></span>
+      <span class="live-greet" id="live-greet">Hello</span>
+      <span class="live-sep">·</span>
+      <span class="live-lbl">Available</span>
+      <span class="live-sep">·</span>
+      <span class="live-loc">Bengaluru</span>
+      <span class="live-time" id="live-time">--:--</span>
+      <span class="live-tz">IST</span>
     </div>
-    <div class="status-bar">
-      <div class="status-dot"></div>
-      <div class="status-text">OPEN TO OPPORTUNITIES — ADAS / Autonomous Systems / Embedded SW</div>
+    <div class="h-ctas fi d3">
+      <a href="#projects" class="btn-p">View Projects</a>
+      <a href="resume.html" class="btn-s" target="_blank" rel="noopener">View Résumé</a>
     </div>
-    <div class="hero-cta">
-      <a href="#contact" class="btn btn-primary">Get in Touch</a>
-      <a href="#projects" class="btn btn-outline">View Projects</a>
-      <a href="#experience" class="btn btn-outline">Experience</a>
-    </div>
-  </div>
-  <div class="hero-deco">
-    <div class="hero-ring hr1"></div>
-    <div class="hero-ring hr2"></div>
-    <div class="hero-ring hr3"></div>
-    <div class="telemetry-bar">
-      <div class="tel-item">
-        <div class="tel-label">MATLAB</div>
-        <div class="tel-bar-wrap"><div class="tel-bar-fill" style="width:92%;animation-delay:0.1s"></div></div>
-        <div class="tel-val">92%</div>
+    <div class="h-stats fi d4">
+      <div class="h-stat">
+        <div class="h-stat-v count-up" data-target="3" data-suffix="+">0+</div>
+        <div class="h-stat-l">Years Experience</div>
       </div>
-      <div class="tel-item">
-        <div class="tel-label">AUTOSAR</div>
-        <div class="tel-bar-wrap"><div class="tel-bar-fill" style="width:85%;animation-delay:0.25s"></div></div>
-        <div class="tel-val">85%</div>
+      <div class="h-stat">
+        <div class="h-stat-v count-up" data-target="4">0</div>
+        <div class="h-stat-l">Vehicle Programs</div>
       </div>
-      <div class="tel-item">
-        <div class="tel-label">ISO 26262</div>
-        <div class="tel-bar-wrap"><div class="tel-bar-fill" style="width:80%;animation-delay:0.4s"></div></div>
-        <div class="tel-val">80%</div>
+      <div class="h-stat">
+        <div class="h-stat-v">Zero</div>
+        <div class="h-stat-l">DRB Failures</div>
       </div>
-      <div class="tel-item">
-        <div class="tel-label">Python</div>
-        <div class="tel-bar-wrap"><div class="tel-bar-fill" style="width:75%;animation-delay:0.55s"></div></div>
-        <div class="tel-val">75%</div>
-      </div>
-      <div class="tel-item">
-        <div class="tel-label">C / C++</div>
-        <div class="tel-bar-wrap"><div class="tel-bar-fill" style="width:70%;animation-delay:0.7s"></div></div>
-        <div class="tel-val">70%</div>
+      <div class="h-stat">
+        <div class="h-stat-v">Patent</div>
+        <div class="h-stat-l">Design Registered</div>
       </div>
     </div>
   </div>
 </section>
 
-<section id="skills">
-  <div class="section-tag">Technical Profile</div>
-  <h2 class="section-title">Core Competencies</h2>
-  <div class="skills-grid">
-    <div class="skill-card fade-in">
-      <div class="skill-card-title">Model-Based Development</div>
-      <div class="skill-tags">
-        <span class="tag">MATLAB</span><span class="tag">Simulink</span><span class="tag">Stateflow</span>
-        <span class="tag">Algorithm Dev</span><span class="tag">MIL/SIL/HIL</span><span class="tag">Code Generation</span>
-      </div>
-    </div>
-    <div class="skill-card fade-in">
-      <div class="skill-card-title">Automotive Platforms</div>
-      <div class="skill-tags">
-        <span class="tag">AUTOSAR Classic</span><span class="tag">AUTOSAR Adaptive</span>
-        <span class="tag">ECU Development</span><span class="tag">CAN Protocol</span><span class="tag">Embedded Control</span>
-      </div>
-    </div>
-    <div class="skill-card fade-in">
-      <div class="skill-card-title">Safety &amp; Quality</div>
-      <div class="skill-tags">
-        <span class="tag">ISO 26262</span><span class="tag">MISRA-C</span><span class="tag">Polyspace</span>
-        <span class="tag">Static Analysis</span><span class="tag">Functional Safety</span>
-      </div>
-    </div>
-    <div class="skill-card fade-in">
-      <div class="skill-card-title">Programming</div>
-      <div class="skill-tags">
-        <span class="tag">C</span><span class="tag">Embedded C</span><span class="tag">C++</span>
-        <span class="tag">Python</span><span class="tag">Automation</span><span class="tag">Git</span>
-      </div>
-    </div>
-    <div class="skill-card fade-in">
-      <div class="skill-card-title">Requirements &amp; Design</div>
-      <div class="skill-tags">
-        <span class="tag">Req. Analysis</span><span class="tag">Functional Design</span>
-        <span class="tag">Architecture</span><span class="tag">Tech Reviews</span><span class="tag">Documentation</span>
-      </div>
-    </div>
-    <div class="skill-card fade-in">
-      <div class="skill-card-title">Testing &amp; Validation</div>
-      <div class="skill-tags">
-        <span class="tag">V&amp;V Methodologies</span><span class="tag">ECU Bench Testing</span>
-        <span class="tag">Diagnostics</span><span class="tag">Root Cause Analysis</span><span class="tag">Agile</span>
-      </div>
+<div class="rule"></div>
+
+<!-- ── ABOUT ────────────────────────────────────────────────────────────── -->
+<section id="about">
+  <div class="wrap">
+    <div class="eyebrow fi">About</div>
+    <div class="about-in fi d1">
+      <p>I'm a Model-Based Development Engineer with 3+ years building safety-critical automotive control systems at KPIT Technologies. My work spans MATLAB/Simulink algorithm development, AUTOSAR architecture, and ISO 26262 compliance — delivering production software for Cummins powertrains across multi-ECU platforms.</p>
+      <p>What drives me is the engineering culture behind elite precision — where milliseconds matter, failure is not an option, and every decision is fully traceable. That discipline I carry from the racetrack into every model, every design review, and every line of code.</p>
     </div>
   </div>
 </section>
 
+<div class="rule"></div>
+
+<!-- ── EXPERTISE ─────────────────────────────────────────────────────────── -->
+<section id="expertise">
+  <div class="wrap">
+    <div class="eyebrow fi">Core Expertise</div>
+    <h2 class="s-title fi d1">Technical Depth</h2>
+    <div class="bar fi d1"></div>
+    <div class="exp-grid">
+
+      <div class="exp-card fi d1">
+        <svg class="exp-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="3" width="20" height="14" rx="2"/>
+          <path d="M8 21h8M12 17v4M7 7l3 3-3 3M13 13h4"/>
+        </svg>
+        <h3>MBD &amp; Modelling</h3>
+        <div class="exp-tags">
+          <span class="tag">MATLAB</span>
+          <span class="tag">Simulink</span>
+          <span class="tag">Stateflow</span>
+          <span class="tag">MIL / SIL</span>
+          <span class="tag">Embedded Coder</span>
+          <span class="tag">MCDC Coverage</span>
+        </div>
+      </div>
+
+      <div class="exp-card fi d2">
+        <svg class="exp-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          <polyline points="9 12 11 14 15 10"/>
+        </svg>
+        <h3>Automotive &amp; Safety</h3>
+        <div class="exp-tags">
+          <span class="tag">AUTOSAR Classic</span>
+          <span class="tag">ASPICE</span>
+          <span class="tag">ISO 26262</span>
+          <span class="tag">MISRA-C / CERT-C</span>
+          <span class="tag">Polyspace</span>
+          <span class="tag">PREEvision</span>
+        </div>
+      </div>
+
+      <div class="exp-card fi d3">
+        <svg class="exp-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="16 18 22 12 16 6"/>
+          <polyline points="8 6 2 12 8 18"/>
+        </svg>
+        <h3>Programming &amp; Tools</h3>
+        <div class="exp-tags">
+          <span class="tag">C</span>
+          <span class="tag">Embedded C</span>
+          <span class="tag">MATLAB Scripting</span>
+          <span class="tag">CAN Protocol</span>
+          <span class="tag">ECU Bench Testing</span>
+          <span class="tag">Git</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="rule"></div>
+
+<!-- ── EXPERIENCE ────────────────────────────────────────────────────────── -->
 <section id="experience">
-  <div class="section-tag">Career</div>
-  <h2 class="section-title">Professional Experience</h2>
-  <div class="exp-timeline">
-    <div class="exp-item fade-in">
-      <div class="exp-dot"></div>
-      <div class="exp-date">Sept 2023 — Present</div>
-      <div class="exp-role">Software Engineer — Model-Based Development</div>
-      <div class="exp-company">Cummins Inc. (via KPIT Technologies) · Bengaluru, India</div>
-      <span class="exp-badge">AUTOSAR</span><span class="exp-badge">ISO 26262</span><span class="exp-badge">MATLAB/Simulink</span>
-      <ul class="exp-bullets">
-        <li>Analyzed and interpreted system requirements for embedded control systems, optimizing functional designs to meet performance targets across multiple ECU platforms.</li>
-        <li>Designed and developed control algorithms using MATLAB/Simulink/Stateflow with comprehensive requirement traceability — improved model quality metrics by <strong style="color:var(--teal)">15%</strong> through systematic design optimization.</li>
-        <li>Migrated legacy Core2 AUTOSAR components to CSAR architecture, enhancing modularity and enabling seamless integration with modern platform software stacks.</li>
-        <li>Developed Python-based automation pipelines for Polyspace static analysis, reducing manual effort by <strong style="color:var(--teal)">40%</strong> and improving code coverage consistency across development teams.</li>
-        <li>Evaluated system-level implications of software functions across distributed ECU architectures; conducted design and specification reviews within peer groups.</li>
-        <li>Troubleshot and resolved production and field-related issues with rapid turnaround, implementing root-cause analysis to prevent recurrence.</li>
-      </ul>
-    </div>
-    <div class="exp-item fade-in">
-      <div class="exp-dot"></div>
-      <div class="exp-date">Jan 2023 — Sept 2023</div>
-      <div class="exp-role">Intern — Model-Based Development</div>
-      <div class="exp-company">KPIT Technologies · Bengaluru, India</div>
-      <ul class="exp-bullets">
-        <li>Developed and validated Simulink and Stateflow models for automotive control algorithms with complete requirement traceability.</li>
-        <li>Conducted ECU verification and validation using CAN protocol and bench-testing, identifying edge-case failures.</li>
-        <li>Created detailed requirements specifications for logic updates; performed ECU diagnostics and troubleshooting.</li>
-      </ul>
-    </div>
-    <div class="exp-item fade-in">
-      <div class="exp-dot"></div>
-      <div class="exp-date">Sept 2021</div>
-      <div class="exp-role">Intern — Embedded Systems &amp; Vehicle Integration</div>
-      <div class="exp-company">Volvo / Martial Motors · Bengaluru, India</div>
-      <ul class="exp-bullets">
-        <li>Supported engine assembly, ECU tuning, and system-level testing for racing vehicle platforms.</li>
-        <li>Gained hands-on understanding of sensor-ECU integration and real-time embedded control systems.</li>
-      </ul>
+  <div class="wrap">
+    <div class="eyebrow fi">Career</div>
+    <h2 class="s-title fi d1">Professional Experience</h2>
+    <div class="bar fi d1"></div>
+    <div class="tl">
+
+      <!-- Entry 1 -->
+      <div class="tl-entry fi d1">
+        <div class="tl-dot on"></div>
+        <div class="tl-meta">
+          <span class="tl-date">Sept 2023 — Present</span>
+          <span class="badge b-cur">Current</span>
+        </div>
+        <div class="tl-role">Software Engineer — Model-Based Development</div>
+        <div class="tl-co">KPIT Technologies &nbsp;·&nbsp; Client: Cummins Inc. &nbsp;·&nbsp; Bengaluru, India</div>
+        <ul class="tl-ul">
+          <li>Own end-to-end V-model delivery of implementation and verification change requests for <b>Air Handling &amp; Combustion Controls</b> across <span class="m">four</span> diesel and gasoline programs — ASPICE requirements through Simulink/Stateflow design, Embedded Coder, and MIL/SIL.</li>
+          <li>Build AUTOSAR Simulink/Stateflow models to MAAB and ASPICE SWE.3/SWE.4, and coordinate ARXML and calibration changes with the PREEvision team.</li>
+          <li>Keep every delivery Polyspace-clean (<span class="m">zero critical findings</span>, full MISRA-C / CERT-C) and drove the team's MISRA-C rollout by clearing the check backlog.</li>
+          <li>Present at the customer <b>Design Review Board</b> to Cummins' global forum (India, US, China, UK) with a <span class="m">zero-failure</span> record and <span class="m">4.8/5</span> CSAT — once caught a design gap the reviewing architect had missed.</li>
+          <li>Trained <span class="m">17</span> engineers in composition testing (archived to KPIT's training library) and proposed splitting the 22-person team into focused sub-teams, now adopted.</li>
+          <li>Migrated legacy <b>Core2 AUTOSAR</b> components to <b>CSAR</b>, and run L2/L3 composition and bench testing on Cummins' US rigs across decision, condition, and MC/DC coverage.</li>
+        </ul>
+      </div>
+
+      <!-- Entry 2 -->
+      <div class="tl-entry fi d2">
+        <div class="tl-dot"></div>
+        <div class="tl-meta">
+          <span class="tl-date">Jan 2023 — Sept 2023</span>
+          <span class="badge b-int">Internship</span>
+        </div>
+        <div class="tl-role">Intern — Model-Based Development</div>
+        <div class="tl-co">KPIT Technologies &nbsp;·&nbsp; Pune &amp; Bengaluru, India</div>
+        <ul class="tl-ul">
+          <li>Developed and validated Simulink/Stateflow models for automotive control algorithms with complete requirement traceability across the software development lifecycle.</li>
+          <li>Conducted ECU verification and validation using CAN protocol and bench-testing; identified edge-case failures and supported MIL/SIL validation of model-based changes.</li>
+          <li>Authored requirement specifications for logic updates and performed ECU diagnostics, supporting cross-functional teams in root-cause analysis and documentation.</li>
+        </ul>
+      </div>
+
+      <!-- Entry 3 -->
+      <div class="tl-entry fi d3">
+        <div class="tl-dot"></div>
+        <div class="tl-meta">
+          <span class="tl-date">Sept 2021</span>
+          <span class="badge b-int">Internship</span>
+        </div>
+        <div class="tl-role">Intern — Embedded Systems &amp; Vehicle Integration</div>
+        <div class="tl-co">Volvo / Martial Motors &nbsp;·&nbsp; Bengaluru, India</div>
+        <ul class="tl-ul">
+          <li>Supported engine assembly, ECU tuning, and system-level testing across vehicle platforms; gained hands-on exposure to sensor-ECU integration and real-time DTC monitoring.</li>
+          <li>Worked with a specialized body-work and vehicle-service team, which provided insight into the premium-vehicle service workflow.</li>
+        </ul>
+      </div>
+
     </div>
   </div>
 </section>
 
+<div class="rule"></div>
+
+<!-- ── PROJECTS ───────────────────────────────────────────────────────────── -->
 <section id="projects">
-  <div class="section-tag">Work</div>
-  <h2 class="section-title">Projects &amp; Showcase</h2>
-  <div class="projects-grid">
-    <div class="project-card fade-in">
-      <div class="project-num">01</div>
-      <div class="project-type">Control Systems · MATLAB/Simulink</div>
-      <div class="project-title">Closed-Loop Speed Regulation Module</div>
-      <p class="project-desc">
-        Emergency-braking and adaptive speed-regulation control module for autonomous vehicle applications.
-        Features PID controller tuning, comprehensive requirement mapping, and safety-critical validation
-        framework aligned with ASIL-B constraints.
-      </p>
-      <div class="skill-tags" style="margin-bottom:20px">
-        <span class="tag">MATLAB</span><span class="tag">Simulink</span>
-        <span class="tag">Arduino</span><span class="tag">PID Control</span>
+  <div class="wrap">
+    <div class="eyebrow fi">Work</div>
+    <h2 class="s-title fi d1">Projects</h2>
+    <div class="bar fi d1"></div>
+    <p class="s-sub fi d1" style="margin-bottom:32px">A deliberate model-based-design suite spanning the three pillars of production powertrain software — closed-loop <b style="color:var(--silver)">control</b>, OBD <b style="color:var(--silver)">diagnostics</b>, and ISO 26262 <b style="color:var(--silver)">functional safety</b> — each with a live in-browser simulation, traceable requirements, and a model-as-code repo.</p>
+    <div class="proj-grid">
+
+      <!-- 1 — Flagship: powertrain boost-pressure controller (buildable, on-brand) -->
+      <div class="proj-card fi d1">
+        <div class="pc-header">
+          <div class="st-tags"><span class="st">Simulink</span><span class="st">Stateflow</span><span class="st">Embedded Coder</span></div>
+          <span class="ps ps-wip">In Progress</span>
+        </div>
+        <div class="p-title">Boost-Pressure Control Model</div>
+        <div class="p-desc">A closed-loop diesel turbocharger boost-pressure (air-path) controller built the full MBD way — discrete PI + feed-forward + back-calculation anti-windup, a speed×load setpoint map with modelled turbo lag, ECO/SPORT/RACE drive modes, and an INIT→OFF→CRANK→RUN→FAULT Stateflow supervisor. Requirement-traceable, MISRA-aligned generated C, with a live in-browser simulation of the same control law. MIL/SIL + MC/DC coverage planned on a personal MATLAB.</div>
+        <div class="p-foot">
+          <a href="boost-pressure.html" class="p-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            Case Study
+          </a>
+          <a href="https://github.com/SaaimSaad/boost-pressure-control" class="p-link" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+            Repo
+          </a>
+        </div>
       </div>
-      <div class="project-links">
-        <a href="https://github.com/" target="_blank" class="project-link">View on GitHub →</a>
+
+      <!-- 2 — Built: sensor diagnostic monitor (case study + repo) -->
+      <div class="proj-card fi d2">
+        <div class="pc-header">
+          <div class="st-tags"><span class="st">Stateflow</span><span class="st">OBD</span><span class="st">MISRA-C</span></div>
+          <span class="ps ps-wip">In Progress</span>
+        </div>
+        <div class="p-title">Sensor Diagnostic Monitor</div>
+        <div class="p-desc">An OBD-style diagnostic monitor for a redundant sensor pair — range / rate / correlation rationality, debounced fault confirmation, DTC + freeze-frame + MIL, and healing — modelled in Simulink/Stateflow, MISRA-aligned C, with an AUTOSAR Classic SWC. Logic re-proven headlessly (REQ-DIAG-001…010, all pass).</div>
+        <div class="p-foot">
+          <a href="sensor-diagnostics.html" class="p-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            Case Study
+          </a>
+          <a href="https://github.com/SaaimSaad/sensor-diagnostic-monitor" class="p-link" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+            Repo
+          </a>
+        </div>
       </div>
-    </div>
-    <div class="project-card fade-in">
-      <div class="project-num">02</div>
-      <div class="project-type">Data Engineering · Python</div>
-      <div class="project-title">Vehicle Telemetry Analysis Pipeline</div>
-      <p class="project-desc">
-        Automated telemetry analysis framework processing multi-sensor vehicle data — throttle, speed,
-        GPS, acceleration. Enables real-time performance pattern identification and optimization
-        insights inspired by motorsport data engineering.
-      </p>
-      <div class="skill-tags" style="margin-bottom:20px">
-        <span class="tag">Python</span><span class="tag">Telemetry</span>
-        <span class="tag">Data Analysis</span><span class="tag">Automation</span>
+
+      <!-- 3 — Built: ISO 26262 torque safety monitor (case study + repo) -->
+      <div class="proj-card fi d3">
+        <div class="pc-header">
+          <div class="st-tags"><span class="st">ISO 26262</span><span class="st">E-Gas</span><span class="st">Stateflow</span></div>
+          <span class="ps ps-wip">In Progress</span>
+        </div>
+        <div class="p-title">Torque Safety Monitor</div>
+        <div class="p-desc">An ISO 26262 E-Gas three-level torque monitor for the ASIL-D unintended-acceleration goal — independent permissible-torque (L2), question/answer watchdog (L3), FTTI-bounded reaction, and a latched safe state. Simulink/Stateflow → MISRA-aligned C, with an AUTOSAR Classic SWC. Logic re-proven headlessly (REQ-SAF-001…010, all pass).</div>
+        <div class="p-foot">
+          <a href="torque-safety.html" class="p-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            Case Study
+          </a>
+          <a href="https://github.com/SaaimSaad/torque-safety-monitor" class="p-link" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+            Repo
+          </a>
+        </div>
       </div>
-      <div class="project-links">
-        <a href="https://github.com/" target="_blank" class="project-link">View on GitHub →</a>
-      </div>
-    </div>
-    <div class="project-card fade-in">
-      <div class="project-num">03</div>
-      <div class="project-type">DevOps · Embedded Toolchain</div>
-      <div class="project-title">Polyspace Static Analysis Automation</div>
-      <p class="project-desc">
-        Internal toolchain reducing manual static analysis effort by 40% across embedded C codebases.
-        Automated MISRA-C compliance, code coverage reporting, and defect tracking
-        integrated into team CI workflows.
-      </p>
-      <div class="skill-tags" style="margin-bottom:20px">
-        <span class="tag">Python</span><span class="tag">Polyspace</span>
-        <span class="tag">MISRA-C</span><span class="tag">CI/CD</span>
-      </div>
-      <div class="project-links">
-        <a href="https://github.com/" target="_blank" class="project-link">View on GitHub →</a>
-      </div>
-    </div>
-    <div class="project-card add-card fade-in">
-      <div class="add-icon">＋</div>
-      <div class="add-text">Future Project<br><br>ADAS perception · Sensor Fusion<br>ROS2 · Camera/LiDAR pipeline</div>
-    </div>
-    <div class="project-card add-card fade-in">
-      <div class="add-icon">＋</div>
-      <div class="add-text">Future Project<br><br>Add your next build here</div>
-    </div>
-    <div class="project-card add-card fade-in">
-      <div class="add-icon">＋</div>
-      <div class="add-text">Future Project<br><br>GitHub repo · Demo video · Write-up</div>
+
     </div>
   </div>
 </section>
 
-<section id="racing">
-  <div class="section-tag">Beyond The Desk</div>
-  <h2 class="section-title">Speed &amp; Passion</h2>
-  <div class="racing-grid">
-    <div class="racing-card f1 fade-in">
-      <span class="racing-icon">🏎️</span>
-      <div class="racing-card-title">Formula 1</div>
-      <p>
-        Lifelong F1 fan with a deep connection to the sport's intersection of engineering and
-        human performance. Mercedes AMG Petronas and Lewis Hamilton represent the pinnacle —
-        7 world championships built on data, engineering excellence, and relentless iteration.
-        The same principles I bring to safety-critical embedded systems development: precision,
-        reliability, and a refusal to accept second-best.
-      </p>
-      <div class="driver-badge">⭐ LEWIS HAMILTON · 7× WORLD CHAMPION</div>
-      <div class="driver-num">44</div>
-    </div>
-    <div class="racing-card motogp fade-in">
-      <span class="racing-icon">🏍️</span>
-      <div class="racing-card-title">MotoGP</div>
-      <p>
-        The raw engineering of MotoGP — traction control, lean-angle sensors, ride-height devices,
-        and seamless-shift gearboxes — is a masterclass in real-time embedded control. Every corner
-        is a live demonstration of the closed-loop systems I develop every day. The sport keeps me
-        grounded in why this work matters.
-      </p>
-      <div style="margin-top:20px;display:flex;gap:8px;flex-wrap:wrap;">
-        <span class="tag" style="border-color:rgba(201,168,76,0.3);color:var(--gold)">Ducati</span>
-        <span class="tag" style="border-color:rgba(201,168,76,0.3);color:var(--gold)">Honda</span>
-        <span class="tag" style="border-color:rgba(201,168,76,0.3);color:var(--gold)">Aprilia</span>
+<div class="rule"></div>
+
+<!-- ── PATENT ─────────────────────────────────────────────────────────────── -->
+<section id="patent">
+  <div class="wrap">
+    <div class="eyebrow fi">Intellectual Property</div>
+    <h2 class="s-title fi d1">Design Patent</h2>
+    <div class="bar fi d1"></div>
+    <div class="pat-card fi d2">
+      <div>
+        <div class="pat-badge">Registered Patent &nbsp;·&nbsp; India</div>
+        <div class="pat-title">Cropped Delta Wing<br>for VTOL Drone</div>
+        <div class="pat-desc">A registered aerodynamic design for a cropped delta wing configuration applied to Vertical Take-Off and Landing drone systems, optimising lift-to-drag ratio and stability during VTOL transition phases.</div>
+        <div class="pat-meta">
+          <div><div class="pm-label">Design Number</div><div class="pm-val">382551-001</div></div>
+          <div><div class="pm-label">Class</div><div class="pm-val">12-07 · Patent Office of India</div></div>
+          <div><div class="pm-label">Registered</div><div class="pm-val">30 March 2023</div></div>
+          <div><div class="pm-label">Certificate Issued</div><div class="pm-val">31 January 2024</div></div>
+          <div><div class="pm-label">Role</div><div class="pm-val">Co-inventor</div></div>
+          <div><div class="pm-label">Institution</div><div class="pm-val">New Horizon College of Engineering</div></div>
+        </div>
+        <div class="pat-ctas">
+          <a href="Patent_Certificate.pdf" class="btn-p" target="_blank">View Certificate</a>
+          <a href="Patent_Report.pdf" class="btn-s" target="_blank">Research Paper</a>
+          <a href="patent.html" class="btn-s">Full Showcase →</a>
+          <a href="https://github.com/SaaimSaad/Patent" class="btn-s" target="_blank" rel="noopener">Repository ↗</a>
+        </div>
+        <div class="pat-inv">Co-inventors: Rajarshi Chatterjee · <span>Saaim Saad</span> · Shreyas Shanbogh · Melvin Jason H · Dr. Sujin Jose A</div>
+      </div>
+      <div class="pat-seal">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M12 2a10 10 0 0 1 0 20"/>
+          <path d="M12 6l1.5 3 3.5.5-2.5 2.4.6 3.6-3.1-1.6-3.1 1.6.6-3.6L7 9.5l3.5-.5z"/>
+        </svg>
       </div>
     </div>
   </div>
 </section>
 
-<section id="connection">
-  <div class="section-tag">Engineering Parallel</div>
-  <h2 class="section-title">Racing ↔ ADAS</h2>
-  <div class="connection-grid">
-    <div class="connection-text">
-      <p>
-        The systems that keep Lewis Hamilton on the limit at 320 km/h are the same families
-        of algorithms I work with daily. <strong>Real-time sensor fusion, model-predictive
-        control, and safety-critical embedded software</strong> are not abstract concepts —
-        I have watched them win championships and I build them for production vehicles.
-      </p>
-      <p>
-        F1 cars generate over <strong>1.5 TB of data per race weekend</strong>. Modern ADAS
-        stacks process comparable sensor streams. My passion for motorsport gives me an
-        intuitive feel for performance targets, safety margins, and why software quality
-        is never negotiable.
-      </p>
-      <p>
-        This is why MBRDI, NVIDIA, and similar companies are where I want to be —
-        where the engineering rigor of motorsport meets real-world autonomous systems.
-      </p>
+<div class="rule"></div>
+
+<!-- ── MOTORSPORT ──────────────────────────────────────────────────────────── -->
+<section id="motorsport">
+  <div class="wrap">
+    <div class="eyebrow fi">Philosophy</div>
+    <h2 class="s-title fi d1">Why Precision Engineering is Personal</h2>
+    <p class="s-sub fi d2" style="margin-bottom:30px">The same standards that decide a championship are the ones I hold safety-critical software to — real-time, sensor-driven, and tested for every case before it ever runs.</p>
+    <div class="bar fi d2"></div>
+
+    <blockquote class="ms-quote fi d2">
+      <p>"Milliseconds decide a race. They also decide whether a control loop holds at the limit. I build both the same way — no margin for error, every path tested."</p>
+      <span>— Saaim</span>
+    </blockquote>
+
+    <div class="ms-grid">
+
+      <!-- Formula 1 -->
+      <div class="ms-card fi d2">
+        <div class="ms-head">
+          <span class="ms-icon" aria-label="Formula 1">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="3" y="3" width="1.7" height="18" rx=".5"/><rect x="6" y="4" width="4" height="3"/><rect x="14" y="4" width="4" height="3"/><rect x="10" y="7" width="4" height="3"/><rect x="6" y="10" width="4" height="3"/><rect x="14" y="10" width="4" height="3"/></svg>
+          </span>
+          <span class="ms-viz telem" aria-hidden="true">
+            <svg viewBox="0 0 96 54" width="96" height="54"><line class="tl-grid" x1="0" y1="27" x2="96" y2="27"/><polyline class="tl-line" points="0,42 12,38 20,18 30,30 40,11 52,34 62,23 74,44 84,15 96,27"/></svg>
+          </span>
+        </div>
+        <h3>Formula 1 — Mercedes-AMG Petronas</h3>
+        <p>A rolling embedded-systems lab: ~300 sensors feeding 1,000+ telemetry channels, a terabyte of data a weekend, and one mandated spec ECU running its control strategy on a 1&nbsp;ms loop. It's the sharpest version of what I do — real-time control and safety-critical code that can't fail at 360&nbsp;km/h.</p>
+        <div>
+          <div class="spec-row"><span class="spec-label">ECU control loop</span><span class="spec-val">1 ms</span></div>
+          <div class="spec-row"><span class="spec-label">Telemetry channels</span><span class="spec-val" data-count="1000" data-suffix="+">1,000+</span></div>
+          <div class="spec-row"><span class="spec-label">Data / weekend</span><span class="spec-val">~1 TB</span></div>
+          <div class="spec-row"><span class="spec-label">Top speed</span><span class="spec-val" data-count="360" data-suffix="+ km/h">360+ km/h</span></div>
+        </div>
+      </div>
+
+      <!-- MotoGP -->
+      <div class="ms-card fi d3">
+        <div class="ms-head">
+          <span class="ms-icon ee-moto" id="ee-moto" aria-label="MotoGP">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 13a8.5 8.5 0 1 1 16.9 1.6"/><path d="M3.5 13v1.4a2.5 2.5 0 0 0 2.5 2.5h4l1.2-2.4"/><path d="M7 11.2h12.6"/></svg>
+          </span>
+          <span class="ms-viz lean-arc" aria-hidden="true">
+            <svg viewBox="0 0 96 60" width="96" height="60"><path class="arc-bg" d="M10 52 A 38 38 0 0 1 86 52" fill="none" stroke-width="5"/><path class="arc-fg" d="M10 52 A 38 38 0 0 1 86 52" fill="none" stroke-width="5"/><text class="lean-val" x="48" y="48" text-anchor="middle">65°</text></svg>
+          </span>
+        </div>
+        <h3><span class="ee-motogp">MotoGP</span> — Marc Márquez</h3>
+        <p>A spec ECU fuses IMU, GPS and wheel-speed to run traction, anti-wheelie and engine-braking control. Márquez holds ~65° of lean mid-corner — and once saved a 70.8° slide at 67&nbsp;km/h — then the same electronics fire the bike down the straight at 360+&nbsp;km/h. The same discipline I bring to every ECU review.</p>
+        <div>
+          <div class="spec-row"><span class="spec-label">Max lean angle</span><span class="spec-val" data-count="65" data-suffix="°">65°</span></div>
+          <div class="spec-row"><span class="spec-label">Top speed (record)</span><span class="spec-val">368.6 km/h</span></div>
+          <div class="spec-row"><span class="spec-label">Spec ECU</span><span class="spec-val">Magneti Marelli</span></div>
+          <div class="spec-row"><span class="spec-label">Sensors</span><span class="spec-val">IMU · GPS · wheel speed</span></div>
+        </div>
+      </div>
+
     </div>
-    <div class="connection-metrics">
-      <div class="metric-box"><div class="metric-val">320+</div><div class="metric-desc">km/h F1 Top Speed</div></div>
-      <div class="metric-box"><div class="metric-val">1ms</div><div class="metric-desc">ECU Cycle Time</div></div>
-      <div class="metric-box"><div class="metric-val">200+</div><div class="metric-desc">Sensors Per F1 Car</div></div>
-      <div class="metric-box"><div class="metric-val">ASIL-D</div><div class="metric-desc">Safety Integrity Level</div></div>
+
+    <!-- track ↔ code mapping -->
+    <div class="map-strip fi d3">
+      <div class="map-cap">On the track ↔ In my code</div>
+      <div class="map-row"><span class="map-track">Telemetry &amp; data logging</span><span class="map-arrow">→</span><span class="map-code">Requirement <b>traceability</b> and MIL/SIL data logging</span></div>
+      <div class="map-row"><span class="map-track">Traction &amp; launch control</span><span class="map-arrow">→</span><span class="map-code">Discrete <b>PI control loops</b> at 100 Hz (10 ms)</span></div>
+      <div class="map-row"><span class="map-track">One spec ECU, one software</span><span class="map-arrow">→</span><span class="map-code"><b>Model-based design</b> with MISRA-C generated code</span></div>
+      <div class="map-row"><span class="map-track">Lean &amp; redline limits</span><span class="map-arrow">→</span><span class="map-code"><b>ASIL-D safe states</b> and permissible-torque bounds</span></div>
+      <div class="map-row"><span class="map-track">Finish every lap · zero DNF</span><span class="map-arrow">→</span><span class="map-code"><b>Structural (MCDC) coverage</b> as the bar, and a zero-DRB-failure record</span></div>
     </div>
   </div>
 </section>
 
-<section id="education">
-  <div class="section-tag">Academic Background</div>
-  <h2 class="section-title">Education</h2>
-  <div class="edu-card fade-in">
-    <div class="edu-degree">B.E. — Electronics &amp; Communication Engineering</div>
-    <div class="edu-school">New Horizon College of Engineering · Bengaluru, India · 2019 – 2023</div>
-    <div class="skill-tags">
-      <span class="tag">Embedded Systems</span><span class="tag">Control Systems</span>
-      <span class="tag">Automotive Electronics</span><span class="tag">Digital Signal Processing</span>
-      <span class="tag">Automotive Architecture</span>
-    </div>
-  </div>
-</section>
+<div class="rule"></div>
 
+<!-- ── CONTACT ────────────────────────────────────────────────────────────── -->
 <section id="contact">
-  <div class="section-tag">Let's Connect</div>
-  <div class="contact-inner">
-    <div>
-      <h2 class="contact-heading">Open to roles in<br><span>ADAS · Autonomous<br>Systems · Embedded SW</span></h2>
-      <p class="contact-text">
-        If you're building the future of autonomous vehicles — at MBRDI, NVIDIA, Bosch, Continental,
-        or beyond — I'd love to talk. I bring production-proven model-based development skills and
-        the drive of someone who measures engineering excellence in championship points.
-      </p>
-      <div class="status-bar" style="margin-bottom:0">
-        <div class="status-dot"></div>
-        <div class="status-text">ACTIVELY EXPLORING · Bengaluru · Open to Relocation</div>
+  <div class="wrap">
+    <div class="eyebrow fi">Get in Touch</div>
+    <h2 class="s-title fi d1">Contact</h2>
+    <div class="bar fi d1"></div>
+    <div class="ct-in">
+      <div class="fi d2">
+        <p class="ct-pitch">I'm actively exploring opportunities at premium automotive OEMs where safety-critical software, AUTOSAR architecture, and functional safety meet cutting-edge vehicle platforms. If you're building something that demands precision — let's talk.</p>
       </div>
-    </div>
-    <div class="contact-links">
-      <a href="mailto:mdsaaimsaad@gmail.com" class="contact-link">
-        <div class="contact-link-icon">✉</div>
-        <div class="contact-link-label">Email</div>
-        <div class="contact-link-val">mdsaaimsaad@gmail.com</div>
-      </a>
-      <a href="tel:+918660859089" class="contact-link">
-        <div class="contact-link-icon">✆</div>
-        <div class="contact-link-label">Phone</div>
-        <div class="contact-link-val">+91 86608 59089</div>
-      </a>
-      <a href="https://www.linkedin.com/in/muhammedsaaimsaad" target="_blank" class="contact-link">
-        <div class="contact-link-icon">in</div>
-        <div class="contact-link-label">LinkedIn</div>
-        <div class="contact-link-val">linkedin.com/in/muhammed-saad</div>
-      </a>
-      <a href="https://github.com/" target="_blank" class="contact-link">
-        <div class="contact-link-icon">⌥</div>
-        <div class="contact-link-label">GitHub</div>
-        <div class="contact-link-val">github.com/MuhammedSaad</div>
-      </a>
+      <div class="ct-links fi d3">
+        <a href="mailto:mdsaaimsaad@gmail.com" class="ct-link">
+          <div class="ct-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+          <div><span class="ct-lbl">Email</span><span class="ct-val">mdsaaimsaad@gmail.com</span></div>
+        </a>
+        <a href="https://www.linkedin.com/in/muhammedsaaimsaad" class="ct-link" target="_blank" rel="noopener">
+          <div class="ct-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg></div>
+          <div><span class="ct-lbl">LinkedIn</span><span class="ct-val">muhammedsaaimsaad</span></div>
+        </a>
+        <a href="https://github.com/SaaimSaad" class="ct-link" target="_blank" rel="noopener">
+          <div class="ct-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg></div>
+          <div><span class="ct-lbl">GitHub</span><span class="ct-val">SaaimSaad</span></div>
+        </a>
+        <a href="tel:+918660859089" class="ct-link">
+          <div class="ct-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.67A2 2 0 012.18 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 8.15a16 16 0 006.94 6.94l1.41-1.41a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg></div>
+          <div><span class="ct-lbl">Phone</span><span class="ct-val">+91 86608 59089</span></div>
+        </a>
+      </div>
     </div>
   </div>
 </section>
 
-<footer>
-  <div class="footer-copy">© 2025 Muhammed Saaim Saad — All rights reserved</div>
-  <div class="footer-teal">BENGALURU · INDIA · MSS_PORTFOLIO_v1.0</div>
+<!-- ── FOOTER ──────────────────────────────────────────────────────────────── -->
+<footer class="carbon">
+  <div class="wrap ft-in">
+    <span class="ft-logo">MSS · 2026</span>
+    <span class="ft-copy">Muhammed Saaim Saad · Bengaluru, India</span>
+    <a href="patent.html" class="ft-link">Patent Showcase ↗</a>
+  </div>
 </footer>
 
 <script>
-  const cursor = document.getElementById('cursor');
-  const ring = document.getElementById('cursorRing');
-  let mx = 0, my = 0, rx = 0, ry = 0;
-  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
-  function animateCursor() {
-    cursor.style.transform = `translate(${mx - 5}px, ${my - 5}px)`;
-    rx += (mx - rx) * 0.12;
-    ry += (my - ry) * 0.12;
-    ring.style.transform = `translate(${rx - 18}px, ${ry - 18}px)`;
-    requestAnimationFrame(animateCursor);
-  }
-  animateCursor();
+// Nav scroll effect
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => nav.classList.toggle('sc', scrollY > 20), {passive:true});
 
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((e, i) => {
-      if (e.isIntersecting) {
-        setTimeout(() => e.target.classList.add('visible'), i * 80);
+// Active nav link
+const secs = document.querySelectorAll('section[id]');
+const nls  = document.querySelectorAll('.n-links a');
+const io1  = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting)
+      nls.forEach(l => l.classList.toggle('act', l.getAttribute('href') === '#' + e.target.id));
+  });
+}, {threshold: 0.45});
+secs.forEach(s => io1.observe(s));
+
+// Fade-in
+const io2 = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting){ e.target.classList.add('v'); io2.unobserve(e.target); } });
+}, {threshold: 0.08});
+document.querySelectorAll('.fi').forEach(el => io2.observe(el));
+
+// Motorsport — count-up stats + gauge/trace reveal (respects reduced motion)
+const msReduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const msSec = document.getElementById('motorsport');
+if (msSec) {
+  const countUp = el => {
+    const to = parseFloat(el.dataset.count), suf = el.dataset.suffix || '', dur = 1100, t0 = performance.now();
+    const tick = t => {
+      const p = Math.min((t - t0) / dur, 1);
+      el.textContent = Math.round(p * to).toLocaleString() + suf;
+      if (p < 1) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  };
+  const io3 = new IntersectionObserver(es => {
+    es.forEach(e => {
+      if (!e.isIntersecting) return;
+      msSec.querySelectorAll('.lean-arc,.telem').forEach(v => v.classList.add('go'));
+      msSec.querySelectorAll('[data-count]').forEach(el => {
+        if (msReduce) el.textContent = (+el.dataset.count).toLocaleString() + (el.dataset.suffix || '');
+        else countUp(el);
+      });
+      io3.disconnect();
+    });
+  }, { threshold: 0.35 });
+  io3.observe(msSec);
+}
+
+// Mobile nav
+const hbg  = document.getElementById('hbg');
+const mnav = document.getElementById('mnav');
+hbg.addEventListener('click', () => mnav.classList.toggle('open'));
+function mn(){ mnav.classList.remove('open') }
+</script>
+
+<script>
+// ═════════════════════════════════════════════════════════════════════
+// EASTER EGG: 5 hidden racers — find them all
+// ═════════════════════════════════════════════════════════════════════
+(function(){
+  const drivers = {
+    hamilton:   { name:'Lewis Hamilton',     nick:'Still I Rise',     num:44, series:'Formula 1',          team:'Mercedes AMG Petronas',     titles:7, quote:'Anything is possible.',                        col:'#00D2BE' },
+    verstappen: { name:'Max Verstappen',     nick:'Super Max',        num:1,  series:'Formula 1',          team:'Oracle Red Bull Racing',    titles:4, quote:'Simply lovely.',                                col:'#1E5BC6' },
+    marquez:    { name:'Marc Márquez',       nick:'The Ant',          num:93, series:'MotoGP',             team:'Ducati Lenovo Team',        titles:8, quote:'Smile, even when it hurts.',                    col:'#E32119' },
+    rossi:      { name:'Valentino Rossi',    nick:'The Doctor',       num:46, series:'MotoGP Legend',      team:'Yamaha · Ducati · Honda',   titles:9, quote:'Racing is in my blood, it always will be.',     col:'#FFD700' },
+    schumacher: { name:'Michael Schumacher', nick:'The Regenmeister', num:1,  series:'Formula 1 Legend',   team:'Ferrari · Mercedes',        titles:7, quote:'In the end, what matters is what you achieve.', col:'#8B0000' }
+  };
+  const order = ['hamilton','verstappen','marquez','rossi','schumacher'];
+
+  const hints = {
+    hamilton:   "An old-school gamer's arrow dance. Ends with his initials.",
+    verstappen: 'Type his first name. Three letters.',
+    marquez:    'His machine, nine times — and quickly.',
+    rossi:      'Three clicks on the right word.',
+    schumacher: 'Type what he is. Four letters.'
+  };
+
+  const unlocked = k => localStorage.getItem('eg_'+k) === '1';
+  function unlock(k){
+    if (unlocked(k)) return;
+    localStorage.setItem('eg_'+k,'1');
+    show(k);
+    updateHint();
+    if (order.every(unlocked) && localStorage.getItem('eg_all_done') !== '1'){
+      localStorage.setItem('eg_all_done','1');
+      setTimeout(() => { confetti(); setTimeout(showFinale, 1400); }, 1800);
+    }
+  }
+
+  // Modal
+  const modal = document.createElement('div');
+  modal.className = 'ee-modal';
+  modal.innerHTML = '<div class="ee-modal-bg"></div><div class="ee-card" id="ee-card"></div>';
+  document.body.appendChild(modal);
+
+  function show(k){
+    const d = drivers[k];
+    const card = modal.querySelector('#ee-card');
+    card.style.setProperty('--ee-accent', d.col);
+    card.innerHTML = `
+      <div class="ee-num">#${d.num}</div>
+      <div class="ee-name">${d.name}</div>
+      <div class="ee-nick">${d.nick}</div>
+      <div class="ee-stats">
+        <div class="ee-stat-row"><span class="lbl">Series</span><span class="val">${d.series}</span></div>
+        <div class="ee-stat-row"><span class="lbl">Team</span><span class="val">${d.team}</span></div>
+        <div class="ee-stat-row"><span class="lbl">World Titles</span><span class="val" style="color:${d.col};font-weight:700">${d.titles}</span></div>
+      </div>
+      <div class="ee-quote">"${d.quote}"</div>
+      <div class="ee-close">Press <kbd>ESC</kbd> to close</div>
+    `;
+    modal.classList.add('open');
+    clearTimeout(modal._t);
+    modal._t = setTimeout(close, 7500);
+  }
+  function close(){ modal.classList.remove('open'); clearTimeout(modal._t); }
+  modal.addEventListener('click', e => { if (e.target === modal || e.target.classList.contains('ee-modal-bg')) close(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+
+  // Footer hint
+  function buildHint(){
+    const ftIn = document.querySelector('.ft-in');
+    if (!ftIn) return;
+    const ftCopy = ftIn.querySelector('.ft-copy');
+    if (!ftCopy) return;
+    const hint = document.createElement('div');
+    hint.className = 'ee-hint';
+    hint.innerHTML = '🏁 <span class="ee-count" id="ee-count">0/5</span> Racers Unlocked<div class="ee-pills">' +
+      order.map(k => `<div class="ee-pill" data-key="${k}" data-tip="???"></div>`).join('') + '</div>' +
+      '<button class="ee-hint-btn" id="ee-hint-btn" title="Reveal cryptic hints">?</button>' +
+      '<button class="ee-reset-btn" id="ee-reset-btn" title="Reset all progress">↻</button>';
+    ftCopy.replaceWith(hint);
+    document.getElementById('ee-hint-btn').addEventListener('click', showHints);
+    document.getElementById('ee-reset-btn').addEventListener('click', resetAll);
+  }
+  function updateHint(){
+    const cnt = document.getElementById('ee-count');
+    if (cnt) cnt.textContent = order.filter(unlocked).length + '/5';
+    document.querySelectorAll('.ee-pill').forEach(p => {
+      const k = p.dataset.key;
+      if (unlocked(k)){
+        p.classList.add('unlocked');
+        p.style.background = drivers[k].col;
+        p.style.borderColor = drivers[k].col;
+        p.dataset.tip = drivers[k].name + ' · #' + drivers[k].num;
+      } else {
+        p.classList.remove('unlocked');
+        p.style.background = '';
+        p.style.borderColor = '';
+        p.dataset.tip = '???';
       }
     });
-  }, { threshold: 0.1 });
-  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+  }
 
-  const sections = document.querySelectorAll('section[id]');
-  const navLinks = document.querySelectorAll('.nav-links a');
-  window.addEventListener('scroll', () => {
-    let current = '';
-    sections.forEach(s => {
-      if (window.scrollY >= s.offsetTop - 200) current = s.id;
-    });
-    navLinks.forEach(a => {
-      a.style.color = a.getAttribute('href') === '#' + current ? 'var(--teal)' : '';
-    });
+  // Reset all progress
+  function resetAll(){
+    order.forEach(k => localStorage.removeItem('eg_' + k));
+    localStorage.removeItem('eg_all_done');
+    close();
+    const btn = document.getElementById('ee-reset-btn');
+    if (btn){
+      btn.classList.add('spinning');
+      setTimeout(() => btn.classList.remove('spinning'), 600);
+    }
+    updateHint();
+  }
+
+  // ── Puzzle 1: Konami → Hamilton
+  const konami = ['arrowup','arrowup','arrowdown','arrowdown','arrowleft','arrowright','arrowleft','arrowright','l','h'];
+  let kBuf = [];
+  document.addEventListener('keydown', e => {
+    kBuf.push(e.key.toLowerCase());
+    if (kBuf.length > konami.length) kBuf.shift();
+    if (kBuf.length === konami.length && kBuf.every((k,i) => k === konami[i])){
+      unlock('hamilton'); kBuf = [];
+    }
   });
+
+  // ── Puzzles 2 & 5: typed words → Verstappen (MAX), Schumacher (GOAT)
+  let typeBuf = '';
+  document.addEventListener('keydown', e => {
+    if (e.key.length === 1 && /[a-z]/i.test(e.key)){
+      typeBuf = (typeBuf + e.key.toUpperCase()).slice(-6);
+      if (typeBuf.endsWith('MAX'))  { unlock('verstappen'); typeBuf = ''; }
+      if (typeBuf.endsWith('GOAT')) { unlock('schumacher'); typeBuf = ''; }
+    }
+  });
+
+  // ── Puzzle 3: click 🏍 nine times in 3s → Márquez
+  const moto = document.getElementById('ee-moto');
+  if (moto){
+    let c = 0, t;
+    moto.addEventListener('click', () => {
+      c++; clearTimeout(t); t = setTimeout(() => c = 0, 3000);
+      if (c >= 9){ unlock('marquez'); c = 0; }
+    });
+  }
+
+  // ── Puzzle 4: triple-click "MotoGP" → Rossi
+  const mg = document.querySelector('.ee-motogp');
+  if (mg){
+    let c = 0, t;
+    mg.addEventListener('click', () => {
+      c++; clearTimeout(t); t = setTimeout(() => c = 0, 600);
+      if (c >= 3){ unlock('rossi'); c = 0; }
+    });
+  }
+
+  // ── Confetti in all 5 team colours
+  function confetti(){
+    const wrap = document.createElement('div');
+    wrap.className = 'ee-confetti';
+    const cols = order.map(k => drivers[k].col);
+    for (let i = 0; i < 70; i++){
+      const c = document.createElement('div');
+      c.className = 'ee-conf';
+      c.style.left = Math.random() * 100 + '%';
+      c.style.background = cols[i % cols.length];
+      c.style.animationDelay = (Math.random() * 0.9) + 's';
+      c.style.animationDuration = (2.4 + Math.random() * 1.6) + 's';
+      wrap.appendChild(c);
+    }
+    document.body.appendChild(wrap);
+    setTimeout(() => wrap.remove(), 4800);
+  }
+
+  // ── Hints modal
+  function showHints(){
+    const card = modal.querySelector('#ee-card');
+    card.style.setProperty('--ee-accent', '#00D2BE');
+    card.innerHTML = `
+      <div class="ee-hints-title">Cryptic Clues</div>
+      <div class="ee-hints-sub">Five racers hidden across the page.<br>Pull the thread — find the driver.</div>
+      <div class="ee-hints-list">
+        ${order.map((k,i) => {
+          const found = unlocked(k);
+          return `<div class="ee-hint-row${found ? ' found' : ''}"><span class="ee-hint-mark">${found ? '✓' : (i+1)}</span><span class="ee-hint-text">${hints[k]}</span></div>`;
+        }).join('')}
+      </div>
+      <div class="ee-close" style="margin-top:22px">Press <kbd>ESC</kbd> or click outside to close</div>
+    `;
+    modal.classList.add('open');
+    clearTimeout(modal._t);
+  }
+
+  // ── Finale
+  function showFinale(){
+    const card = modal.querySelector('#ee-card');
+    card.style.setProperty('--ee-accent', '#00D2BE');
+    card.innerHTML = `
+      <div class="ee-num" style="font-size:3.8rem">🏁</div>
+      <div class="ee-name">You Found Them All</div>
+      <div class="ee-nick">A Real Fan</div>
+      <div class="ee-quote" style="border-color:#00D2BE">Hamilton · Verstappen · Márquez · Rossi · Schumacher<br><br>Different eras, same obsession — precision at the limit.</div>
+      <div class="ee-close">Press <kbd>ESC</kbd> to close</div>
+    `;
+    modal.classList.add('open');
+    clearTimeout(modal._t);
+    modal._t = setTimeout(close, 12000);
+  }
+
+  // Init
+  buildHint();
+  updateHint();
+})();
 </script>
+
+<script>
+// ═════════════════════════════════════════════════════════════════════
+// LIVELY LAYER: rev-strip, typewriter, counters, live time, card tilt
+// ═════════════════════════════════════════════════════════════════════
+(function(){
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // ── 1) F1 REV-LIGHT STRIP — race-start ceremony, then scroll progress
+  const segs = document.querySelectorAll('.rev-seg');
+  let revRaf = null;
+  let raceActive = true;  // suppress scroll-progress until race-start finishes
+
+  function updateRev(){
+    if (raceActive){ revRaf = null; return; }
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    const p = max > 0 ? Math.min(1, window.scrollY / max) : 0;
+    const lit = Math.round(p * segs.length);
+    segs.forEach((s, i) => s.classList.toggle('lit', i < lit));
+    revRaf = null;
+  }
+  window.addEventListener('scroll', () => {
+    if (revRaf == null) revRaf = requestAnimationFrame(updateRev);
+  }, {passive:true});
+
+  // F1 race-start: lights illuminate left-to-right in red, hold, then all out
+  function raceStart(){
+    if (reduceMotion){
+      raceActive = false;
+      updateRev();
+      return;
+    }
+    let i = 0;
+    const step = 160;  // ms between lights — fast enough not to annoy on repeat visits
+    function lightNext(){
+      if (i < segs.length){
+        segs[i].classList.add('lit-start');
+        i++;
+        setTimeout(lightNext, step);
+      } else {
+        // Hold all lit (F1-style suspense)
+        setTimeout(() => {
+          // Lights out — race begins
+          segs.forEach(s => s.classList.remove('lit-start'));
+          setTimeout(() => {
+            raceActive = false;
+            updateRev();
+          }, 300);
+        }, 700);
+      }
+    }
+    setTimeout(lightNext, 450);  // small delay so the page settles first
+  }
+  raceStart();
+
+  // ── 2) TYPEWRITER (hero subtitle) ──────────────────────────────────
+  const typed = document.getElementById('h-typed');
+  const caret = document.getElementById('type-caret');
+  if (typed){
+    const text = typed.dataset.text || '';
+    if (reduceMotion){
+      typed.textContent = text;
+      if (caret) caret.classList.add('done');
+    } else {
+      let i = 0;
+      setTimeout(function tick(){
+        if (i <= text.length){
+          typed.textContent = text.slice(0, i++);
+          setTimeout(tick, 26);
+        } else if (caret){
+          setTimeout(() => caret.classList.add('done'), 700);
+        }
+      }, 600);
+    }
+  }
+
+  // ── 3) ANIMATED COUNTERS (15%, 40%, 3+) ────────────────────────────
+  function easeOutCubic(t){ return 1 - Math.pow(1 - t, 3); }
+  function animateCount(el){
+    const target = parseInt(el.dataset.target, 10);
+    const suffix = el.dataset.suffix || '';
+    if (reduceMotion){ el.textContent = target + suffix; return; }
+    const dur = 1200;
+    const start = performance.now();
+    (function step(now){
+      const t = Math.min(1, (now - start) / dur);
+      const v = Math.round(easeOutCubic(t) * target);
+      el.textContent = v + suffix;
+      if (t < 1) requestAnimationFrame(step);
+    })(start);
+  }
+  const counters = document.querySelectorAll('.count-up');
+  const ioCount = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting){
+        animateCount(e.target);
+        ioCount.unobserve(e.target);
+      }
+    });
+  }, {threshold: 0.4});
+  counters.forEach(c => {
+    // Hero counters (above the fold) animate immediately
+    const rect = c.getBoundingClientRect();
+    if (rect.top < window.innerHeight * 0.9){
+      animateCount(c);
+    } else {
+      ioCount.observe(c);
+    }
+  });
+
+  // ── 4) LIVE BENGALURU IST TIME + greeting (visitor's local time) ──
+  const timeEl  = document.getElementById('live-time');
+  const greetEl = document.getElementById('live-greet');
+
+  function greetingFor(h){
+    if (h < 5)  return 'Good evening';
+    if (h < 12) return 'Good morning';
+    if (h < 17) return 'Good afternoon';
+    return 'Good evening';
+  }
+  function updateTime(){
+    if (!timeEl) return;
+    try {
+      timeEl.textContent = new Date().toLocaleTimeString('en-IN', {
+        hour: '2-digit', minute: '2-digit',
+        timeZone: 'Asia/Kolkata', hour12: false
+      });
+      if (greetEl) greetEl.textContent = greetingFor(new Date().getHours());
+    } catch (_){
+      const pill = document.getElementById('live-status');
+      if (pill) pill.style.display = 'none';
+    }
+  }
+  updateTime();
+  setInterval(updateTime, 60000);
+
+  // ── 5) 3D CARD TILT (project + expertise cards) ────────────────────
+  const isTouch = window.matchMedia('(pointer: coarse)').matches;
+  if (!isTouch && !reduceMotion){
+    const cards = document.querySelectorAll('.proj-card, .exp-card');
+    cards.forEach(card => {
+      card.addEventListener('mousemove', e => {
+        const r = card.getBoundingClientRect();
+        const cx = e.clientX - r.left - r.width / 2;
+        const cy = e.clientY - r.top - r.height / 2;
+        const rx = (-cy / r.height) * 8;  // max 4° each side
+        const ry = ( cx / r.width)  * 8;
+        card.classList.add('tilting');
+        card.style.transform = `perspective(1200px) rotateX(${rx.toFixed(2)}deg) rotateY(${ry.toFixed(2)}deg) translateZ(0)`;
+      });
+      card.addEventListener('mouseleave', () => {
+        card.classList.remove('tilting');
+        card.style.transform = '';
+      });
+    });
+  }
+})();
+</script>
+
 </body>
 </html>
